@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/wearekhmer
+    username: postgres
+    password: 1
+
+    #config files
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: "2KB"
+      max-request-size: 250MB
+      max-file-size: 250MB
+
+
+
+
+
+
+
+
+
