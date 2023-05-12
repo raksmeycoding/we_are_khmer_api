@@ -34,7 +34,10 @@ public class WeAreKhmerSecurity {
 
 
             "/api/v1/files/**",
-            "/images/**"
+            "/images/**",
+
+            "/email",
+            "/email/**"
     };
 
 
