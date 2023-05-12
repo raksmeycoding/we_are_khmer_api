@@ -1,13 +1,25 @@
 package com.java.techhub.email.demo;
 
+import com.java.techhub.email.demo.config.ThymeleafTemplateConfig;
+import lombok.AllArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringBootEmailDemoApplication {
+@AllArgsConstructor
+public class SpringBootEmailDemoApplication implements CommandLineRunner {
+
+
+	private final ThymeleafTemplateConfig thymeleafTemplateConfig;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootEmailDemoApplication.class, args);
 	}
 
+	@Override
+	public void run(String... args) throws Exception {
+		thymeleafTemplateConfig.getTemplateExtension();
+		thymeleafTemplateConfig.getTemplateLocation();
+	}
 }

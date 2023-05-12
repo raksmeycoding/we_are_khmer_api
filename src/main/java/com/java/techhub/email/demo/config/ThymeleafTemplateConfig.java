@@ -5,8 +5,8 @@ import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
 @Configuration
@@ -33,5 +33,22 @@ public class ThymeleafTemplateConfig {
 		emailTemplateResolver.setTemplateMode(TemplateMode.HTML);
 		emailTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		return emailTemplateResolver;
+	}
+
+
+	public String getTemplateLocation() {
+		return templateLocation;
+	}
+
+	public void setTemplateLocation(String templateLocation) {
+		this.templateLocation = templateLocation;
+	}
+
+	public String getTemplateExtension() {
+		return templateExtension;
+	}
+
+	public void setTemplateExtension(String templateExtension) {
+		this.templateExtension = templateExtension;
 	}
 }

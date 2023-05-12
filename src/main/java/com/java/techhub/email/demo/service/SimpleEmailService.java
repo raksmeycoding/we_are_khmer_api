@@ -9,9 +9,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,11 +19,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
+
 
 import com.java.techhub.email.demo.model.User;
 
 import lombok.extern.slf4j.Slf4j;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 /**
  * @author mahes

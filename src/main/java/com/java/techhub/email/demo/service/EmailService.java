@@ -3,9 +3,10 @@
  */
 package com.java.techhub.email.demo.service;
 
-import javax.mail.MessagingException;
+
 
 import com.java.techhub.email.demo.model.User;
+import jakarta.mail.MessagingException;
 
 /**
  * @author mahes
