@@ -1,11 +1,11 @@
 /**
  * 
  */
-package com.java.techhub.email.demo.service;
+package com.kshrd.wearekhmer.service;
 
 
 
-import com.java.techhub.email.demo.model.User;
+import com.kshrd.wearekhmer.model.User;
 import jakarta.mail.MessagingException;
 
 /**

@@ -16,9 +16,9 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.java.techhub.email.demo.controller.EmailController;
-import com.java.techhub.email.demo.model.User;
-import com.java.techhub.email.demo.service.EmailService;
+import com.kshrd.wearekhmer.controller.EmailController;
+import com.kshrd.wearekhmer.model.User;
+import com.kshrd.wearekhmer.service.EmailService;
 
 @ExtendWith(MockitoExtension.class)
 class EmailControllerTest {

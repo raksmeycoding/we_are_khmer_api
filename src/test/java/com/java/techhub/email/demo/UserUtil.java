@@ -6,8 +6,8 @@ package com.java.techhub.email.demo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.java.techhub.email.demo.model.TargetEmail;
-import com.java.techhub.email.demo.model.User;
+import com.kshrd.wearekhmer.model.TargetEmail;
+import com.kshrd.wearekhmer.model.User;
 
 import lombok.experimental.UtilityClass;
 

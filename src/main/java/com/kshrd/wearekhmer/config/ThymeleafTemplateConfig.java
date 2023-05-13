@@ -1,4 +1,4 @@
-package com.java.techhub.email.demo.config;
+package com.kshrd.wearekhmer.config;
 
 import java.nio.charset.StandardCharsets;
 

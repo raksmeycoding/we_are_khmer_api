@@ -1,6 +1,6 @@
-package com.java.techhub.email.demo;
+package com.kshrd.wearekhmer;
 
-import com.java.techhub.email.demo.config.ThymeleafTemplateConfig;
+import com.kshrd.wearekhmer.config.ThymeleafTemplateConfig;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

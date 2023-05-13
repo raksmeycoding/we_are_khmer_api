@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.java.techhub.email.demo.model;
+package com.kshrd.wearekhmer.model;
 
 import java.util.List;
 
