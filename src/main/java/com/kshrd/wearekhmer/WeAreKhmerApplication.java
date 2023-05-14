@@ -1,8 +1,10 @@
 package com.kshrd.wearekhmer;
 
+import com.kshrd.wearekhmer.opt.service.OtpService;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
 import com.kshrd.wearekhmer.user.service.UserAppService;
 import com.kshrd.wearekhmer.files.config.FileConfig;
+import com.kshrd.wearekhmer.utils.OtpUtil;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
@@ -10,9 +12,12 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.sql.Timestamp;
 
 @SpringBootApplication
 @AllArgsConstructor
@@ -28,6 +33,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         info = @Info(title = "Sample api", version = "v1")
 //        security = @SecurityRequirement(name = "bearerAuth")
 )
+@Slf4j
 public class WeAreKhmerApplication implements CommandLineRunner {
 
     private final UserAppService userAppService;
@@ -35,6 +41,10 @@ public class WeAreKhmerApplication implements CommandLineRunner {
     private final UserUtil userUtil;
 
     private final FileConfig fileConfig;
+
+    private final OtpUtil otpUtil;
+
+    private final OtpService otpService;
 
 
     public static void main(String[] args) {
@@ -62,10 +72,18 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 //        System.out.println(now2);
 
 
+//        System.out.println(otpUtil.getGeneratedUUid());
+//        System.out.println(otpUtil.getCurrentDate());
+//        Thread.sleep(5000);
+//        System.out.println(otpUtil.getExpiredAt());
 
 
+//        System.out.println(otpService.createVerificationToken("mtoken34",  new Timestamp(System.currentTimeMillis()), "ecab1f9a-c195-4adf-9b71-7e524e8aef12"));
 
 
+//        log.info("finding token token: {}", otpService.findByToken("mtoken3"));
+
+//        log.info("remove token: {}", otpService.removeByToken("mtoken2"));
 
 
 

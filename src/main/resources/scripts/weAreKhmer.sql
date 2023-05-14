@@ -25,9 +25,10 @@ CREATE TABLE IF NOT EXISTS user_tb (
 );
 drop table if exists user_tb CASCADE ;
 alter table user_tb alter column username drop not null;
+alter table user_tb drop constraint user_tb_email_key;
 alter table user_tb alter column data_of_birth drop not null;
-alter table user_tb alter column is_author drop not null, alter column is_author set default true;
-alter table user_tb alter column is_enable drop not null, alter column is_enable set default true;
+alter table user_tb alter column is_author drop not null, alter column is_author set default false;
+alter table user_tb alter column is_enable drop not null, alter column is_enable set default false;
 
 INSERT INTO user_tb (username, email, password, photo_url, data_of_birth, is_enable, is_author, gender)
 VALUES
@@ -181,6 +182,43 @@ insert into category(category_name) values ('temple');
 delete from category where category_id = '34c9a369-1604-4624-b182-defb34840eab' returning *;
 update category set category_name = 'PP' where category_id = '801c45f7-0d95-4dcf-b168-23713407058c' returning *;
 
+
+
+
+
+
+
+
+
+
+-- Create OTP table
+
+create table otp2
+(
+    token_id varchar primary key  default uuid_generate_v4() not null,
+    token varchar not null unique,
+    createAt timestamp default current_timestamp,
+    expiredAt timestamp not null,
+    isExpired  boolean,
+    user_id varchar references user_tb(user_id) on update cascade on delete cascade
+);
+drop table otp2;
+
+
+select * from otp2;
+
+
+select * from otp2 where token = 'tokenw9reujewr9jdffdfsd';
+
+-- create
+insert into otp2(token, expiredAt, user_id)
+values ('tokenw9reujewr9jdffdfsd', '2023-5-15', 'e5058c06-b40a-41a8-98fd-46f1c7768268') returning *;
+
+-- delete
+delete from otp2 where token = 'tokenw9reujewr9jdfdfsd' returning *;
+
+-- update column
+update user_tb set is_enable = true where user_id = (select user_id from otp2 where otp2.token = '9de06d91-2d36-49cb-a384-1a41d8b83236');
 
 
 

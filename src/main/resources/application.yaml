@@ -20,3 +20,38 @@ spring:
 
 
 
+  mail:
+    username: raksmeykoung@gmail.com
+    password: qxsayvuxoekwvixo
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            trust: smtp.gmail.com
+          starttls:
+            enable: true
+
+user:
+  personal:
+    repo:
+      link: https://github.com/MaheshIare?tab=repositories
+      type: Github repo
+
+thymeleaf:
+  templates:
+    location: classpath:/templates/
+    extension: .html
+
+
+
+
+
+
+
+
+
+
