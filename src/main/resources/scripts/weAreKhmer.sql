@@ -223,4 +223,26 @@ update user_tb set is_enable = true where user_id = (select user_id from otp2 wh
 
 
 
+-- user profile feature table
+create table profile_tb
+(
+    profile_id varchar primary key default uuid_generate_v4(),
+    user_id varchar unique references user_tb(user_id) on delete cascade on update cascade,
+    working_experience jsonb not null,
+    education jsonb not null,
+    reason varchar
+);
+
+drop table profile_tb;
+
+
+INSERT INTO profile_tb ( user_id, working_experience, education, reason)
+VALUES ('e5058c06-b40a-41a8-98fd-46f1c7768268', '[{"title": "Software Developer"}, {"title": "Network Developer"}]', '{"degree": "Bachelor of Science"}', 'Career advancement');
+
+
+select * from profile_tb;
+
+
+
+
 
