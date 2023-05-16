@@ -6,6 +6,7 @@ import com.kshrd.wearekhmer.emailVerification.service.EmailService;
 import com.kshrd.wearekhmer.opt.model.Otp;
 import com.kshrd.wearekhmer.opt.service.OtpService;
 import com.kshrd.wearekhmer.user.model.dto.UserAppDTO;
+import com.kshrd.wearekhmer.user.model.entity.AuthorRequest;
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
 import com.kshrd.wearekhmer.request.NormalUserRequest;
 import com.kshrd.wearekhmer.request.UserLoginRequest;
@@ -70,11 +71,14 @@ public class AuthenticationController {
     };
 
     @PostMapping("/register/as-author/user/{userId}")
-    public ResponseEntity<?> registerAsAuthor(@PathVariable String userId) {
+    public ResponseEntity<?> registerAsAuthor(@RequestBody AuthorRequest authorRequest) {
         try {
-            UserApp userApp = userAppDetailsService.registerAsAuthorAndReturnUserApp(userId);
-            UserAppDTO userAppDTO = userUtil.toUserAppDTO(userApp);
-            return ResponseEntity.ok(userAppDTO);
+
+            System.out.println(authorRequest);
+
+//            UserApp userApp = userAppDetailsService.registerAsAuthorAndReturnUserApp(userId);
+//            UserAppDTO userAppDTO = userUtil.toUserAppDTO(userApp);
+            return ResponseEntity.ok(authorRequest);
         } catch (Exception ex) {
             System.out.println(ex);
             return ResponseEntity.ok(ex.getMessage());

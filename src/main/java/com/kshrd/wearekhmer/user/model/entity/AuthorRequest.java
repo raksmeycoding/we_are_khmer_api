@@ -23,11 +23,11 @@ public class AuthorRequest {
     private Timestamp dateOfBirth;
 
     private String gender;
-    private JsonNode workingExperience;
+    private List<String> workingExperience;
 
-    private JsonNode education;
+    private List<String> education;
 
-    private JsonNode quote;
+    private List<String> quote;
 
     private String reason;
 }

@@ -35,7 +35,7 @@ public class WeAreKhmerSecurity {
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/api/v1/user/**",
-            "/api/v1/auth/register",
+            "/api/v1/auth/register/**",
             "/api/v1/auth/login",
 
 
@@ -93,7 +93,7 @@ public class WeAreKhmerSecurity {
 //                .requestMatchers("/", "/user", "/swagger-ui/index.html").permitAll()
                 .authorizeHttpRequests()
 //                .requestMatchers("/user").hasRole("USER")
-                .requestMatchers("/api/v1/auth/register/as-author/user/**").hasRole("USER")
+//                .requestMatchers("/api/v1/auth/register/as-author/user/**").hasRole("USER")
                 .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
