@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.authenticatoin.AuthenticationService;
 import com.kshrd.wearekhmer.emailVerification.service.EmailService;
 import com.kshrd.wearekhmer.opt.model.Otp;
 import com.kshrd.wearekhmer.opt.service.OtpService;
+import com.kshrd.wearekhmer.request.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.UserAppDTO;
 import com.kshrd.wearekhmer.user.model.entity.*;
 import com.kshrd.wearekhmer.request.NormalUserRequest;
@@ -16,6 +17,7 @@ import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
 import com.kshrd.wearekhmer.user.service.userService.UserAppDetailsServiceImpl;
 import com.kshrd.wearekhmer.utils.OtpUtil;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
@@ -57,6 +59,9 @@ public class AuthenticationController {
     private final AuthorRepository authorRepository;
 
 
+    private final ServiceClassHelper serviceClassHelper;
+
+
     @PostMapping("/register")
     public ResponseEntity<UserAppDTO> userRegister(@RequestBody NormalUserRequest normalUserRequest ) {
         try {
@@ -91,60 +96,13 @@ public class AuthenticationController {
     @PostMapping("/register/as-author")
     public ResponseEntity<?> registerAsAuthor(@RequestBody AuthorRequest authorRequest) {
         try {
-            String currentUserId = weAreKhmerCurrentUser.getUserId();
-
-            List<String> educations = authorRequest.getEducation();
-            assert educations != null;
-            List<String> workingExperiences = authorRequest.getWorkingExperience();
-            assert workingExperiences != null;
-            List<String> quotes = authorRequest.getQuote();
-            assert quotes != null;
-
-            for (String education: educations) {
-                Education education1 = Education.builder()
-                        .educationName(education)
-                        .userId(weAreKhmerCurrentUser.getUserId())
-                        .build();
-                Education education11 = educationMapper.insert(education1);
-            }
-
-            for (String quote: quotes) {
-                Quote toInsertQuote = Quote.builder()
-                        .quoteName(quote)
-                        .userId(weAreKhmerCurrentUser.getUserId())
-                        .build();
-
-                Quote insertedQuote = quoteMapper.insert(toInsertQuote);
-            }
-
-            for (String workingExperience: workingExperiences) {
-                WorkingExperience toInsertWorkingExperience = WorkingExperience.builder()
-                        .workingExperienceName(workingExperience)
-                        .userId(weAreKhmerCurrentUser.getUserId())
-                        .build();
-
-                WorkingExperience workingExperience1 = workingExperienceMapper.insert(toInsertWorkingExperience);
-            }
-
-
-            AuthorRequestTable authorRequestTable =
-                    AuthorRequestTable.builder()
-                            .authorRequestName(authorRequest.getAuthorName())
-                            .userId(weAreKhmerCurrentUser.getUserId())
-                            .reason(authorRequest.getReason())
-                            .build();
-
-            AuthorRequestTable authorRequestTable1 =
-                    authorRepository.insert(authorRequestTable);
-            System.out.println(authorRequestTable1);
-
-
-
-
-
-//            UserApp userApp = userAppDetailsService.registerAsAuthorAndReturnUserApp(userId);
-//            UserAppDTO userAppDTO = userUtil.toUserAppDTO(userApp);
-            return ResponseEntity.ok(authorRequest);
+            AuthorRequestTable authorRequestTable = serviceClassHelper.insertAndGetAuthorRequestFromDatabase(authorRequest);
+            GenericResponse AUTHOR_REQUEST_RESULT = GenericResponse.builder()
+                    .message("request successfully")
+                    .status("200")
+                    .payload(authorRequestTable)
+                    .build();
+            return ResponseEntity.ok(AUTHOR_REQUEST_RESULT);
         } catch (Exception ex) {
             System.out.println(ex);
             return ResponseEntity.ok(ex.getMessage());

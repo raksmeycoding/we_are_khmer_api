@@ -1,16 +1,15 @@
 package com.kshrd.wearekhmer.user.controller;
 
 
+import com.kshrd.wearekhmer.request.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
 import com.kshrd.wearekhmer.user.service.AuthorRequestTableService;
 import com.kshrd.wearekhmer.user.service.AuthorService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,11 +48,27 @@ public class AuthorController {
     }
 
 
-    @PostMapping("accept")
-    public ResponseEntity<?> acceptAutorRequest() {
-        boolean isAccepted = authorService.updateUserRequestToBeAsAuthor("e5058c06-b40a-41a8-98fd-46f1c7768268");
-        System.out.println(isAccepted);
-        return ResponseEntity.ok(isAccepted);
+    @PostMapping("accept/{userId}")
+    public ResponseEntity<?> acceptAutorRequest(@PathVariable String userId) {
+        try {
+            boolean isAccepted = authorService.updateUserRequestToBeAsAuthor(userId);
+            GenericResponse res;
+            if(!isAccepted) {
+                res = GenericResponse.builder()
+                        .status("500")
+                        .message("is not accepted.")
+                        .build();
+                return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            res = GenericResponse.builder()
+                    .status("200")
+                    .message("success")
+                    .build();
+            return ResponseEntity.ok(res);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException();
+        }
     }
 
 }
