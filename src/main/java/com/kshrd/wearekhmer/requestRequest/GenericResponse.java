@@ -1,4 +1,4 @@
-package com.kshrd.wearekhmer.request;
+package com.kshrd.wearekhmer.requestRequest;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,14 +7,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class GenericResponse {
     String status;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    String title;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     String message;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

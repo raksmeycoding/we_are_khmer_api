@@ -4,15 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Timestamp;
-
-
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
-public class Category {
-    private String categoryId;
+public class CategoryRequestDTO {
     private String categoryName;
-    private String categoryImage;
-
 }

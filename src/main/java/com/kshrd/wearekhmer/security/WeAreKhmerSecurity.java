@@ -48,7 +48,11 @@ public class WeAreKhmerSecurity {
             "/api/v1/email/verification/token/**",
             "/user/verify/email/token/**",
 
-            "/api/v1/author/**"
+            "/api/v1/author/**",
+
+
+            "/api/v1/category/**"
+
     };
 
     @Bean

@@ -1,7 +1,7 @@
 package com.kshrd.wearekhmer.user.controller;
 
 
-import com.kshrd.wearekhmer.request.GenericResponse;
+import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
 import com.kshrd.wearekhmer.user.service.AuthorRequestTableService;

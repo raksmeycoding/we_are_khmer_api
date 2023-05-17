@@ -1,4 +1,4 @@
-package com.kshrd.wearekhmer.request;
+package com.kshrd.wearekhmer.requestRequest;
 
 
 import lombok.AllArgsConstructor;

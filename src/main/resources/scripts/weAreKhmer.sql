@@ -183,9 +183,9 @@ where name = 'ROLE_USER';
 -- Category --
 create table if not exists category
 (
-    category_id   varchar primary key default uuid_generate_v4(),
-    category_name varchar not null,
-    category_url  varchar
+    category_id    varchar primary key default uuid_generate_v4(),
+    category_name  varchar not null,
+    category_image varchar
 );
 
 drop table category;
@@ -208,6 +208,10 @@ returning *;
 update category
 set category_name = 'PP'
 where category_id = '801c45f7-0d95-4dcf-b168-23713407058c'
+returning *;
+
+INSERT INTO category (category_name)
+VALUES ('temple2')
 returning *;
 
 
@@ -283,51 +287,69 @@ from profile_tb;
 
 create table working_experience_tb
 (
-    wid varchar primary key default uuid_generate_v4(),
+    wid     varchar primary key default uuid_generate_v4(),
     w_name  varchar not null,
-    user_id varchar references user_tb(user_id) on update cascade on delete cascade
+    user_id varchar references user_tb (user_id) on update cascade on delete cascade
 );
-select * from working_experience_tb;
-select * from working_experience_tb where user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
-select cast(w_name as varchar) as w_name from working_experience_tb where user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
+select *
+from working_experience_tb;
+select *
+from working_experience_tb
+where user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
+select cast(w_name as varchar) as w_name
+from working_experience_tb
+where user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
 
 
 -- author request feature
 create table author_request_tb
-    (
-         author_request_id varchar primary key default uuid_generate_v4(),
-         user_id varchar references user_tb(user_id),
-         author_request_name varchar not null,
-         is_author_accepted boolean default false,
-         createAt timestamp default current_timestamp,
-         reason varchar not null
+(
+    author_request_id   varchar primary key default uuid_generate_v4(),
+    user_id             varchar references user_tb (user_id),
+    author_request_name varchar not null,
+    is_author_accepted  boolean             default false,
+    createAt            timestamp           default current_timestamp,
+    reason              varchar not null
 );
-drop  table author_request_tb;
+drop table author_request_tb;
 
-select * from author_request_tb;
-
-
-select * from user_tb where is_author = true;
+select *
+from author_request_tb;
 
 
-select * from user_tb ub
-inner join working_experience_tb wb on ub.user_id = wb.user_id;
+select *
+from user_tb
+where is_author = true;
 
-select * from user_tb where user_id in (select user_id from working_experience_tb);
+
+select *
+from user_tb ub
+         inner join working_experience_tb wb on ub.user_id = wb.user_id;
+
+select *
+from user_tb
+where user_id in (select user_id from working_experience_tb);
 -- inner join quote_tb qb on qb.user_id = ub.user_id
 -- inner join education e on e.user_id = ub.user_id
 
 
-select * from working_experience_tb;
+select *
+from working_experience_tb;
 
 
 -- Education
-select * from education where education.user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
-select education.e_name as edu_name from education where education.user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
+select *
+from education
+where education.user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
+select education.e_name as edu_name
+from education
+where education.user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
 
 
 
-select qb.q_name as q_name from quote_tb qb where qb.user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
+select qb.q_name as q_name
+from quote_tb qb
+where qb.user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
 
 
 --
@@ -340,8 +362,9 @@ select qb.q_name as q_name from quote_tb qb where qb.user_id = '046adf5f-4a53-43
 --     SET is_author_accepted = true where user_id = '';
 -- END;
 
-CREATE OR REPLACE FUNCTION update_tables_author_request_tb_and_user_tb(status boolean,user_idd varchar)
-    RETURNS boolean AS $$
+CREATE OR REPLACE FUNCTION update_tables_author_request_tb_and_user_tb(status boolean, user_idd varchar)
+    RETURNS boolean AS
+$$
 BEGIN
     UPDATE user_tb
     SET is_author = status
@@ -364,9 +387,13 @@ select update_tables_author_request_tb_and_user_tb(true, 'e5058c06-b40a-41a8-98f
 
 
 
-select count(*) from quote_tb where user_id = 'e5058c06-b40a-41a8-98fd-46f1c7768268';
+select count(*)
+from quote_tb
+where user_id = 'e5058c06-b40a-41a8-98fd-46f1c7768268';
 
-select count(*) from quote_tb where user_id = 'e5058c06-b40a-41a8-98fd-46f1c7768268';
+select count(*)
+from quote_tb
+where user_id = 'e5058c06-b40a-41a8-98fd-46f1c7768268';
 
 
 -- SELECT *
@@ -377,3 +404,58 @@ select count(*) from quote_tb where user_id = 'e5058c06-b40a-41a8-98fd-46f1c7768
 --     where quote_tb.user_id = '046adf5f-4a53-4386-b746-28a05db5753b'
 --     HAVING COUNT(*) <= 3
 -- ) ;
+
+
+-- Article
+-- must run
+create table article_tb
+(
+    article_id   varchar primary key default uuid_generate_v4(),
+    title        varchar                                   not null,
+    sub_title    varchar,
+    publish_date timestamp           default current_timestamp,
+    description  varchar                                   not null,
+    updatedAt    timestamp           default current_timestamp,
+    image        varchar,
+    count_view   integer             default 0,
+    isBan        boolean             default false,
+    hero_card_in varchar,
+    user_id      varchar references user_tb (user_id)      not null,
+    category_id  varchar references category (category_id) not null
+);
+
+alter table article_tb
+    add constraint fk_user_author
+        foreign key (user_id)
+            references user_tb (user_id)
+            deferrable initially deferred;
+
+
+create or replace function check_user_author()
+    returns trigger as
+$$
+BEGIN
+    if not exists(
+            select 1
+            from user_tb
+            where user_id = NEW.user_id
+              and is_author = true
+        ) then
+        raise exception 'Only authors can be associated with a category';
+    end if;
+
+    return NEW;
+end;
+$$
+    language plpgsql;
+
+
+create trigger trg_check_user_author before insert or update on
+    article_tb for each row execute function check_user_author();
+
+
+-- end must run;
+
+
+
+

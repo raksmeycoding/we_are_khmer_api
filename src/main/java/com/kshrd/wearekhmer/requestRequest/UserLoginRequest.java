@@ -1,4 +1,4 @@
-package com.kshrd.wearekhmer.request;
+package com.kshrd.wearekhmer.requestRequest;
 
 
 import lombok.AllArgsConstructor;
@@ -7,19 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class NormalUserRequest {
-
+public class UserLoginRequest {
     private String email;
-
     private String password;
-
-
-
-    private String gender;
-
 }
-
-

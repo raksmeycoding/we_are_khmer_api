@@ -1,10 +1,7 @@
-package com.kshrd.wearekhmer.request;
+package com.kshrd.wearekhmer.requestRequest;
 
 
 import lombok.*;
-
-import java.sql.Timestamp;
-import java.util.List;
 
 @Builder
 @Data

@@ -5,11 +5,11 @@ import com.kshrd.wearekhmer.authenticatoin.AuthenticationService;
 import com.kshrd.wearekhmer.emailVerification.service.EmailService;
 import com.kshrd.wearekhmer.opt.model.Otp;
 import com.kshrd.wearekhmer.opt.service.OtpService;
-import com.kshrd.wearekhmer.request.GenericResponse;
+import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.UserAppDTO;
 import com.kshrd.wearekhmer.user.model.entity.*;
-import com.kshrd.wearekhmer.request.NormalUserRequest;
-import com.kshrd.wearekhmer.request.UserLoginRequest;
+import com.kshrd.wearekhmer.requestRequest.NormalUserRequest;
+import com.kshrd.wearekhmer.requestRequest.UserLoginRequest;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.repository.EducationMapper;
 import com.kshrd.wearekhmer.user.repository.QuoteMapper;
@@ -25,8 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth")

@@ -2,7 +2,7 @@ package com.kshrd.wearekhmer.user.service;
 
 
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
-import com.kshrd.wearekhmer.request.NormalUserRequest;
+import com.kshrd.wearekhmer.requestRequest.NormalUserRequest;
 
 public interface UserAppService {
 //    UserApp findUserByUserName(String userName);
