@@ -1,14 +1,18 @@
 package com.kshrd.wearekhmer;
 
 import com.kshrd.wearekhmer.opt.service.OtpService;
+import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.Education;
+import com.kshrd.wearekhmer.user.model.entity.UserApp;
 import com.kshrd.wearekhmer.user.model.entity.WorkingExperience;
 import com.kshrd.wearekhmer.user.repository.EducationMapper;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
 import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
+import com.kshrd.wearekhmer.user.service.AuthorService;
 import com.kshrd.wearekhmer.user.service.UserAppService;
 import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.utils.OtpUtil;
+import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
@@ -55,6 +59,10 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 
     private final WorkingExperienceMapper workingExperienceMapper;
 
+    private final WeAreKhmerCurrentUser weAreKhmerCurrentUser;
+
+    private final AuthorService authorService;
+
 
     public static void main(String[] args) {
         SpringApplication.run(WeAreKhmerApplication.class, args);
@@ -95,11 +103,11 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 //        log.info("remove token: {}", otpService.removeByToken("mtoken2"));
 
 
-        WorkingExperience workingExperience = WorkingExperience.builder()
-                .workingExperienceName("Apple")
-                .workingExperienceId("64561088-6da3-45a9-ab16-cfc3f32377da")
+//        WorkingExperience workingExperience = WorkingExperience.builder()
+//                .workingExperienceName("Apple")
+//                .workingExperienceId("64561088-6da3-45a9-ab16-cfc3f32377da")
 //                .userId("e5058c06-b40a-41a8-98fd-46f1c7768268")
-                .build();
+//                .build();
 
 
 //        WorkingExperience workingExperienceMapper1
@@ -113,18 +121,15 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 //        System.out.println(workingExperienceList);
 
 
+//        WorkingExperience workingExperience2 = workingExperienceMapper.update(workingExperience);
+//        System.out.println("update: "+ workingExperience2);
 
-        WorkingExperience workingExperience2 = workingExperienceMapper.update(workingExperience);
-        System.out.println("update: "+ workingExperience2);
+
+        List<WorkingExperience> workingExperienceList = workingExperienceMapper.getAll();
+        System.out.println(workingExperienceList);
+
+
+
 
     }
-
-
-
-
-
-
-
-
-
 }

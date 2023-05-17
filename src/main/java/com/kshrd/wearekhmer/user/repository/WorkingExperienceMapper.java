@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface WorkingExperienceMapper {
 
-    @Select("SELECT * FROM working_experience_tb")
+    @Select("select * from working_experience_tb")
     @Results(
             id = "workingExperienceMap",
             value = {
@@ -30,6 +30,16 @@ public interface WorkingExperienceMapper {
     @Select("SELECT * FROM working_experience_tb WHERE wId = #{workingExperienceId}")
     @ResultMap("workingExperienceMap")
     WorkingExperience getById(String workingExperienceId);
+
+    @Select("select * from working_experience_tb where user_id = #{userId}")
+    @ResultMap("workingExperienceMap")
+    WorkingExperience getByUserId(String userId);
+
+
+    @Select("""
+            select cast(w_name as varchar) as w_name from working_experience_tb where user_id = #{userId}
+            """)
+    String getWorkingByUserId(String userId);
 
     @Select("UPDATE working_experience_tb SET w_name = #{workingExperienceName} WHERE wId = #{workingExperienceId} RETURNING *")
     @ResultMap("workingExperienceMap")

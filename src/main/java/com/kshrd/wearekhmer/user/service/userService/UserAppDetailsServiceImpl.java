@@ -1,9 +1,10 @@
-package com.kshrd.wearekhmer.user.service;
+package com.kshrd.wearekhmer.user.service.userService;
 
 
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
 import com.kshrd.wearekhmer.request.NormalUserRequest;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
+import com.kshrd.wearekhmer.user.service.UserAppService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

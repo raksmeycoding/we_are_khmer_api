@@ -1,6 +1,6 @@
 package com.kshrd.wearekhmer.security;
 
-import com.kshrd.wearekhmer.user.service.UserAppDetailsServiceImpl;
+import com.kshrd.wearekhmer.user.service.userService.UserAppDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

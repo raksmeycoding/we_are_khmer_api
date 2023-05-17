@@ -26,6 +26,13 @@ public interface QuoteMapper {
     @ResultMap("quoteMapperId")
     Quote getById(String quoteId);
 
+
+
+    @Select("""
+            select qb.q_name as q_name from quote_tb qb where qb.user_id = #{userId}
+            """)
+    String getQuoteByUserId(String userId);
+
     @Select("INSERT INTO quote_tb(q_name, user_id) VALUES (#{quoteName}, #{userId}) returning *")
     @ResultMap("quoteMapperId")
     Quote insert(Quote quote);

@@ -287,4 +287,44 @@ create table working_experience_tb
     w_name  varchar not null,
     user_id varchar references user_tb(user_id) on update cascade on delete cascade
 );
+select * from working_experience_tb;
+select * from working_experience_tb where user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
+select cast(w_name as varchar) as w_name from working_experience_tb where user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
 
+
+-- author request feature
+create table author_request_tb
+    (
+         author_request_id varchar primary key default uuid_generate_v4(),
+         user_id varchar references user_tb(user_id),
+         author_request_name varchar not null,
+         is_author_accepted boolean default false,
+         createAt timestamp default current_timestamp,
+         reason varchar not null
+);
+drop  table author_request_tb;
+
+select * from author_request_tb;
+
+
+select * from user_tb where is_author = true;
+
+
+select * from user_tb ub
+inner join working_experience_tb wb on ub.user_id = wb.user_id;
+
+select * from user_tb where user_id in (select user_id from working_experience_tb);
+-- inner join quote_tb qb on qb.user_id = ub.user_id
+-- inner join education e on e.user_id = ub.user_id
+
+
+select * from working_experience_tb;
+
+
+-- Education
+select * from education where education.user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
+select education.e_name as edu_name from education where education.user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
+
+
+
+select qb.q_name as q_name from quote_tb qb where qb.user_id = '046adf5f-4a53-4386-b746-28a05db5753b';

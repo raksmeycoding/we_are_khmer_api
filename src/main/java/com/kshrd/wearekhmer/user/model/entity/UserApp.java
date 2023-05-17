@@ -19,26 +19,26 @@ import java.util.List;
 @Builder
 @Data
 public class UserApp implements UserDetails {
-    private String userId;
-    private String userName;
+    protected String userId;
+    protected String userName;
 
-    private String email;
+    protected String email;
 
-    private String password;
+    protected String password;
 
-    private String photoUrl;
+    protected String photoUrl;
 
 
-    private Timestamp dataOfBirth;
+    protected Timestamp dataOfBirth;
 
     private boolean isEnable;
 
 
-    private Boolean isAuthor;
+    protected Boolean isAuthor;
 
-    private String gender;
+    protected String gender;
 
-    private List<String> roles;
+    protected List<String> roles;
 
     public String getUserName() {
         return userName;

@@ -1,7 +1,7 @@
 package com.kshrd.wearekhmer.security;
 
 
-import com.kshrd.wearekhmer.user.service.UserAppDetailsServiceImpl;
+import com.kshrd.wearekhmer.user.service.userService.UserAppDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,7 +46,9 @@ public class WeAreKhmerSecurity {
 
 
             "/api/v1/email/verification/token/**",
-            "/user/verify/email/token/**"
+            "/user/verify/email/token/**",
+
+            "/api/v1/author/**"
     };
 
     @Bean
@@ -93,7 +95,7 @@ public class WeAreKhmerSecurity {
 //                .requestMatchers("/", "/user", "/swagger-ui/index.html").permitAll()
                 .authorizeHttpRequests()
 //                .requestMatchers("/user").hasRole("USER")
-//                .requestMatchers("/api/v1/auth/register/as-author/user/**").hasRole("USER")
+                .requestMatchers("/api/v1/auth/register/as-author").hasRole("USER")
                 .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
