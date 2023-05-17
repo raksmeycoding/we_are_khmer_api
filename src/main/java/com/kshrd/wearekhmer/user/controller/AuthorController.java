@@ -8,6 +8,7 @@ import com.kshrd.wearekhmer.user.service.AuthorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,6 +46,14 @@ public class AuthorController {
             System.out.println(e.getMessage());
             throw new RuntimeException();
         }
+    }
+
+
+    @PostMapping("accept")
+    public ResponseEntity<?> acceptAutorRequest() {
+        boolean isAccepted = authorService.updateUserRequestToBeAsAuthor("e5058c06-b40a-41a8-98fd-46f1c7768268");
+        System.out.println(isAccepted);
+        return ResponseEntity.ok(isAccepted);
     }
 
 }

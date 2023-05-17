@@ -93,8 +93,6 @@ public class AuthenticationController {
         try {
             String currentUserId = weAreKhmerCurrentUser.getUserId();
 
-            AuthorRequest authorRequest1;
-
             List<String> educations = authorRequest.getEducation();
             assert educations != null;
             List<String> workingExperiences = authorRequest.getWorkingExperience();

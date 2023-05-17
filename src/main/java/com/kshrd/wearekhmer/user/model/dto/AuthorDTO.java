@@ -23,9 +23,9 @@ public class AuthorDTO {
 
     private String gender;
 
-    private List<String> workingExperience;
+    private List<WorkingExperience> workingExperience;
 
-    private List<String> education;
-    private List<String> quote;
+    private List<Education> education;
+    private List<Quote> quote;
 
 }

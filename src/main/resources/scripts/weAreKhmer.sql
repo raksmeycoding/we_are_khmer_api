@@ -328,3 +328,52 @@ select education.e_name as edu_name from education where education.user_id = '04
 
 
 select qb.q_name as q_name from quote_tb qb where qb.user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
+
+
+--
+-- CREATE PROCEDURE UpdateAuthorStatus()
+-- BEGIN
+--     UPDATE user_tb
+--     SET is_author = true where user_id = '';
+--
+--     UPDATE author_request_tb
+--     SET is_author_accepted = true where user_id = '';
+-- END;
+
+CREATE OR REPLACE FUNCTION update_tables_author_request_tb_and_user_tb(status boolean,user_idd varchar)
+    RETURNS boolean AS $$
+BEGIN
+    UPDATE user_tb
+    SET is_author = status
+    WHERE user_tb.user_id = user_idd;
+
+    UPDATE author_request_tb
+    SET is_author_accepted = status
+    WHERE author_request_tb.user_id = user_idd;
+
+    -- Raise an exception if no rows were affected
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'You are not an author request.';
+    END IF;
+
+    RETURN true;
+END;
+$$ LANGUAGE plpgsql;
+
+select update_tables_author_request_tb_and_user_tb(true, 'e5058c06-b40a-41a8-98fd-46f1c7768268');
+
+
+
+select count(*) from quote_tb where user_id = 'e5058c06-b40a-41a8-98fd-46f1c7768268';
+
+select count(*) from quote_tb where user_id = 'e5058c06-b40a-41a8-98fd-46f1c7768268';
+
+
+-- SELECT *
+-- FROM quote_tb
+-- WHERE user_id IN (
+--     SELECT user_id
+--     FROM quote_tb
+--     where quote_tb.user_id = '046adf5f-4a53-4386-b746-28a05db5753b'
+--     HAVING COUNT(*) <= 3
+-- ) ;

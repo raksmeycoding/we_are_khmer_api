@@ -33,6 +33,12 @@ public interface QuoteMapper {
             """)
     String getQuoteByUserId(String userId);
 
+    @Select("""
+            select * from quote_tb where user_id = #{userId}
+            """)
+    @ResultMap("quoteMapperId")
+    Quote getQuoteByUserIdAsObject(String userId);
+
     @Select("INSERT INTO quote_tb(q_name, user_id) VALUES (#{quoteName}, #{userId}) returning *")
     @ResultMap("quoteMapperId")
     Quote insert(Quote quote);

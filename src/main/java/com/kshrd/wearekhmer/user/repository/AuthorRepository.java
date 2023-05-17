@@ -56,12 +56,24 @@ public interface AuthorRepository {
                     @Result(property = "photoUrl", column = "photo_url"),
                     @Result(property = "dateOfBirth", column = "data_of_birth"),
                     @Result(property = "gender", column = "gender"),
-                    @Result(property = "workingExperience", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper.getWorkingByUserId")),
-                    @Result(property = "education", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.EducationMapper.getEducationByUserId")),
-                    @Result(property = "quote", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.QuoteMapper.getQuoteByUserId"))
+                    @Result(property = "workingExperience", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper.getByUserId")),
+                    @Result(property = "education", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.EducationMapper.getEducationByUserIdObject")),
+                    @Result(property = "quote", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.QuoteMapper.getQuoteByUserIdAsObject"))
             })
     List<AuthorDTO> getAllAuthor();
 
+
+
+    @Select("""
+            select update_tables_author_request_tb_and_user_tb(true, #{userId})
+            """)
+    boolean updateUserRequestToBeAsAuthor(String userId);
+
+
+    @Select("""
+            select update_tables_author_request_tb_and_user_tb(false, #{userId})
+            """)
+    boolean updateUserRequestToBeAsAuthorAsReject(String userId);
 
 
 }

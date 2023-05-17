@@ -49,4 +49,15 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
     public List<AuthorDTO> getAllAuthor() {
         return authorRepository.getAllAuthor();
     }
+
+
+    @Override
+    public boolean updateUserRequestToBeAsAuthor(String userId) {
+        return authorRepository.updateUserRequestToBeAsAuthor(userId);
+    }
+
+    @Override
+    public boolean updateUserRequestToBeAsAuthorAsReject(String userId) {
+        return authorRepository.updateUserRequestToBeAsAuthorAsReject(userId);
+    }
 }

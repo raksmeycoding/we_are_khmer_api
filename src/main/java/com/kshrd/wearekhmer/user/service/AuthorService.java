@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface AuthorService {
     List<AuthorDTO> getAllAuthor();
+
+    boolean updateUserRequestToBeAsAuthor(String userId);
+
+    boolean updateUserRequestToBeAsAuthorAsReject(String userId);
 }

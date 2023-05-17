@@ -28,7 +28,13 @@ public interface EducationMapper {
     @Select("""
             select education.e_name as edu_name from education where education.user_id = #{userId}
             """)
-    String getEducationByUserId(String userId);
+    String getEducationByUserIdAsString(String userId);
+
+    @Select("""
+            select * from education where education.user_id = #{userId}
+            """)
+    @ResultMap("educationMapperId")
+    Education getEducationByUserIdObject(String userId);
 
     @Select("INSERT INTO education (e_name, user_id) VALUES (#{educationName}, #{userId}) returning *")
     @ResultMap("educationMapperId")
