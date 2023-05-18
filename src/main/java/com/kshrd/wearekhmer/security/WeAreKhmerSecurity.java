@@ -51,7 +51,11 @@ public class WeAreKhmerSecurity {
             "/api/v1/author/**",
 
 
-            "/api/v1/category/**"
+            "/api/v1/category/**",
+
+
+            "/api/v1/article",
+            "/api/v1/article/**"
 
     };
 

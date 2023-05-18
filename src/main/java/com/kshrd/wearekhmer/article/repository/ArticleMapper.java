@@ -29,9 +29,10 @@ public interface ArticleMapper {
     @Select("SELECT * FROM article_tb WHERE article_id = #{articleId}")
     Article getArticleById(String articleId);
 
-    @Insert("INSERT INTO article_tb (article_id, title, sub_title, publish_date, description, updatedAt, image, count_view, isBan, hero_card_in, user_id, category_id) " +
-            "VALUES (#{articleId}, #{title}, #{subTitle}, #{publishDate}, #{description}, #{updateAt}, #{image}, #{countView}, #{isBan}, #{heroCardIn}, #{userId}, #{categoryId})")
-    void insertArticle(Article article);
+    @Select("INSERT INTO article_tb (title, sub_title, description, image, user_id, category_id) " +
+            "VALUES (#{title}, #{subTitle}, #{description}, #{image}, #{userId}, #{categoryId}) returning *")
+    @ResultMap("articleResultMap")
+    Article insertArticle(Article article);
 
     @Update("UPDATE article_tb SET title = #{title}, sub_title = #{subTitle}, publish_date = #{publishDate}, description = #{description}, " +
             "updatedAt = #{updateAt}, image = #{image}, count_view = #{countView}, isBan = #{isBan}, hero_card_in = #{heroCardIn}, " +

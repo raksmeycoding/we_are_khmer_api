@@ -8,6 +8,7 @@ import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public class CategoryController implements CategoryControllerInterface{
     @Override
     @GetMapping
     public ResponseEntity<?> getAllCategories() throws Exception {
+        System.out.println(SecurityContextHolder.getContext().getAuthentication());
+
         GenericResponse genericResponse;
         try {
             List<Category> categories = categoryService.getAllCategories();

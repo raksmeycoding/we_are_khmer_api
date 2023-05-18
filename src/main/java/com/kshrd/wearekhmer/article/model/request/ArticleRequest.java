@@ -1,26 +1,21 @@
-package com.kshrd.wearekhmer.article.model.entity;
+package com.kshrd.wearekhmer.article.model.request;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Builder
 @Data
 @AllArgsConstructor
-public class Article {
-    private String articleId;
+@NoArgsConstructor
+public class ArticleRequest {
     private String title;
     private String subTitle;
-    private Timestamp publishDate;
     private String description;
-    private Timestamp updateAt;
     private String image;
-    private Integer countView;
-    private Boolean isBan;
-    private String heroCardIn;
-    private String userId;
     private String categoryId;
 }
