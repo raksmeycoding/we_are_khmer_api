@@ -2,7 +2,7 @@ package com.kshrd.wearekhmer.files.controller;
 
 
 import com.kshrd.wearekhmer.files.model.response.FileResponse;
-import com.kshrd.wearekhmer.files.service.FileService;
+import com.kshrd.wearekhmer.files.service.IFileService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +16,17 @@ import java.io.IOException;
 @SecurityRequirement(name = "bearerAuth")
 public class FileController {
 
-    private final FileService fileService;
+    private final IFileService IFileService;
 
-    public FileController(FileService fileService) {
-        this.fileService = fileService;
+    public FileController(IFileService IFileService) {
+        this.IFileService = IFileService;
     }
 
     @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFile(@RequestParam MultipartFile multipartFile){
 
         try {
-            String fileName = fileService.uploadFile(multipartFile);
+            String fileName = IFileService.uploadFile(multipartFile);
             FileResponse fileResponse = FileResponse.builder()
                     .status("200")
                     .message("upload successfully")
@@ -44,7 +44,7 @@ public class FileController {
     @GetMapping("/file/filename")
     public ResponseEntity<?> getFilename(@RequestParam String name) {
         try {
-            return fileService.getFile(name);
+            return IFileService.getFile(name);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -23,6 +23,11 @@ public class ArticleServiceImpl implements IArticleService{
 
 
     @Override
+    public Article getArticleById(String articleId) {
+        return articleMapper.getArticleById(articleId);
+    }
+
+    @Override
     public Article insertArticle(Article article) {
         return articleMapper.insertArticle(article);
     }

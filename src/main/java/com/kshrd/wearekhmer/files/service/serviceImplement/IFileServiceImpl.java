@@ -1,7 +1,7 @@
 package com.kshrd.wearekhmer.files.service.serviceImplement;
 
 import com.kshrd.wearekhmer.files.config.FileConfig;
-import com.kshrd.wearekhmer.files.service.FileService;
+import com.kshrd.wearekhmer.files.service.IFileService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
@@ -20,12 +20,12 @@ import java.util.UUID;
 
 
 @Service
-public class ServiceImpl implements FileService {
+public class IFileServiceImpl implements IFileService {
 
     private final FileConfig fileConfig;
     Path root;
 
-    public ServiceImpl(FileConfig fileConfig) {
+    public IFileServiceImpl(FileConfig fileConfig) {
         this.fileConfig = fileConfig;
     }
 
@@ -39,10 +39,10 @@ public class ServiceImpl implements FileService {
     @Override
     public String uploadFile(MultipartFile multipartFile) throws IOException {
         String fileName = multipartFile.getOriginalFilename();
-        assert multipartFile != null;
+        assert fileName != null;
         if (isFileNameContains(fileName))
         {
-            fileName = UUID.randomUUID() + "-wearekhmer." + StringUtils.getFilenameExtension(fileName);
+            fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(fileName);
 
 
             if(!Files.exists(root)){

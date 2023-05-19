@@ -19,8 +19,8 @@ import java.nio.file.Paths;
 @Getter
 public class FileConfig implements WebMvcConfigurer{
 
-    private String[] imagePath = {"main", "resources","static",  "images"};
-    private Path root = Paths.get("src", imagePath);
+    private final String[] imagePath = {"main", "resources","static",  "images"};
+    private final Path root = Paths.get("src", imagePath);
 
 
 
