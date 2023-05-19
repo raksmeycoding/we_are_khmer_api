@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/wearekhmer
-    username: postgres
-    password: 1
+    url: jdbc:postgresql://8.219.139.67:5436/we_are_khmer
+    username: we_are_khmer
+    password: we_are_khmer
 
     #config files
   servlet:

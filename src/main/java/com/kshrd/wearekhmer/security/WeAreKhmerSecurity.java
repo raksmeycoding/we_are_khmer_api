@@ -103,7 +103,7 @@ public class WeAreKhmerSecurity {
 //                .requestMatchers("/", "/user", "/swagger-ui/index.html").permitAll()
                 .authorizeHttpRequests()
 //                .requestMatchers("/user").hasRole("USER")
-                .requestMatchers("/api/v1/auth/register/as-author").hasRole("USER")
+//                .requestMatchers("/api/v1/auth/register/as-author").hasRole("USER")
                 .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
