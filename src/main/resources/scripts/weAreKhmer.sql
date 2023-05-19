@@ -10,18 +10,18 @@ WHERE extname = 'uuid-ossp';
 
 
 CREATE TYPE gender as ENUM ('male', 'female', 'other');
-drop type if exists gender;
+drop type if exists gender cascade;
 
 CREATE TABLE IF NOT EXISTS user_tb
 (
     user_id       varchar PRIMARY KEY DEFAULT uuid_generate_v4(),
-    username      varchar(100) NOT NULL,
-    email         varchar(255) NOT NULL UNIQUE,
+    username      varchar(100),
+    email         varchar(255) NOT NULL,
     password      text         NOT NULL,
     photo_url     text,
-    data_of_birth timestamp    not null,
-    is_enable     boolean      not null,
-    is_author     boolean      not null,
+    data_of_birth timestamp ,
+    is_enable     boolean      not null default false,
+    is_author     boolean      not null default false,
     gender        gender       not null
 
 );
@@ -193,7 +193,7 @@ select *
 from category;
 
 alter table category
-    alter category_url set default null;
+    alter category_image set default null;
 
 
 select *
@@ -338,6 +338,13 @@ from working_experience_tb;
 
 
 -- Education
+create table public.education
+(
+    e_id    varchar default uuid_generate_v4() not null primary key,
+    e_name  varchar                            not null,
+    user_id varchar references public.user_tb on update cascade on delete cascade
+);
+
 select *
 from education
 where education.user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
@@ -386,6 +393,12 @@ $$ LANGUAGE plpgsql;
 select update_tables_author_request_tb_and_user_tb(true, 'e5058c06-b40a-41a8-98fd-46f1c7768268');
 
 
+create table public.quote_tb
+(
+    q_id    varchar default uuid_generate_v4() not null primary key,
+    q_name  varchar not null,
+    user_id varchar references public.user_tb on update cascade on delete cascade
+);
 
 select count(*)
 from quote_tb
@@ -450,8 +463,12 @@ $$
     language plpgsql;
 
 
-create trigger trg_check_user_author before insert or update on
-    article_tb for each row execute function check_user_author();
+create trigger trg_check_user_author
+    before insert or update
+    on
+        article_tb
+    for each row
+execute function check_user_author();
 
 
 -- end must run;
