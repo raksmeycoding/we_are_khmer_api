@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.article.repository;
 
 import com.kshrd.wearekhmer.article.model.entity.Article;
+import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -25,6 +26,12 @@ public interface ArticleMapper {
     @Select("SELECT * FROM article_tb")
     List<Article> getAllArticles();
 
+
+    @Select("SELECT * FROM article_tb where user_id = #{userId}")
+    @ResultMap("articleResultMap")
+    List<Article> getAllArticlesForCurrentUser(String userId);
+
+
     @ResultMap("articleResultMap")
     @Select("SELECT * FROM article_tb WHERE article_id = #{articleId}")
     Article getArticleById(String articleId);
@@ -34,11 +41,13 @@ public interface ArticleMapper {
     @ResultMap("articleResultMap")
     Article insertArticle(Article article);
 
-    @Update("UPDATE article_tb SET title = #{title}, sub_title = #{subTitle}, publish_date = #{publishDate}, description = #{description}, " +
-            "updatedAt = #{updateAt}, image = #{image}, count_view = #{countView}, isBan = #{isBan}, hero_card_in = #{heroCardIn}, " +
-            "user_id = #{userId}, category_id = #{categoryId} WHERE article_id = #{articleId}")
-    void updateArticle(Article article);
+    @Select("""
+            UPDATE article_tb SET title = #{title}, sub_title = #{subTitle}, description = #{description}, category_id = #{categoryId} WHERE article_id = #{articleId} and user_id = #{userId} returning *
+            """)
+    @ResultMap("articleResultMap")
+    Article updateArticle(Article article);
 
-    @Delete("DELETE FROM article_tb WHERE article_id = #{articleId}")
-    void deleteArticle(String articleId);
+    @Select("DELETE FROM article_tb WHERE article_id = #{articleId} and user_id = #{userId} returning *")
+    @ResultMap("articleResultMap")
+    Article deleteArticleByIdAndCurrentUser(Article article);
 }

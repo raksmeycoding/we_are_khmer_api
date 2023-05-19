@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.article.service;
 
 import com.kshrd.wearekhmer.article.model.entity.Article;
+import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,10 @@ public class ArticleServiceImpl implements IArticleService{
 
     }
 
+    @Override
+    public List<Article> getAllArticlesForCurrentUser(String userId) {
+        return articleMapper.getAllArticlesForCurrentUser(userId);
+    }
 
     @Override
     public Article getArticleById(String articleId) {
@@ -30,5 +35,16 @@ public class ArticleServiceImpl implements IArticleService{
     @Override
     public Article insertArticle(Article article) {
         return articleMapper.insertArticle(article);
+    }
+
+
+    @Override
+    public Article updateArticle(Article article) {
+        return articleMapper.updateArticle(article);
+    }
+
+    @Override
+    public Article deleteArticleByIdAndCurrentUser(Article article) {
+        return articleMapper.deleteArticleByIdAndCurrentUser(article);
     }
 }
