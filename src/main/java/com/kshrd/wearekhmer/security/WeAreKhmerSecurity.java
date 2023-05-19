@@ -55,7 +55,10 @@ public class WeAreKhmerSecurity {
 
 
             "/api/v1/article",
-            "/api/v1/article/**"
+            "/api/v1/article/**",
+
+
+            "/api/v1/article/react/**"
 
     };
 
