@@ -41,4 +41,6 @@ public interface ArticleMapper {
 
     @Delete("DELETE FROM article_tb WHERE article_id = #{articleId}")
     void deleteArticle(String articleId);
+
+    
 }
