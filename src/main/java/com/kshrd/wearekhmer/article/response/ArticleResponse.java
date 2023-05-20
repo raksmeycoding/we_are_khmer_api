@@ -26,4 +26,5 @@ public class ArticleResponse {
     private String hero_card_in;
     private String author_name;
     private String category_name;
+    private String react_count;
 }

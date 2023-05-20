@@ -9,7 +9,8 @@ import java.util.List;
 public interface IArticleService {
     List<Article> getAllArticles();
 
-    List<ArticleResponse> getAllArticlesForCurrentUser(String userId);
+    List<ArticleResponse> getArticlesForCurrentUser(String userId);
+
     Article insertArticle(Article article);
 
     Article getArticleById(String articleId);

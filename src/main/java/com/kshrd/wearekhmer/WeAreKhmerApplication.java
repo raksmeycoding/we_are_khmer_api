@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer;
 
+import com.kshrd.wearekhmer.article.service.IArticleService;
 import com.kshrd.wearekhmer.opt.service.OtpService;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.Education;
@@ -63,6 +64,8 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 
     private final AuthorService authorService;
 
+    private final IArticleService articleService;
+
 
     public static void main(String[] args) {
         SpringApplication.run(WeAreKhmerApplication.class, args);
@@ -125,8 +128,9 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 //        System.out.println("update: "+ workingExperience2);
 
 
-        List<WorkingExperience> workingExperienceList = workingExperienceMapper.getAll();
-        System.out.println(workingExperienceList);
+//        List<WorkingExperience> workingExperienceList = workingExperienceMapper.getAll();
+//        System.out.println(workingExperienceList);
+
 
 
 

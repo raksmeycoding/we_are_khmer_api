@@ -70,7 +70,7 @@ public class ArticleControllerImpl implements IArticleController {
     public ResponseEntity<?> getAllArticleForCurrentUser() {
         GenericResponse genericResponse;
         try {
-            List<ArticleResponse> articleResponses = articleService.getAllArticlesForCurrentUser(weAreKhmerCurrentUser.getUserId());
+            List<ArticleResponse> articleResponses = articleService.getArticlesForCurrentUser(weAreKhmerCurrentUser.getUserId());
             genericResponse =
                     GenericResponse.builder()
                             .title("success")
@@ -99,7 +99,7 @@ public class ArticleControllerImpl implements IArticleController {
         GenericResponse genericResponse;
         try {
             String currentUerId = weAreKhmerCurrentUser.getUserId();
-            List<ArticleResponse> articles = articleService.getAllArticlesForCurrentUser(currentUerId);
+            List<ArticleResponse> articles = articleService.getArticlesForCurrentUser(currentUerId);
             genericResponse = GenericResponse.builder()
                     .status("200")
                     .message("request successfully")

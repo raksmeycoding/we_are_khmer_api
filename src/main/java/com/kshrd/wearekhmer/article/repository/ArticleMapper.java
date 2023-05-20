@@ -1,7 +1,6 @@
 package com.kshrd.wearekhmer.article.repository;
 
 import com.kshrd.wearekhmer.article.model.entity.Article;
-import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import org.apache.ibatis.annotations.*;
 
@@ -42,16 +41,12 @@ public interface ArticleMapper {
                    ab.isban,
                    ab.hero_card_in,
                    ub.username as author_name,
-                   c.category_name
+                   c.category_name,
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
             from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
             where ab.user_id = #{userId}
             """)
-    List<ArticleResponse> getArticleForCurrentUser(String userId);
-
-
-    @Select("SELECT * FROM article_tb where user_id = #{userId}")
-    @ResultMap("articleResultMap")
-    List<Article> getAllArticlesForCurrentUser(String userId);
+    List<ArticleResponse> getArticlesForCurrentUser(String userId);
 
 
     @ResultMap("articleResultMap")
