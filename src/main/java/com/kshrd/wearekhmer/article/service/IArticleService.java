@@ -13,7 +13,7 @@ public interface IArticleService {
 
     Article insertArticle(Article article);
 
-    Article getArticleById(String articleId);
+    ArticleResponse getArticleById(String articleId);
 
     Article updateArticle(Article article);
 

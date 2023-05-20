@@ -2,7 +2,6 @@ package com.kshrd.wearekhmer.article.controller;
 
 
 import com.kshrd.wearekhmer.article.model.entity.Article;
-import com.kshrd.wearekhmer.article.model.request.ArticleDeleteRequest;
 import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
 import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
@@ -14,10 +13,8 @@ import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -176,8 +173,8 @@ public class ArticleControllerImpl implements IArticleController {
     public ResponseEntity<?> getArticleById(@PathVariable String articleId) {
         GenericResponse genericResponse;
         try {
-            Article article = articleService.getArticleById(articleId);
-             genericResponse = GenericResponse.builder()
+            ArticleResponse article = articleService.getArticleById(articleId);
+            genericResponse = GenericResponse.builder()
                     .status("200")
                     .title("success")
                     .message("request successfully")
@@ -255,12 +252,12 @@ public class ArticleControllerImpl implements IArticleController {
 
         } catch (Exception ex) {
             genericResponse =
-            GenericResponse
-                    .builder()
-                    .message("delete failed")
-                    .status("500")
-                    .message(ex.getMessage())
-                    .build();
+                    GenericResponse
+                            .builder()
+                            .message("delete failed")
+                            .status("500")
+                            .message(ex.getMessage())
+                            .build();
             ex.printStackTrace();
             return ResponseEntity.ok(genericResponse);
         }

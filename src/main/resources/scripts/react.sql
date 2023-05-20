@@ -40,6 +40,7 @@ $$
     language plpgsql;
 
 
+-- test
 select handle_user_like('5b1ed971-3338-4a65-be91-4979c0bbd427', '6ba98ca2-fa24-4165-a288-a54cbd12e1c2', 'unlike');
 
 -- must execute
@@ -66,5 +67,6 @@ create trigger trg_check_exist_only_one_like_in_a_record_per_user
     before insert or update on react_tb for each row execute function check_exist_only_one_like_in_a_record_per_user();
 
 
+-- Test
 -- get count user_react_like_article
 select count(*) from react_tb where article_id = '8256a9af-da04-4c25-837f-3b9ccebd443a'

@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer;
 
+import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import com.kshrd.wearekhmer.article.service.IArticleService;
 import com.kshrd.wearekhmer.opt.service.OtpService;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
@@ -130,6 +131,10 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 
 //        List<WorkingExperience> workingExperienceList = workingExperienceMapper.getAll();
 //        System.out.println(workingExperienceList);
+
+
+        ArticleResponse articleResponse = articleService.getArticleById("6ba98ca2-fa24-4165-a288-a54cbd12e1c2");
+        System.out.println(articleResponse);
 
 
 

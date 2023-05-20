@@ -15,7 +15,7 @@ select ab.article_id,
        c.category_name,
        (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
 from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
-where ab.user_id = '5b1ed971-3338-4a65-be91-4979c0bbd427';
+where ab.article_id = '8256a9af-da04-4c25-837f-3b9ccebd443a';
 
 
 -- work

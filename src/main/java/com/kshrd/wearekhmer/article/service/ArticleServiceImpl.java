@@ -29,7 +29,7 @@ public class ArticleServiceImpl implements IArticleService{
     }
 
     @Override
-    public Article getArticleById(String articleId) {
+    public ArticleResponse getArticleById(String articleId) {
         return articleMapper.getArticleById(articleId);
     }
 
