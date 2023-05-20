@@ -2,6 +2,7 @@ package com.kshrd.wearekhmer.article.repository;
 
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
+import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -25,6 +26,27 @@ public interface ArticleMapper {
     })
     @Select("SELECT * FROM article_tb")
     List<Article> getAllArticles();
+
+
+    @Select("""
+            select ab.article_id,
+                   ab.user_id,
+                   ab.category_id,
+                   ab.title,
+                   ab.sub_title,
+                   ab.publish_date,
+                   ab.description,
+                   ab.updatedat,
+                   ab.image,
+                   ab.count_view,
+                   ab.isban,
+                   ab.hero_card_in,
+                   ub.username as author_name,
+                   c.category_name
+            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
+            where ab.user_id = #{userId}
+            """)
+    List<ArticleResponse> getArticleForCurrentUser(String userId);
 
 
     @Select("SELECT * FROM article_tb where user_id = #{userId}")

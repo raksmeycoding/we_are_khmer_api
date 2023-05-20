@@ -3,6 +3,7 @@ package com.kshrd.wearekhmer.article.service;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
+import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,8 @@ public class ArticleServiceImpl implements IArticleService{
     }
 
     @Override
-    public List<Article> getAllArticlesForCurrentUser(String userId) {
-        return articleMapper.getAllArticlesForCurrentUser(userId);
+    public List<ArticleResponse> getAllArticlesForCurrentUser(String userId) {
+        return articleMapper.getArticleForCurrentUser(userId);
     }
 
     @Override

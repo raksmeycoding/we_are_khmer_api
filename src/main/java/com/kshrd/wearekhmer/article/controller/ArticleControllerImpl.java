@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.model.request.ArticleDeleteRequest;
 import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
 import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
+import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import com.kshrd.wearekhmer.article.service.IArticleService;
 import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.files.service.IFileService;
@@ -66,13 +67,39 @@ public class ArticleControllerImpl implements IArticleController {
 
 
     @Override
+    public ResponseEntity<?> getAllArticleForCurrentUser() {
+        GenericResponse genericResponse;
+        try {
+            List<ArticleResponse> articleResponses = articleService.getAllArticlesForCurrentUser(weAreKhmerCurrentUser.getUserId());
+            genericResponse =
+                    GenericResponse.builder()
+                            .title("success")
+                            .message("request successfully")
+                            .payload(articleResponses)
+                            .build();
+
+            return ResponseEntity.ok(genericResponse);
+
+        } catch (Exception ex) {
+            genericResponse = GenericResponse.builder()
+                    .status("500")
+                    .message(ex.getMessage())
+                    .title("internal server error!")
+                    .build();
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(genericResponse);
+        }
+
+    }
+
+    @Override
     @Operation(summary = "get all articles (current for current user)")
     @GetMapping("currentUser")
     public ResponseEntity<?> getAllArticlesForCurrentUser() {
         GenericResponse genericResponse;
         try {
             String currentUerId = weAreKhmerCurrentUser.getUserId();
-            List<Article> articles = articleService.getAllArticlesForCurrentUser(currentUerId);
+            List<ArticleResponse> articles = articleService.getAllArticlesForCurrentUser(currentUerId);
             genericResponse = GenericResponse.builder()
                     .status("200")
                     .message("request successfully")

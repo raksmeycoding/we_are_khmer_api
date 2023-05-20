@@ -14,6 +14,8 @@ public interface IArticleController {
 
     ResponseEntity<?> getAllArticles();
 
+    ResponseEntity<?> getAllArticleForCurrentUser();
+
     ResponseEntity<?> getAllArticlesForCurrentUser();
 
     ResponseEntity<?> insertArticle(MultipartFile multipartFile, ArticleRequest articleRequest);
