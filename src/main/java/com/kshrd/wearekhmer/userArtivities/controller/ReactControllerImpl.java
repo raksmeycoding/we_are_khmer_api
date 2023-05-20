@@ -33,6 +33,15 @@ public class ReactControllerImpl implements IReactController{
     @Override
     @DeleteMapping("{articleId}")
     public ResponseEntity<?> deleteUserReactForCurrentUser(@PathVariable String articleId) {
-        return null;
+        try {
+            React react = React.builder()
+                    .userId(weAreKhmerCurrentUser.getUserId())
+                    .articleId(articleId)
+                    .build();
+            React react1 = reactService.deleteUserReactForCurrentUser(react);
+            return null;
+        } catch (Exception exception) {
+            throw new RuntimeException();
+        }
     }
 }
