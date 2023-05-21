@@ -1,18 +1,15 @@
 package com.kshrd.wearekhmer;
 
-import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import com.kshrd.wearekhmer.article.service.IArticleService;
 import com.kshrd.wearekhmer.opt.service.OtpService;
-import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
-import com.kshrd.wearekhmer.user.model.entity.Education;
-import com.kshrd.wearekhmer.user.model.entity.UserApp;
-import com.kshrd.wearekhmer.user.model.entity.WorkingExperience;
 import com.kshrd.wearekhmer.user.repository.EducationMapper;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
 import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
 import com.kshrd.wearekhmer.user.service.AuthorService;
 import com.kshrd.wearekhmer.user.service.UserAppService;
 import com.kshrd.wearekhmer.files.config.FileConfig;
+import com.kshrd.wearekhmer.userArtivities.model.UserComment;
+import com.kshrd.wearekhmer.userArtivities.repository.ICommentRepository;
 import com.kshrd.wearekhmer.utils.OtpUtil;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
@@ -27,7 +24,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @SpringBootApplication
@@ -67,6 +63,7 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 
     private final IArticleService articleService;
 
+    private final ICommentRepository ICommentRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(WeAreKhmerApplication.class, args);
@@ -133,9 +130,8 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 //        System.out.println(workingExperienceList);
 
 
-        ArticleResponse articleResponse = articleService.getArticleById("6ba98ca2-fa24-4165-a288-a54cbd12e1c2");
-        System.out.println(articleResponse);
-
+        List<UserComment> userComment = ICommentRepository.getUserCommentByArticleId("8256a9af-da04-4c25-837f-3b9ccebd443a");
+        System.out.println(userComment);
 
 
 
