@@ -13,10 +13,6 @@ import java.util.List;
 public class HistoryImpService implements IHistoryService{
 
     private final HistoryMapper historyMapper;
-    @Override
-    public List<History> getAllHistory() {
-        return historyMapper.getAllHistory();
-    }
 
     @Override
     public History insertHistory(History history) {

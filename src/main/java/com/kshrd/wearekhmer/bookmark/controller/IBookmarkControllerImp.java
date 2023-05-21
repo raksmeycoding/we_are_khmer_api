@@ -1,15 +1,12 @@
-package com.kshrd.wearekhmer.history.controller;
+package com.kshrd.wearekhmer.bookmark.controller;
 
-import com.kshrd.wearekhmer.article.controller.IArticleController;
-import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.service.IArticleService;
-import com.kshrd.wearekhmer.history.model.entity.History;
-import com.kshrd.wearekhmer.history.model.request.HistoryRequest;
-import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
-import com.kshrd.wearekhmer.history.service.IHistoryService;
+import com.kshrd.wearekhmer.bookmark.model.entity.Bookmark;
+import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
+import com.kshrd.wearekhmer.bookmark.model.request.BookmarkRequest;
+import com.kshrd.wearekhmer.bookmark.service.IBookService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,35 +14,33 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-
 @RestController
-@RequestMapping("/api/v1/history")
+@RequestMapping("/api/v1/bookmark")
 @SecurityRequirement(name = "bearerAuth")
-
 @AllArgsConstructor
-public class HistoryControllerImp implements IHistoryController {
+public class IBookmarkControllerImp implements IBookmarkController {
 
-    private final IHistoryService historyService;
+    private final IBookService bookmarkService;
     private final IArticleService articleService;
+
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
 
     @Override
     @GetMapping
-    public ResponseEntity<?> getAllHistoryByCurrentId() {
+    public ResponseEntity<?> getAllBookmarkCurrentId() {
         GenericResponse genericResponse;
         try {
-            History history1 = History.builder()
+            Bookmark bookmark = Bookmark.builder()
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .build();
 
-            List<HistoryResponse> history2 = historyService.getAllHistoryByCurrentUser(weAreKhmerCurrentUser.getUserId());
+            List<BookmarkResponse> bookmarklist = bookmarkService.getAllBookmarkByCurrentId(weAreKhmerCurrentUser.getUserId());
             genericResponse = GenericResponse.builder()
                     .status("200")
-                    .payload(history2)
+                    .payload(bookmarklist)
                     .title("success")
-                    .message("You have successfully got all history recorded")
+                    .message("You have successfully got all bookmark recorded")
                     .build();
             return ResponseEntity.ok(genericResponse);
 
@@ -61,27 +56,26 @@ public class HistoryControllerImp implements IHistoryController {
         }
     }
 
-
     @Override
     @PostMapping
-    public ResponseEntity<?> insertHistory(String articleId) {
+    public ResponseEntity<?> insertBookmark(String articleId) {
         GenericResponse genericResponse;
         try {
 
-            HistoryRequest requestInsert = HistoryRequest.builder()
+            BookmarkRequest requestInsert = BookmarkRequest.builder()
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .articleId(articleId)
                     .build();
-            History history = History.builder()
+            Bookmark bookmark = Bookmark.builder()
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .articleId(articleId)
                     .build();
-            History history1 = historyService.insertHistory(history);
+            Bookmark bookmark1 = bookmarkService.insertBookmark(bookmark);
             genericResponse = GenericResponse.builder()
                     .status("200")
-                    .payload(history1)
+                    .payload(bookmark1)
                     .title("success")
-                    .message("You have successfully recorded history")
+                    .message("You have successfully recorded bookmark")
                     .build();
             return ResponseEntity.ok(genericResponse);
         } catch (Exception ex) {
@@ -99,24 +93,25 @@ public class HistoryControllerImp implements IHistoryController {
 
     @Override
     @DeleteMapping
-    public ResponseEntity<?> deleteHistory(String historyId) {
+    public ResponseEntity<?> deleteBookmark(String bookmarkId) {
         GenericResponse genericResponse;
-        try {
-           History history = History.builder()
-                   .userId(weAreKhmerCurrentUser.getUserId())
-                   .historyId(historyId)
-                   .build();
+        try{
+            Bookmark bookmark = Bookmark.builder()
+                    .userId(weAreKhmerCurrentUser.getUserId())
+                    .bookmarkId(bookmarkId)
+                    .build();
 
-           History history1 = historyService.deleteHistory(history);
+            Bookmark bookmark1 = bookmarkService.deleteBookmark(bookmark);
 
-           genericResponse = GenericResponse.builder()
-                   .status("200")
-                   .message("You have deleted history record successfully")
-                   .payload(history1)
-                   .title("success")
-                   .build();
-           return ResponseEntity.ok(genericResponse);
-        } catch (Exception ex) {
+            genericResponse = GenericResponse.builder()
+                    .status("200")
+                    .message("You have deleted bookmark record successfully")
+                    .payload(bookmark1)
+                    .title("success")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+
+        }catch(Exception ex){
             genericResponse =
                     GenericResponse
                             .builder()

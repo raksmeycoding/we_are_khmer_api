@@ -7,7 +7,6 @@ import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import java.util.List;
 
 public interface IHistoryService {
-    List<History> getAllHistory();
 
     History insertHistory(History history);
 

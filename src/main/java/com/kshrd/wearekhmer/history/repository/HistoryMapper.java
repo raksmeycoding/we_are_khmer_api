@@ -15,12 +15,8 @@ public interface HistoryMapper {
             @Result(property = "articleId", column = "article_id"),
             @Result(property = "createdAt", column = "created_at"),
     })
-    @Select("SELECT * FROM history_tb")
-    List<History> getAllHistory();
-
     @Select("INSERT INTO history_tb (user_id, article_id) " +
             "VALUES (#{userId}, #{articleId}) returning *")
-    @ResultMap("historyResultMap")
     History insertHistory(History history);
 
 
@@ -30,17 +26,6 @@ public interface HistoryMapper {
     @ResultMap("historyResultMap")
     History deleteHistory(History history);
 
-    @Select("""
-            SELECT * FROM history_tb WHERE user_id = #{userId}
-            """)
-    @ResultMap("historyResultMap")
-    List<History> getAllHistoryByCurrentId(History history);
-
-
-    @Select("""
-        SELECT ht.history_id,ht.created_at, a.article_id, a.user_id, a.description, a.title, a.sub_title, a.image 
-        FROM history_tb as ht INNER JOIN article_tb a on a.article_id = ht.article_id  WHERE a.user_id= '5b1ed971-3338-4a65-be91-4979c0bbd427';""")
-    List<Article> getAllArticleByCurrentID();
 
 
     @Select("""
