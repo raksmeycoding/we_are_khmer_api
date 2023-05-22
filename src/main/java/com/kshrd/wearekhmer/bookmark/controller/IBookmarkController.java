@@ -7,4 +7,6 @@ public interface IBookmarkController {
 
     ResponseEntity<?> insertBookmark(String articleId);
     ResponseEntity<?> deleteBookmark(String articleId);
+
+    ResponseEntity<?> removeAllBookmark();
 }

@@ -98,24 +98,24 @@ public class HistoryControllerImp implements IHistoryController {
     }
 
     @Override
-    @DeleteMapping
+    @DeleteMapping("/history")
     public ResponseEntity<?> deleteHistory(String historyId) {
         GenericResponse genericResponse;
         try {
-           History history = History.builder()
-                   .userId(weAreKhmerCurrentUser.getUserId())
-                   .historyId(historyId)
-                   .build();
+            History history = History.builder()
+                    .userId(weAreKhmerCurrentUser.getUserId())
+                    .historyId(historyId)
+                    .build();
 
-           History history1 = historyService.deleteHistory(history);
+            History history1 = historyService.deleteHistory(history);
 
-           genericResponse = GenericResponse.builder()
-                   .status("200")
-                   .message("You have deleted history record successfully")
-                   .payload(history1)
-                   .title("success")
-                   .build();
-           return ResponseEntity.ok(genericResponse);
+            genericResponse = GenericResponse.builder()
+                    .status("200")
+                    .message("You have deleted history record successfully")
+                    .payload(history1)
+                    .title("success")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
         } catch (Exception ex) {
             genericResponse =
                     GenericResponse
@@ -127,4 +127,36 @@ public class HistoryControllerImp implements IHistoryController {
             return ResponseEntity.internalServerError().body(genericResponse);
         }
     }
+
+    @Override
+    @DeleteMapping("histories")
+    public ResponseEntity<?> removeAllHistory() {
+        GenericResponse genericResponse;
+        try {
+            History history = History.builder()
+                    .userId(weAreKhmerCurrentUser.getUserId())
+                    .build();
+
+            List<History> history1 = historyService.removeAllHistory(history);
+
+            genericResponse = GenericResponse.builder()
+                    .status("200")
+                    .message("You have deleted history record successfully")
+                    .payload(history1)
+                    .title("success")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+        } catch (Exception ex) {
+            genericResponse =
+                    GenericResponse
+                            .builder()
+                            .status("500")
+                            .message(ex.getMessage())
+                            .build();
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(genericResponse);
+        }
+    }
+
+
 }

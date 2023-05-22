@@ -37,4 +37,11 @@ public interface BookmarkMapper {
     @Result(property = "createdAt", column = "created_at")
     @Result(property = "article", column = "article_id", many = @Many(select = "com.kshrd.wearekhmer.article.repository.ArticleMapper.getArticleById"))
     List<BookmarkResponse> getAllBookmarkByCurrentId(String userId);
+
+
+    @Select("""
+            DELETE FROM bookmark_tb WHERE user_id = #{userId} returning *
+            """)
+    @ResultMap("bookmarkResultMap")
+    List<Bookmark> removeAllBookmark(Bookmark bookmark);
 }

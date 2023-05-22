@@ -92,7 +92,7 @@ public class IBookmarkControllerImp implements IBookmarkController {
     }
 
     @Override
-    @DeleteMapping
+    @DeleteMapping("/Bookmark")
     public ResponseEntity<?> deleteBookmark(String bookmarkId) {
         GenericResponse genericResponse;
         try{
@@ -102,6 +102,37 @@ public class IBookmarkControllerImp implements IBookmarkController {
                     .build();
 
             Bookmark bookmark1 = bookmarkService.deleteBookmark(bookmark);
+
+            genericResponse = GenericResponse.builder()
+                    .status("200")
+                    .message("You have deleted bookmark record successfully")
+                    .payload(bookmark1)
+                    .title("success")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+
+        }catch(Exception ex){
+            genericResponse =
+                    GenericResponse
+                            .builder()
+                            .status("500")
+                            .message(ex.getMessage())
+                            .build();
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(genericResponse);
+        }
+    }
+
+    @Override
+    @DeleteMapping("/Bookmarks")
+    public ResponseEntity<?> removeAllBookmark() {
+        GenericResponse genericResponse;
+        try{
+            Bookmark bookmark = Bookmark.builder()
+                    .userId(weAreKhmerCurrentUser.getUserId())
+                    .build();
+
+            List<Bookmark> bookmark1 = bookmarkService.removeAllBookmark(bookmark);
 
             genericResponse = GenericResponse.builder()
                     .status("200")
