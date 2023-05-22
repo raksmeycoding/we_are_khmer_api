@@ -3,6 +3,7 @@ package com.kshrd.wearekhmer.authenticatoin.controller;
 
 import com.kshrd.wearekhmer.authenticatoin.AuthenticationService;
 import com.kshrd.wearekhmer.emailVerification.service.EmailService;
+import com.kshrd.wearekhmer.exception.DuplicateKeyException;
 import com.kshrd.wearekhmer.opt.model.Otp;
 import com.kshrd.wearekhmer.opt.service.OtpService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
@@ -20,8 +21,10 @@ import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -84,9 +87,11 @@ public class AuthenticationController {
             }
             UserAppDTO userAppDTO = userUtil.toUserAppDTO(n2);
             return ResponseEntity.ok(userAppDTO);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            System.out.println(ex.getClass());
+        } catch (DataIntegrityViolationException | MessagingException ex) {
+            if (ex instanceof DataIntegrityViolationException) {
+                throw new DuplicateKeyException("Email is already login.");
+            }
+
             throw new RuntimeException();
         }
     };
