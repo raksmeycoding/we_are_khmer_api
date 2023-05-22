@@ -30,6 +30,7 @@ alter table user_tb
     alter column username drop not null;
 alter table user_tb
     drop constraint user_tb_email_key;
+alter table user_tb add constraint unique_user_email unique (email);
 alter table user_tb
     alter column data_of_birth drop not null;
 alter table user_tb
