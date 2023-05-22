@@ -10,8 +10,13 @@ public interface IHistoryService {
 
     History insertHistory(History history);
 
-    History deleteHistory(History history);
 
     List<HistoryResponse> getAllHistoryByCurrentUser(String userId);
+
+
+    History deleteHistory(History history);
+
+    List<History> removeAllHistory(History history);
+
 
 }

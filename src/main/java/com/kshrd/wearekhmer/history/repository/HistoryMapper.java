@@ -29,13 +29,26 @@ public interface HistoryMapper {
 
 
     @Select("""
-            SELECT * FROM history_tb WHERE user_id = #{userId}
+            SELECT DISTINCT ON (article_id) * FROM history_tb
+            WHERE user_id = #{userId}
+            ORDER BY article_id, created_at DESC
+            ;
             """)
     @Result(property = "historyId", column = "history_id")
     @Result(property = "userId", column = "user_id")
     @Result(property = "createdAt", column = "created_at")
     @Result(property = "article", column = "article_id", many = @Many(select = "com.kshrd.wearekhmer.article.repository.ArticleMapper.getArticleById"))
     List<HistoryResponse> getAllHistoryByCurrentUser(String userId);
+
+    @Select("""
+            DELETE FROM history_tb WHERE user_id = #{userId} returning *
+            """)
+    @ResultMap("historyResultMap")
+    List<History> removeAllHistory(History history);
+
+
+
+
 
 
 

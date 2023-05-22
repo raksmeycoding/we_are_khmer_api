@@ -12,4 +12,6 @@ public interface IBookService {
     Bookmark deleteBookmark(Bookmark bookmark);
 
     List<BookmarkResponse> getAllBookmarkByCurrentId(String userId);
+
+    List<Bookmark> removeAllBookmark(Bookmark bookmark);
 }

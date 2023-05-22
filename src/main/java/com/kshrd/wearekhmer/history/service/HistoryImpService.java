@@ -19,18 +19,21 @@ public class HistoryImpService implements IHistoryService{
         return historyMapper.insertHistory(history);
     }
 
-    @Override
-    public History deleteHistory(History history) {
-        return historyMapper.deleteHistory(history);
-    }
 
     @Override
     public List<HistoryResponse> getAllHistoryByCurrentUser(String userId) {
         return historyMapper.getAllHistoryByCurrentUser(userId);
     }
 
+    @Override
+    public History deleteHistory(History history) {
+        return historyMapper.deleteHistory(history);
+    }
 
-
+    @Override
+    public List<History> removeAllHistory(History history) {
+        return historyMapper.removeAllHistory(history);
+    }
 
 
 }
