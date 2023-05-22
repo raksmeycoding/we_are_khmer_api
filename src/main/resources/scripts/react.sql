@@ -2,13 +2,13 @@
 create table if not exists react_tb
 (
     react_id   varchar primary key default uuid_generate_v4(),
-    user_id    varchar references user_tb (user_id)       not null,
+    user_id    varchar references user_tb (user_id) on delete cascade not null,
     article_id varchar references article_tb (article_id) not null,
     status     bool                default false,
     createAt   timestamp           default current_timestamp,
     updateAt   timestamp           default current_timestamp
 );
--- drop table react_tb;
+drop table react_tb;
 
 
 -- must execute
