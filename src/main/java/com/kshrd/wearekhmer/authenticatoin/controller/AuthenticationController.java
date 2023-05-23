@@ -31,6 +31,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,7 +75,7 @@ public class AuthenticationController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> userRegister(@RequestBody NormalUserRequest normalUserRequest) {
+    public ResponseEntity<?> userRegister(@RequestBody @Validated NormalUserRequest normalUserRequest) {
 
 
         GenericResponse genericResponse = null;
@@ -84,6 +85,8 @@ public class AuthenticationController {
                     .password(passwordEncoder.encode(normalUserRequest.getPassword()))
                     .gender(normalUserRequest.getGender())
                     .build();
+
+
             UserApp n2 = userAppDetailsService.normalUserRegister(n);
             //            sending email verification
             log.info("""
