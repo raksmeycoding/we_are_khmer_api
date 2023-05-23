@@ -31,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -148,6 +149,19 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     private ResponseEntity<?> userLogin(@RequestBody UserLoginRequest userLoginRequest) {
-        return ResponseEntity.ok(authenticationService.authenticate(userLoginRequest));
+        GenericResponse genericResponse;
+        try {
+            return ResponseEntity.ok(authenticationService.authenticate(userLoginRequest));
+        } catch (Exception ex) {
+            if(ex instanceof DisabledException) {
+                genericResponse = GenericResponse.builder()
+                        .title("User not allowed.")
+                        .status("400")
+                        .message("You need to do code verification. please checkout your email and verify it. (" + ex.getMessage() + ")")
+                        .build();
+                return ResponseEntity.badRequest().body(genericResponse);
+            }
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 }
