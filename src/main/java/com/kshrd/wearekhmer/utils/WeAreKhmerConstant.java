@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 
 
 
+@Component
+
 public class WeAreKhmerConstant {
      public static String[] WORKING_EXPERIENCE_ERROR_MESSAGE = {
             "working experience are required least 1.",
@@ -14,4 +16,8 @@ public class WeAreKhmerConstant {
             "education are required least 1.",
             "education only 3 are allowed."
     };
+
+     public String[] GENDER = {
+             "male", "female", "other"
+     };
 }

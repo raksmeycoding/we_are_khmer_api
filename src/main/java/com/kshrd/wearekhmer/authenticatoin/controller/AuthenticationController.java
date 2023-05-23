@@ -23,6 +23,7 @@ import com.kshrd.wearekhmer.utils.UserTemPassword;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
+import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
@@ -73,6 +74,8 @@ public class AuthenticationController {
 
     private final ServiceClassHelper serviceClassHelper;
 
+    private final DefaultWeAreKhmerValidation defaultWeAreKhmerValidation;
+
 
     @PostMapping("/register")
     public ResponseEntity<?> userRegister(@RequestBody @Validated NormalUserRequest normalUserRequest) {
@@ -80,6 +83,9 @@ public class AuthenticationController {
 
         GenericResponse genericResponse = null;
         try {
+//            gender validation
+            defaultWeAreKhmerValidation.genderValidation(normalUserRequest.getGender());
+
             NormalUserRequest n = NormalUserRequest.builder()
                     .email(normalUserRequest.getEmail())
                     .password(passwordEncoder.encode(normalUserRequest.getPassword()))

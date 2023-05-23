@@ -49,4 +49,16 @@ public class DomrraCustomExceptionHandler {
                         .build();
         return ResponseEntity.ok(genericResponse);
     }
+
+    @ExceptionHandler(CustomRuntimeException.class)
+    public ResponseEntity<?> customRuntimeException(CustomRuntimeException ex) {
+        GenericResponse genericResponse =
+                GenericResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.name())
+                        .title("error")
+                        .message(ex.getMessage())
+                        .build();
+        return ResponseEntity.badRequest().body(genericResponse);
+
+    }
 }
