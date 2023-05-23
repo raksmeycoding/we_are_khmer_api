@@ -86,6 +86,8 @@ public class AuthenticationController {
         try {
 //            gender validation
             defaultWeAreKhmerValidation.genderValidation(normalUserRequest.getGender());
+//            password validation
+            defaultWeAreKhmerValidation.passwordValidation(normalUserRequest.getPassword());
 
             NormalUserRequest n = NormalUserRequest.builder()
                     .email(normalUserRequest.getEmail())

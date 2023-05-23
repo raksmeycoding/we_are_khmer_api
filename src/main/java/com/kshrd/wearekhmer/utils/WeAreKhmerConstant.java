@@ -20,4 +20,8 @@ public class WeAreKhmerConstant {
      public String[] GENDER = {
              "male", "female", "other"
      };
+
+
+    public final String PASSWORD_PATTERN =
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@#$%^&+=]).{8,}$";
 }
