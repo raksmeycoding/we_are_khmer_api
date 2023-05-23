@@ -61,4 +61,6 @@ public class DomrraCustomExceptionHandler {
         return ResponseEntity.badRequest().body(genericResponse);
 
     }
+
+
 }

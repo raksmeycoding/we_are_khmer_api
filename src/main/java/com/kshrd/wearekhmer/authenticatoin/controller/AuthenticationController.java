@@ -17,9 +17,7 @@ import com.kshrd.wearekhmer.user.repository.EducationMapper;
 import com.kshrd.wearekhmer.user.repository.QuoteMapper;
 import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
 import com.kshrd.wearekhmer.user.service.userService.UserAppDetailsServiceImpl;
-import com.kshrd.wearekhmer.utils.InMemoryTempoUserPassword;
 import com.kshrd.wearekhmer.utils.OtpUtil;
-import com.kshrd.wearekhmer.utils.UserTemPassword;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
@@ -38,9 +36,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -99,8 +94,8 @@ public class AuthenticationController {
             UserApp n2 = userAppDetailsService.normalUserRegister(n);
             //            sending email verification
             log.info("""
-                        Sending Email...
-                        """);
+                    Sending Email...
+                    """);
             Otp otpGen = Otp.builder()
                     .token(otpUtil.getGeneratedUUid())
                     .email(normalUserRequest.getEmail())
@@ -113,8 +108,8 @@ public class AuthenticationController {
 
             emailService.sendVerificationEmail(n2.getEmail(), otp.getToken());
             log.info("""
-                        Finish Sending Email...
-                        """);
+                    Finish Sending Email...
+                    """);
 
             genericResponse = GenericResponse.builder()
                     .title("register succeed!")
@@ -134,18 +129,13 @@ public class AuthenticationController {
 
     @PostMapping("/register/as-author")
     public ResponseEntity<?> registerAsAuthor(@RequestBody AuthorRequest authorRequest) {
-        try {
-            AuthorRequestTable authorRequestTable = serviceClassHelper.insertAndGetAuthorRequestFromDatabase(authorRequest);
-            GenericResponse AUTHOR_REQUEST_RESULT = GenericResponse.builder()
-                    .message("request successfully")
-                    .status("200")
-                    .payload(authorRequestTable)
-                    .build();
-            return ResponseEntity.ok(AUTHOR_REQUEST_RESULT);
-        } catch (Exception ex) {
-            System.out.println(ex);
-            return ResponseEntity.ok(ex.getMessage());
-        }
+        AuthorRequestTable authorRequestTable = serviceClassHelper.insertAndGetAuthorRequestFromDatabase(authorRequest);
+        GenericResponse AUTHOR_REQUEST_RESULT = GenericResponse.builder()
+                .message("request successfully")
+                .status("200")
+                .payload(authorRequestTable)
+                .build();
+        return ResponseEntity.ok(AUTHOR_REQUEST_RESULT);
     }
 
 
@@ -155,7 +145,7 @@ public class AuthenticationController {
         try {
             return ResponseEntity.ok(authenticationService.authenticate(userLoginRequest));
         } catch (Exception ex) {
-            if(ex instanceof DisabledException) {
+            if (ex instanceof DisabledException) {
                 genericResponse = GenericResponse.builder()
                         .title("User not allowed.")
                         .status("400")
