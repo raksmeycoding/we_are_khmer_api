@@ -11,7 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class UserRepsonse {
-    private String email;
-    private List<String> roles;
     private String token;
 }

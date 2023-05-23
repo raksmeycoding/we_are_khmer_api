@@ -6,7 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import java.sql.Timestamp;
 
 public interface OtpService {
-    Otp createVerificationToken(String token, Timestamp expiredAt, String userId);
+
+    Otp createVerificationToken(Otp otp);
 
     Otp findByToken(String token);
 

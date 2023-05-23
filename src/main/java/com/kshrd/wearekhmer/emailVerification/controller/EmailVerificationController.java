@@ -1,9 +1,14 @@
 package com.kshrd.wearekhmer.emailVerification.controller;
 
 
+import com.kshrd.wearekhmer.authenticatoin.AuthenticationService;
 import com.kshrd.wearekhmer.emailVerification.service.EmailService;
 import com.kshrd.wearekhmer.opt.model.Otp;
 import com.kshrd.wearekhmer.opt.service.OtpService;
+import com.kshrd.wearekhmer.requestRequest.GenericResponse;
+import com.kshrd.wearekhmer.requestRequest.UserLoginRequest;
+import com.kshrd.wearekhmer.requestRequest.UserRepsonse;
+import com.kshrd.wearekhmer.utils.InMemoryTempoUserPassword;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @AllArgsConstructor
@@ -23,31 +26,43 @@ public class EmailVerificationController {
     private final EmailService emailService;
     private final OtpService otpService;
 
+    private final AuthenticationService authenticationService;
 
-    @PostMapping("/verification/token/{tokenId}")
+    private final InMemoryTempoUserPassword inMemoryTempoUserPassword;
+
+
+    @PostMapping("/verification/token")
     public ResponseEntity<?> emailVerificatoin(@RequestBody TokenRequest tokenRequest) {
 
         System.out.println(tokenRequest.getToken());
-
-        final AtomicInteger counter = new AtomicInteger(0);
+        GenericResponse genericResponse;
         try {
             log.info("sending email");
-//          enable user
             Otp otp = otpService.enableUserByToken(tokenRequest.getToken());
+            System.out.println(otp);
 
-            System.out.println("found token: " + otp);
-            ResponseEntity.ok("user enablee success");
-
+//            after verification, then login
+            UserLoginRequest userLoginRequest =
+                    UserLoginRequest.builder()
+                            .email(otp.getEmail())
+                            .password(otp.getTemp_password())
+                            .build();
+            ResponseEntity<?> response = authenticationService.authenticate(userLoginRequest);
+            otpService.removeByToken(otp.getToken());
+            return ResponseEntity.ok(response.getBody());
         } catch (Exception exception) {
-            log.error("sending email error");
-            System.out.println(exception);
-            counter.incrementAndGet();
+            genericResponse = GenericResponse.builder()
+                    .status("500")
+                    .message(exception.getMessage())
+                    .title("internal server error!")
+                    .build();
+
+            return ResponseEntity.internalServerError().body(genericResponse);
+
+
         }
 
-        if (counter.get() > 0) {
-            return ResponseEntity.badRequest().body("sending email get error.");
-        }
-        return ResponseEntity.ok("sending email successfully");
+
     }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 @Component
@@ -25,7 +26,11 @@ public class OtpUtil {
     }
 
     public String getGeneratedUUid() {
-        this.generatedUUid = UUID.randomUUID().toString();
+        Random random = new Random();
+        int min = 100_000; // Minimum 6-digit number
+        int max = 999_999; // Maximum 6-digit number
+        int randomNumber = random.nextInt(max - min + 1) + min;
+        this.generatedUUid = String.valueOf(randomNumber);
         return this.generatedUUid;
     }
 

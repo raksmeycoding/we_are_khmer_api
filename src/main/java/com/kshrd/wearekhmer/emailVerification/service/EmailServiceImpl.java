@@ -31,7 +31,8 @@ public class EmailServiceImpl implements EmailService{
         SimpleMailMessage message = new SimpleMailMessage();
         Context context = new Context();
         Map<String, Object> map = new HashMap<>();
-        map.put("link", "http://localhost:8080/user/verify/email/token/" + tokenId);
+        map.put("link", "http://localhost:3000/codeVerification");
+        map.put("code", tokenId);
         context.setVariables(map);
         String process = springTemplateEngine.process("email-verification", context);
         MimeMessage mimeMessage = mailSender.createMimeMessage();
