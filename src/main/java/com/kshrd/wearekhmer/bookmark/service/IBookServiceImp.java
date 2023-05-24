@@ -41,7 +41,7 @@ public class IBookServiceImp implements IBookService{
     }
 
     @Override
-    public Bookmark deleteBookmarkByArticleId(String userId, String articleId) {
-        return bookmarkMapper.deleteBookmarkByArticleId(userId, articleId);
+    public Bookmark deleteBookmarkByArticleId(Bookmark bookmark) {
+        return bookmarkMapper.deleteBookmarkByArticleId(bookmark);
     }
 }

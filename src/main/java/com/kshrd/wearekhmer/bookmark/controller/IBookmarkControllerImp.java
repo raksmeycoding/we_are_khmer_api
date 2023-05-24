@@ -4,15 +4,18 @@ import com.kshrd.wearekhmer.article.service.IArticleService;
 import com.kshrd.wearekhmer.bookmark.model.entity.Bookmark;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.bookmark.model.request.BookmarkRequest;
+import com.kshrd.wearekhmer.bookmark.repository.BookmarkMapper;
 import com.kshrd.wearekhmer.bookmark.service.IBookService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/bookmark")
@@ -28,6 +31,7 @@ public class IBookmarkControllerImp implements IBookmarkController {
 
     @Override
     @GetMapping
+    @Operation(summary = "get all bookmark (for current user)")
     public ResponseEntity<?> getAllBookmarkCurrentId() {
         GenericResponse genericResponse;
         try {
@@ -44,7 +48,7 @@ public class IBookmarkControllerImp implements IBookmarkController {
                     .build();
             return ResponseEntity.ok(genericResponse);
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             genericResponse =
                     GenericResponse
                             .builder()
@@ -58,6 +62,7 @@ public class IBookmarkControllerImp implements IBookmarkController {
 
     @Override
     @PostMapping
+    @Operation(summary = "insert bookmark (for current user)")
     public ResponseEntity<?> insertBookmark(String articleId) {
         GenericResponse genericResponse;
         try {
@@ -66,23 +71,32 @@ public class IBookmarkControllerImp implements IBookmarkController {
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .articleId(articleId)
                     .build();
-            Bookmark bookmark = Bookmark.builder()
-                    .userId(weAreKhmerCurrentUser.getUserId())
-                    .articleId(articleId)
-                    .build();
-            if(bookmarkService.getAllBookmarkCurrentId(weAreKhmerCurrentUser.getUserId(), articleId)){
-                Bookmark bookmark1 = bookmarkService.insertBookmark(bookmark);
-                genericResponse = GenericResponse.builder()
-                        .status("200")
-                        .payload(bookmark1)
-                        .title("success")
-                        .message("You have save to bookmark successfully")
-                        .build();
-                return ResponseEntity.ok(genericResponse);
-            }else{
-                Bookmark bookmark1 = bookmarkService.deleteBookmark(bookmark);
-            }
 
+                Bookmark bookmark = Bookmark.builder()
+                        .userId(weAreKhmerCurrentUser.getUserId())
+                        .articleId(articleId)
+                        .build();
+
+                if(bookmarkService.getAllBookmarkCurrentId(articleId, weAreKhmerCurrentUser.getUserId())){
+                    Bookmark bookmark1 = bookmarkService.deleteBookmarkByArticleId(bookmark);
+                    genericResponse =
+                            GenericResponse.builder()
+                                    .status("200")
+                                    .payload(bookmark1)
+                                    .title("success")
+                                    .message("You have deleted bookmark successfully")
+                                    .build();
+                    return ResponseEntity.ok(genericResponse);
+                }
+                Bookmark bookmark1 = bookmarkService.insertBookmark(bookmark);
+                genericResponse =
+                        GenericResponse.builder()
+                            .status("200")
+                            .payload(bookmark1)
+                            .title("success")
+                            .message("You have saved to bookmark successfully")
+                            .build();
+                    return ResponseEntity.ok(genericResponse);
         } catch (Exception ex) {
             genericResponse =
                     GenericResponse
@@ -94,11 +108,10 @@ public class IBookmarkControllerImp implements IBookmarkController {
             return ResponseEntity.internalServerError().body(genericResponse);
 
         }
-        return null;
     }
-
     @Override
     @DeleteMapping("/Bookmark")
+    @Operation(summary = "delete bookmark (for current user)")
     public ResponseEntity<?> deleteBookmark(String bookmarkId) {
         GenericResponse genericResponse;
         try{
@@ -131,6 +144,7 @@ public class IBookmarkControllerImp implements IBookmarkController {
 
     @Override
     @DeleteMapping("/Bookmarks")
+    @Operation(summary = "delete all bookmark (for current user)")
     public ResponseEntity<?> removeAllBookmark() {
         GenericResponse genericResponse;
         try{
