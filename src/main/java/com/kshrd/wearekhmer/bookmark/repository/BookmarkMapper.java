@@ -53,5 +53,5 @@ public interface BookmarkMapper {
     @Select("""
             DELETE FROM bookmark_tb WHERE article_id = #{articleId} AND user_id = #{userId}
             """)
-    Bookmark deleteBookmarkByArticleId(String articleId, String userId);
+    Bookmark deleteBookmarkByArticleId(Bookmark bookmark);
 }

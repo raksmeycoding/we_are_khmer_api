@@ -18,5 +18,5 @@ public interface IBookService {
 
     Boolean getAllBookmarkCurrentId(String articleId, String userId);
 
-    Bookmark deleteBookmarkByArticleId(String userId, String articleId);
+    Bookmark deleteBookmarkByArticleId(Bookmark bookmark);
 }
