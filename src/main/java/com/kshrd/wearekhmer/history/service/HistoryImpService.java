@@ -35,5 +35,15 @@ public class HistoryImpService implements IHistoryService{
         return historyMapper.removeAllHistory(history);
     }
 
+    @Override
+    public History updateHistory(String articleId, String userId) {
+        return historyMapper.updateHistory(articleId,userId);
+    }
+
+    @Override
+    public Boolean getAllHistoryByCurrentId(String articleId, String userId) {
+        return historyMapper.getAllHistoryCurrentId(articleId,userId);
+    }
+
 
 }

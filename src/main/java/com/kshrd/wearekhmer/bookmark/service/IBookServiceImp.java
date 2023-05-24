@@ -34,4 +34,14 @@ public class IBookServiceImp implements IBookService{
     public List<Bookmark> removeAllBookmark(Bookmark bookmark) {
         return bookmarkMapper.removeAllBookmark(bookmark);
     }
+
+    @Override
+    public Boolean getAllBookmarkCurrentId(String articleId, String userId) {
+        return bookmarkMapper.getAllBookmarkCurrentId(articleId,userId);
+    }
+
+    @Override
+    public Bookmark deleteBookmarkByArticleId(String userId, String articleId) {
+        return bookmarkMapper.deleteBookmarkByArticleId(userId, articleId);
+    }
 }

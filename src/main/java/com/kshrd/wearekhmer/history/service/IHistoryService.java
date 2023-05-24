@@ -18,5 +18,8 @@ public interface IHistoryService {
 
     List<History> removeAllHistory(History history);
 
+    History updateHistory(String articleId, String userId);
+
+    Boolean getAllHistoryByCurrentId(String articleId, String userId);
 
 }

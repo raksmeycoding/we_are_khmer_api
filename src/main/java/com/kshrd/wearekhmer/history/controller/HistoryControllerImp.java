@@ -33,6 +33,7 @@ public class HistoryControllerImp implements IHistoryController {
 
     @Override
     @GetMapping
+    @Operation(summary = "get all history (for current user)")
     public ResponseEntity<?> getAllHistoryByCurrentId() {
         GenericResponse genericResponse;
         try {
@@ -64,26 +65,40 @@ public class HistoryControllerImp implements IHistoryController {
 
     @Override
     @PostMapping
+    @Operation(summary = "insert history (for current user) ")
     public ResponseEntity<?> insertHistory(String articleId) {
         GenericResponse genericResponse;
         try {
+
 
             HistoryRequest requestInsert = HistoryRequest.builder()
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .articleId(articleId)
                     .build();
-            History history = History.builder()
-                    .userId(weAreKhmerCurrentUser.getUserId())
-                    .articleId(articleId)
-                    .build();
-            History history1 = historyService.insertHistory(history);
-            genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .payload(history1)
-                    .title("success")
-                    .message("You have successfully recorded history")
-                    .build();
-            return ResponseEntity.ok(genericResponse);
+
+            if(historyService.getAllHistoryByCurrentId(articleId, weAreKhmerCurrentUser.getUserId()) == true){
+                History update = historyService.updateHistory(articleId, weAreKhmerCurrentUser.getUserId());
+                genericResponse = GenericResponse.builder()
+                        .status("200")
+                        .payload(update)
+                        .title("success")
+                        .message("You have update this record successfully")
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }else{
+                History history = History.builder()
+                        .userId(weAreKhmerCurrentUser.getUserId())
+                        .articleId(articleId)
+                        .build();
+                History history1 = historyService.insertHistory(history);
+                genericResponse = GenericResponse.builder()
+                        .status("200")
+                        .payload(history1)
+                        .title("success")
+                        .message("You have successfully recorded history")
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }
         } catch (Exception ex) {
             genericResponse =
                     GenericResponse
@@ -93,12 +108,12 @@ public class HistoryControllerImp implements IHistoryController {
                             .build();
             ex.printStackTrace();
             return ResponseEntity.internalServerError().body(genericResponse);
-
         }
     }
 
     @Override
     @DeleteMapping("/history")
+    @Operation(summary = "delete history (for current user) ")
     public ResponseEntity<?> deleteHistory(String historyId) {
         GenericResponse genericResponse;
         try {
@@ -108,6 +123,7 @@ public class HistoryControllerImp implements IHistoryController {
                     .build();
 
             History history1 = historyService.deleteHistory(history);
+
 
             genericResponse = GenericResponse.builder()
                     .status("200")
@@ -130,6 +146,7 @@ public class HistoryControllerImp implements IHistoryController {
 
     @Override
     @DeleteMapping("histories")
+    @Operation(summary = "delete all history (for current user) ")
     public ResponseEntity<?> removeAllHistory() {
         GenericResponse genericResponse;
         try {
@@ -157,6 +174,5 @@ public class HistoryControllerImp implements IHistoryController {
             return ResponseEntity.internalServerError().body(genericResponse);
         }
     }
-
 
 }
