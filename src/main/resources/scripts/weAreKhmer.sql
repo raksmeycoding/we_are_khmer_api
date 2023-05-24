@@ -451,4 +451,4 @@ create table history_tb(
 
 
 
-
+select * from user_tb where is_author = true;

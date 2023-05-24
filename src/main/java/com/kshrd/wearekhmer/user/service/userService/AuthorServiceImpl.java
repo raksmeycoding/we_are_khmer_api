@@ -42,14 +42,13 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
 
     @Override
     public AuthorRequestTable delete(String authorRequestId) {
-        return null;
+        return authorRepository.delete(authorRequestId);
     }
 
     @Override
     public List<AuthorDTO> getAllAuthor() {
         return authorRepository.getAllAuthor();
     }
-
 
     @Override
     public String updateUserRequestToBeAsAuthor(String userId) {

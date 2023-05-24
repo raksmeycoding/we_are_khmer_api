@@ -4,6 +4,8 @@ import com.kshrd.wearekhmer.article.service.IArticleService;
 import com.kshrd.wearekhmer.history.model.entity.History;
 import com.kshrd.wearekhmer.history.service.IHistoryService;
 import com.kshrd.wearekhmer.opt.service.OtpService;
+import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
+import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.repository.EducationMapper;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
 import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
@@ -69,6 +71,9 @@ public class WeAreKhmerApplication implements CommandLineRunner {
     private final ICommentRepository ICommentRepository;
 
     private final IHistoryService iHistoryService;
+
+    private final AuthorRepository authorRepository;
+
 
     public static void main(String[] args) {
         SpringApplication.run(WeAreKhmerApplication.class, args);
@@ -147,6 +152,10 @@ public class WeAreKhmerApplication implements CommandLineRunner {
         System.out.println(randomNumber);
 
 //        List<History> historyList = iHistoryService.getAllHistoryByCurrentUser();
+
+
+        List<AuthorDTO> authorDTOList = authorService.getAllAuthor();
+        System.out.println(authorDTOList);
 
 
 

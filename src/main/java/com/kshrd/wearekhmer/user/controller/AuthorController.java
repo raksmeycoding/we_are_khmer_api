@@ -4,9 +4,11 @@ package com.kshrd.wearekhmer.user.controller;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
+import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.service.AuthorRequestTableService;
 import com.kshrd.wearekhmer.user.service.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 
 
 @RequestMapping("/api/v1/author")
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @AllArgsConstructor
 public class AuthorController {
@@ -27,19 +30,19 @@ public class AuthorController {
 
     @GetMapping("authorRequest")
     @Operation(summary = "(Get all authors request either accept as author or not.)")
-    public ResponseEntity<?> getAllAuthorRequest() {
+    public ResponseEntity<?> getAllUserRequestAsAuthorEitherAcceptOrNot() {
         try {
             List<AuthorRequestTable> authorRequestTable = authorRequestTableService.getAll();
             return ResponseEntity.ok(authorRequestTable);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
-            throw  new RuntimeException();
+            throw new RuntimeException();
         }
     }
 
 
-    @GetMapping("authorUser ")
-    @Operation(summary = "(Get all authors authors.)")
+    @GetMapping("authorUser")
+    @Operation(summary = "(Get all only authors user.)")
     public ResponseEntity<?> getAllAuthorUser() {
         try {
             List<AuthorDTO> authorDTOList = authorService.getAllAuthor();
@@ -53,11 +56,11 @@ public class AuthorController {
 
     @PostMapping("accept/{userId}")
     @Operation(summary = "(Accept user request as author.)")
-    public ResponseEntity<?> acceptAutorRequest(@PathVariable String userId) {
+    public ResponseEntity<?> updateUserRequestToBeAsAuthor(@PathVariable String userId) {
         try {
             String userIdAccepted = authorService.updateUserRequestToBeAsAuthor(userId);
             GenericResponse res;
-            if(userIdAccepted == null) {
+            if (userIdAccepted == null) {
                 res = GenericResponse.builder()
                         .status("500")
                         .message("is not accepted.")
