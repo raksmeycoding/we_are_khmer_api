@@ -66,9 +66,12 @@ public interface AuthorRepository {
 
 
     @Select("""
-            select update_tables_author_request_tb_and_user_tb(true, #{userId})
+            insert into user_role_tb (user_id, role_id)
+            values ((select user_id from user_tb where user_tb.user_id = #{userId}),
+                    (select role_id from role_tb where name = 'ROLE_AUTHOR'))
+            returning user_id
             """)
-    boolean updateUserRequestToBeAsAuthor(String userId);
+    String updateUserRequestToBeAsAuthor(String userId);
 
 
     @Select("""

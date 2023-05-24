@@ -3,6 +3,8 @@ package com.kshrd.wearekhmer.utils.validation;
 
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
+import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,12 @@ import java.util.regex.Pattern;
 
 @Service
 @Qualifier("DefaultWeAreKhmerValidation")
+@SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
 public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     private final WeAreKhmerConstant weAreKhmerConstant;
+    private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
     @Override
     public void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize) {
@@ -59,9 +63,23 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
 
     public void passwordValidation(String password) {
-        if(password.length() < 8) {
+        if (password.length() < 8) {
             throw new CustomRuntimeException("Password must be at least 8 characters");
         }
+    }
+
+
+    @Override
+    @SecurityRequirement(name = "bearerAuth")
+    public boolean isAdmin() {
+
+        System.out.println(weAreKhmerCurrentUser.getAuthorities());
+        for (String role : weAreKhmerCurrentUser.getAuthorities()) {
+            if (role.equals("ROLE_ADMIN")) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

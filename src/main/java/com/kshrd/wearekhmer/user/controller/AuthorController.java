@@ -54,9 +54,9 @@ public class AuthorController {
     @PostMapping("accept/{userId}")
     public ResponseEntity<?> acceptAutorRequest(@PathVariable String userId) {
         try {
-            boolean isAccepted = authorService.updateUserRequestToBeAsAuthor(userId);
+            String userIdAccepted = authorService.updateUserRequestToBeAsAuthor(userId);
             GenericResponse res;
-            if(!isAccepted) {
+            if(userIdAccepted == null) {
                 res = GenericResponse.builder()
                         .status("500")
                         .message("is not accepted.")

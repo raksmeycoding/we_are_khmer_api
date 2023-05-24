@@ -7,4 +7,6 @@ public interface WeAreKhmerValidation {
     void validateElementLengthInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize);
 
     void genderValidation(String gender);
+
+    public boolean isAdmin();
 }

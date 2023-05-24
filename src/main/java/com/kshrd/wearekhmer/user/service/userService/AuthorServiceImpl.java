@@ -52,7 +52,7 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
 
 
     @Override
-    public boolean updateUserRequestToBeAsAuthor(String userId) {
+    public String updateUserRequestToBeAsAuthor(String userId) {
         return authorRepository.updateUserRequestToBeAsAuthor(userId);
     }
 

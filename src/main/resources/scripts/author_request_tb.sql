@@ -36,5 +36,4 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
 select * from insert_or_update_user_request_as_author('dcc1bfec-6c61-4936-bf90-26fc6a25246a', 'raksmey koung', 'i 3 want to be author')
