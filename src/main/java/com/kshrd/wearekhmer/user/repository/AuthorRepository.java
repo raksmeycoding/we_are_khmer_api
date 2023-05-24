@@ -31,8 +31,9 @@ public interface AuthorRepository {
     @ResultMap("authorRequestMap")
     AuthorRequestTable getById(String authorRequestId);
 
-    @Select("INSERT INTO author_request_tb (user_id, author_request_name, reason) " +
-            "VALUES (#{userId}, #{authorRequestName}, #{reason}) returning *")
+    @Select("""
+            select * from insert_or_update_user_request_as_author(#{userId}, #{authorRequestName}, #{reason})
+            """)
     @ResultMap("authorRequestMap")
     AuthorRequestTable insert(AuthorRequestTable authorRequest);
 
