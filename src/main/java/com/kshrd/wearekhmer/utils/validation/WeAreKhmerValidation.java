@@ -9,4 +9,9 @@ public interface WeAreKhmerValidation {
     void genderValidation(String gender);
 
     public boolean isAdmin();
+
+
+    public boolean validateArticleId(String articleId);
+
+    public boolean validateReportId(String reportId);
 }

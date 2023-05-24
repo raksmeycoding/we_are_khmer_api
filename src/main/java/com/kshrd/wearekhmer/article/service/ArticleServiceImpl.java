@@ -48,4 +48,10 @@ public class ArticleServiceImpl implements IArticleService{
     public Article deleteArticleByIdAndCurrentUser(Article article) {
         return articleMapper.deleteArticleByIdAndCurrentUser(article);
     }
+
+
+    @Override
+    public boolean isArticleExist(String articleId) {
+        return articleMapper.isArticleExist(articleId);
+    }
 }

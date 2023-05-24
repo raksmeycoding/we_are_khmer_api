@@ -1,3 +1,6 @@
+-- check if article exist by id
+select exists(select 1 from article_tb where article_tb.article_id = '773066fb-bd6c-4a75-94d6-9c8b3c24e31c');
+
 -- work, but not satisfied
 select ab.article_id,
        ab.user_id,

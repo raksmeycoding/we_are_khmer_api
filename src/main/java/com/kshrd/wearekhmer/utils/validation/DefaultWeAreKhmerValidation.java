@@ -1,7 +1,10 @@
 package com.kshrd.wearekhmer.utils.validation;
 
 
+import com.kshrd.wearekhmer.article.repository.ArticleMapper;
+import com.kshrd.wearekhmer.article.service.IArticleService;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
+import com.kshrd.wearekhmer.userReport.repository.ReportMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -20,6 +23,10 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     private final WeAreKhmerConstant weAreKhmerConstant;
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
+
+    private final ReportMapper reportMapper;
+
+    private final IArticleService articleService;
 
     @Override
     public void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize) {
@@ -82,6 +89,16 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
         return false;
     }
 
+
+    @Override
+    public boolean validateArticleId(String articleId) {
+        return articleService.isArticleExist(articleId);
+    }
+
+    @Override
+    public boolean validateReportId(String reportId) {
+        return reportMapper.isReportExistByIs(reportId);
+    }
 }
 
 

@@ -154,8 +154,7 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 //        List<History> historyList = iHistoryService.getAllHistoryByCurrentUser();
 
 
-        List<AuthorDTO> authorDTOList = authorService.getAllAuthor();
-        System.out.println(authorDTOList);
+        System.out.println(articleService.isArticleExist("773066fb-bd6c-4a75-94d6-9c8b3c24e31c"));
 
 
 

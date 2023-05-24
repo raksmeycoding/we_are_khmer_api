@@ -84,4 +84,10 @@ public interface ArticleMapper {
     @Select("DELETE FROM article_tb WHERE article_id = #{articleId} and user_id = #{userId} returning *")
     @ResultMap("articleResultMap")
     Article deleteArticleByIdAndCurrentUser(Article article);
+
+
+    @Select("""
+            select exists(select 1 from article_tb where article_tb.article_id = #{articleId})
+            """)
+    boolean isArticleExist(String articleId);
 }

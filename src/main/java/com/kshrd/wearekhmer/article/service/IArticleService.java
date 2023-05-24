@@ -18,4 +18,6 @@ public interface IArticleService {
     Article updateArticle(Article article);
 
     Article deleteArticleByIdAndCurrentUser(Article article);
+
+    boolean isArticleExist(String articleId);
 }
