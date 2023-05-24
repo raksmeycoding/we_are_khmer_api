@@ -1,3 +1,10 @@
+-- update user request as author to be author
+select update_tables_author_request_tb_and_user_tb(true, '34535646436');
+
+-- reject user as author to be author as reject
+select update_tables_author_request_tb_and_user_tb(false, '32456465764');
+
+
 CREATE OR REPLACE FUNCTION insert_or_update_user_request_as_author(
     user_id_param varchar,
     author_name_param varchar,
