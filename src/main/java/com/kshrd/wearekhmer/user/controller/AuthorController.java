@@ -52,6 +52,7 @@ public class AuthorController {
 
 
     @PostMapping("accept/{userId}")
+    @Operation(summary = "(Accept user request as author.)")
     public ResponseEntity<?> acceptAutorRequest(@PathVariable String userId) {
         try {
             String userIdAccepted = authorService.updateUserRequestToBeAsAuthor(userId);
