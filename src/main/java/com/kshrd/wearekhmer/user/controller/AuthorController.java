@@ -6,6 +6,7 @@ import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
 import com.kshrd.wearekhmer.user.service.AuthorRequestTableService;
 import com.kshrd.wearekhmer.user.service.AuthorService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class AuthorController {
 
 
     @GetMapping("authorRequest")
+    @Operation(summary = "(Get all authors request either accept as author or not.)")
     public ResponseEntity<?> getAllAuthorRequest() {
         try {
             List<AuthorRequestTable> authorRequestTable = authorRequestTableService.getAll();
@@ -36,7 +38,8 @@ public class AuthorController {
     }
 
 
-    @GetMapping("authorUser")
+    @GetMapping("authorUser ")
+    @Operation(summary = "(Get all authors authors.)")
     public ResponseEntity<?> getAllAuthorUser() {
         try {
             List<AuthorDTO> authorDTOList = authorService.getAllAuthor();
