@@ -4,4 +4,7 @@ CREATE TABLE bookmark_tb(
     user_id varchar references user_tb (user_id)  ON UPDATE CASCADE ON DELETE CASCADE   not null,
     article_id varchar references article_tb(article_id) ON UPDATE CASCADE ON DELETE CASCADE not null,
     created_at timestamp default current_timestamp
-)
+);
+
+drop table  bookmark_tb;
+

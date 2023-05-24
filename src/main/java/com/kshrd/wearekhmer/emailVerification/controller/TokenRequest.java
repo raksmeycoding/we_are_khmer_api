@@ -1,6 +1,9 @@
 package com.kshrd.wearekhmer.emailVerification.controller;
 
 
+import lombok.Data;
+
+@Data
 public class TokenRequest {
     String token;
 

@@ -5,8 +5,6 @@ import com.kshrd.wearekhmer.opt.repository.OtpServiceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-
 
 @Service
 @AllArgsConstructor
@@ -14,9 +12,10 @@ public class OtpServiceImpl implements OtpService{
 
     private final OtpServiceRepository otpServiceRepository;
 
+
     @Override
-    public Otp createVerificationToken(String token, Timestamp expiredAt, String userId) {
-        return otpServiceRepository.createVerificationToken(token, expiredAt, userId);
+    public Otp createVerificationToken(Otp otp) {
+        return otpServiceRepository.createVerificationToken(otp);
     }
 
     @Override

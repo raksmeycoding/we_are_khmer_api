@@ -4,15 +4,14 @@ package com.kshrd.wearekhmer.opt.repository;
 import com.kshrd.wearekhmer.opt.model.Otp;
 import org.apache.ibatis.annotations.*;
 
-import java.sql.Timestamp;
-
 @Mapper
 public interface OtpServiceRepository {
 
 
     @Select("""
-            insert into otp2(token, expiredAt, user_id)
-            values (#{token}, #{expiredAt}, #{userId}) returning *
+            insert into otp2(token, email, temp_password, expiredAt, user_id)
+            values (#{token},#{email}, #{temp_password}, #{expiredAt}, #{userId})
+            returning *
             """)
 
     @Results(
@@ -20,13 +19,15 @@ public interface OtpServiceRepository {
             value = {
                     @Result(property = "optId", column = "token_id"),
                     @Result(property = "token", column = "token"),
+                    @Result(property = "email", column = "email"),
+                    @Result(property = "temp_password", column = "temp_password"),
                     @Result(property = "createAt", column = "createat"),
                     @Result(property = "expiredAt", column = "expiredat"),
                     @Result(property = "isexpired", column = "isExpired"),
                     @Result(property = "userId", column = "user_id")
             }
     )
-    Otp createVerificationToken(@Param("token") String token, @Param("expiredAt") Timestamp expiredAt, @Param("userId") String userId );
+    Otp createVerificationToken(Otp otp);
 
 
     @Select("""
@@ -36,22 +37,31 @@ public interface OtpServiceRepository {
     Otp findByToken(@Param("token") String token);
 
 
-
     @Select("""
-           delete from otp2 where token = #{token} returning * 
-            """)
+            delete from otp2 where token = #{token} returning * 
+             """)
     @ResultMap("optMap")
     Otp removeByToken(@Param("token") String token);
 
 
-
     @Select("""
-            update user_tb set is_enable = true where user_id = (select user_id from otp2 where otp2.token = #{token}) returning *
+            WITH updated_users AS (
+                UPDATE user_tb
+                    SET is_enable = true
+                    WHERE user_id = (SELECT user_id FROM otp2 WHERE otp2.token = #{token})
+                    RETURNING *
+            )
+            SELECT * FROM otp2;
             """)
-    @ResultMap("optMap")
-    Otp enableUserByToken(@Param("token") String token);
-
-
+    @Result(property = "optId", column = "token_id")
+    @Result(property = "token", column = "token")
+    @Result(property = "email", column = "email")
+    @Result(property = "temp_password", column = "temp_password")
+    @Result(property = "createAt", column = "createat")
+    @Result(property = "expiredAt", column = "expiredat")
+    @Result(property = "isexpired", column = "isExpired")
+    @Result(property = "userId", column = "user_id")
+    Otp enableUserByToken(String token);
 
 
 }

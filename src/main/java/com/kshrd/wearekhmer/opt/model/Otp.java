@@ -14,6 +14,9 @@ public class Otp {
     private String optId;
     private String token;
 
+    private String email;
+    private String temp_password;
+
     private String createAt;
     private Timestamp expiredAt;
 

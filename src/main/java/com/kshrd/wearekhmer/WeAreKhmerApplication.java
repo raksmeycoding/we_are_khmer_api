@@ -27,6 +27,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.List;
+import java.util.Random;
 
 @SpringBootApplication
 @AllArgsConstructor
@@ -134,8 +135,16 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 //        System.out.println(workingExperienceList);
 
 
-        List<UserComment> userComment = ICommentRepository.getUserCommentByArticleId("8256a9af-da04-4c25-837f-3b9ccebd443a");
-        System.out.println(userComment);
+//        List<UserComment> userComment = ICommentRepository.getUserCommentByArticleId("8256a9af-da04-4c25-837f-3b9ccebd443a");
+//        System.out.println(userComment);
+
+
+        Random random = new Random();
+        int min = 100_000; // Minimum 6-digit number
+        int max = 999_999; // Maximum 6-digit number
+        int randomNumber = random.nextInt(max - min + 1) + min;
+
+        System.out.println(randomNumber);
 
 //        List<History> historyList = iHistoryService.getAllHistoryByCurrentUser();
 
