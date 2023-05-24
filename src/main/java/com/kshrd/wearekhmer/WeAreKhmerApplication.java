@@ -1,6 +1,8 @@
 package com.kshrd.wearekhmer;
 
 import com.kshrd.wearekhmer.article.service.IArticleService;
+import com.kshrd.wearekhmer.history.model.entity.History;
+import com.kshrd.wearekhmer.history.service.IHistoryService;
 import com.kshrd.wearekhmer.opt.service.OtpService;
 import com.kshrd.wearekhmer.user.repository.EducationMapper;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
@@ -64,6 +66,8 @@ public class WeAreKhmerApplication implements CommandLineRunner {
     private final IArticleService articleService;
 
     private final ICommentRepository ICommentRepository;
+
+    private final IHistoryService iHistoryService;
 
     public static void main(String[] args) {
         SpringApplication.run(WeAreKhmerApplication.class, args);
@@ -132,6 +136,8 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 
         List<UserComment> userComment = ICommentRepository.getUserCommentByArticleId("8256a9af-da04-4c25-837f-3b9ccebd443a");
         System.out.println(userComment);
+
+//        List<History> historyList = iHistoryService.getAllHistoryByCurrentUser();
 
 
 
