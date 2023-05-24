@@ -36,7 +36,7 @@ public class WeAreKhmerCurrentUser {
 
         } catch (Exception exception) {
             if (exception instanceof ClassCastException) {
-                throw new CustomRuntimeException("You are not login.");
+                throw new CustomRuntimeException("You are not login. Please register first.");
             }
             throw new RuntimeException();
         }
