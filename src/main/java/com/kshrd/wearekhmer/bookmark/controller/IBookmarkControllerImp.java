@@ -70,14 +70,19 @@ public class IBookmarkControllerImp implements IBookmarkController {
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .articleId(articleId)
                     .build();
-            Bookmark bookmark1 = bookmarkService.insertBookmark(bookmark);
-            genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .payload(bookmark1)
-                    .title("success")
-                    .message("You have successfully recorded bookmark")
-                    .build();
-            return ResponseEntity.ok(genericResponse);
+            if(bookmarkService.getAllBookmarkCurrentId(weAreKhmerCurrentUser.getUserId(), articleId)){
+                Bookmark bookmark1 = bookmarkService.insertBookmark(bookmark);
+                genericResponse = GenericResponse.builder()
+                        .status("200")
+                        .payload(bookmark1)
+                        .title("success")
+                        .message("You have save to bookmark successfully")
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }else{
+                Bookmark bookmark1 = bookmarkService.deleteBookmark(bookmark);
+            }
+
         } catch (Exception ex) {
             genericResponse =
                     GenericResponse
@@ -89,6 +94,7 @@ public class IBookmarkControllerImp implements IBookmarkController {
             return ResponseEntity.internalServerError().body(genericResponse);
 
         }
+        return null;
     }
 
     @Override

@@ -30,7 +30,7 @@ public interface BookmarkMapper {
     Bookmark deleteBookmark(Bookmark bookmark);
 
     @Select("""
-            SELECT * FROM bookmark_tb WHERE user_id = #{userId}
+            SELECT * FROM bookmark_tb WHERE user_id = #{userId} ORDER BY created_at DESC
             """)
     @Result(property = "bookmarkId", column = "bookmark_id")
     @Result(property = "userId", column = "user_id")
@@ -44,4 +44,14 @@ public interface BookmarkMapper {
             """)
     @ResultMap("bookmarkResultMap")
     List<Bookmark> removeAllBookmark(Bookmark bookmark);
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM bookmark_tb WHERE article_id = #{articleId} AND user_id = #{userId})
+            """)
+    Boolean getAllBookmarkCurrentId(String articleId, String userId);
+
+    @Select("""
+            DELETE FROM bookmark_tb WHERE article_id = #{articleId} AND user_id = #{userId}
+            """)
+    Bookmark deleteBookmarkByArticleId(String articleId, String userId);
 }

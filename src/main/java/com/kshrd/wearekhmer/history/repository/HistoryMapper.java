@@ -29,9 +29,9 @@ public interface HistoryMapper {
 
 
     @Select("""
-            SELECT DISTINCT ON (article_id) * FROM history_tb
+            SELECT * FROM history_tb
             WHERE user_id = #{userId}
-            ORDER BY article_id, created_at DESC
+            ORDER BY created_at DESC
             ;
             """)
     @Result(property = "historyId", column = "history_id")
@@ -45,6 +45,20 @@ public interface HistoryMapper {
             """)
     @ResultMap("historyResultMap")
     List<History> removeAllHistory(History history);
+
+
+    @Select("""
+            UPDATE history_tb
+            SET created_at = current_timestamp
+            WHERE article_id = #{articleId} AND user_id = #{userId} returning *
+            """)
+    @ResultMap("historyResultMap")
+    History updateHistory(String articleId, String userId);
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM history_tb WHERE article_id = #{articleId} AND user_id = #{userId})
+            """)
+    Boolean getAllHistoryCurrentId(String articleId, String userId);
 
 
 
