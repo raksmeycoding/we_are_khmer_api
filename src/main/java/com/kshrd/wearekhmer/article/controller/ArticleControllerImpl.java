@@ -35,7 +35,7 @@ public class ArticleControllerImpl implements IArticleController {
     private final FileConfig fileConfig;
 
     @Override
-    @GetMapping("/article")
+    @GetMapping
     @Operation(summary = "(Get all articles)")
     public ResponseEntity<?> getAllArticles() {
         GenericResponse genericResponse;
@@ -166,7 +166,7 @@ public class ArticleControllerImpl implements IArticleController {
     }
 
     @Override
-    @GetMapping("/article/{articleId}")
+    @GetMapping("/{articleId}")
     @Operation(summary = "(Get article by id)")
     public ResponseEntity<?> getArticleById(@PathVariable String articleId) {
         GenericResponse genericResponse;
@@ -288,5 +288,32 @@ public class ArticleControllerImpl implements IArticleController {
             return ResponseEntity.ok(genericResponse);
         }
 
+    }
+
+
+    @Operation(summary = "(Get Articles by category name)")
+    @GetMapping("/category/{categoryName}")
+    @Override
+    public ResponseEntity<?> getAllArticleByCategoryName(@PathVariable String categoryName) {
+        try {
+            System.out.println(categoryName );
+            List<ArticleResponse> articleResponseList = articleService.getAllArticleByCategoryName(categoryName);
+            if (articleResponseList.isEmpty()) {
+                throw new CustomRuntimeException("This article by this category is not exist");
+            }
+            return ResponseEntity.ok(GenericResponse.builder()
+                    .message("Get data successfully.")
+                    .status("200")
+                    .title("success")
+                    .payload(articleResponseList)
+                    .build());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(GenericResponse.builder()
+                    .message(ex.getMessage())
+                    .status("500")
+                    .title("error")
+                    .build());
+        }
     }
 }

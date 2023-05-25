@@ -19,6 +19,8 @@ public interface IArticleController {
 
     ResponseEntity<?> getAllArticlesForCurrentUser();
 
+    ResponseEntity<?> getAllArticleByCategoryName(String categoryName);
+
     ResponseEntity<?> insertArticle(ArticleRequest articleRequest);
 
     ResponseEntity<?> getArticleById(String articleId);

@@ -27,6 +27,12 @@ public class ArticleServiceImpl implements IArticleService {
         return articleMapper.getArticlesForCurrentUser(userId);
     }
 
+
+    @Override
+    public List<ArticleResponse> getAllArticleByCategoryName(String categoryName) {
+        return articleMapper.getAllArticleByCategoryName(categoryName);
+    }
+
     @Override
     public ArticleResponse getArticleById(String articleId) {
         return articleMapper.getArticleById(articleId);
