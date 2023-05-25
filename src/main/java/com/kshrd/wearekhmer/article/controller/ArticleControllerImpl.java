@@ -13,10 +13,9 @@ import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class ArticleControllerImpl implements IArticleController {
 
     @Override
     @GetMapping
-    @Operation(summary = "get all articles")
+    @Operation(summary = "(Get all articles)")
     public ResponseEntity<?> getAllArticles() {
         GenericResponse genericResponse;
         try {
@@ -63,34 +62,34 @@ public class ArticleControllerImpl implements IArticleController {
     }
 
 
+//    @Override
+//    public ResponseEntity<?> getAllArticleForCurrentUser() {
+//        GenericResponse genericResponse;
+//        try {
+//            List<ArticleResponse> articleResponses = articleService.getArticlesForCurrentUser(weAreKhmerCurrentUser.getUserId());
+//            genericResponse =
+//                    GenericResponse.builder()
+//                            .title("success")
+//                            .message("request successfully")
+//                            .payload(articleResponses)
+//                            .build();
+//
+//            return ResponseEntity.ok(genericResponse);
+//
+//        } catch (Exception ex) {
+//            genericResponse = GenericResponse.builder()
+//                    .status("500")
+//                    .message(ex.getMessage())
+//                    .title("internal server error!")
+//                    .build();
+//            ex.printStackTrace();
+//            return ResponseEntity.internalServerError().body(genericResponse);
+//        }
+//
+//    }
+
     @Override
-    public ResponseEntity<?> getAllArticleForCurrentUser() {
-        GenericResponse genericResponse;
-        try {
-            List<ArticleResponse> articleResponses = articleService.getArticlesForCurrentUser(weAreKhmerCurrentUser.getUserId());
-            genericResponse =
-                    GenericResponse.builder()
-                            .title("success")
-                            .message("request successfully")
-                            .payload(articleResponses)
-                            .build();
-
-            return ResponseEntity.ok(genericResponse);
-
-        } catch (Exception ex) {
-            genericResponse = GenericResponse.builder()
-                    .status("500")
-                    .message(ex.getMessage())
-                    .title("internal server error!")
-                    .build();
-            ex.printStackTrace();
-            return ResponseEntity.internalServerError().body(genericResponse);
-        }
-
-    }
-
-    @Override
-    @Operation(summary = "get all articles (current for current user)")
+    @Operation(summary = "(Get all articles current for current user)")
     @GetMapping("currentUser")
     public ResponseEntity<?> getAllArticlesForCurrentUser() {
         GenericResponse genericResponse;
@@ -119,32 +118,30 @@ public class ArticleControllerImpl implements IArticleController {
     }
 
     @Override
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "insert article (for current user).")
-    public ResponseEntity<?> insertArticle(@RequestParam MultipartFile multipartFile, ArticleRequest articleRequest) {
+    @PostMapping
+    @Operation(summary = "(Insert article for current user")
+    public ResponseEntity<?> insertArticle(@RequestBody @Validated ArticleRequest articleRequest) {
         GenericResponse genericResponse;
         try {
 
 //            processing image and article
-            String imageName = fileService.uploadFile(multipartFile);
+//            String imageName = fileService.uploadFile(multipartFile);
 //            save image to desired location
 //            Generate the image URL
-            String generateImageUrl;
-            generateImageUrl = "http://localhost:8080/api/v1/files/file/filename?name=" + imageName;
+//            String generateImageUrl;
+//            generateImageUrl = "http://localhost:8080/api/v1/files/file/filename?name=" + imageName;
 //            Save image url to article object
 
             Article article = Article.builder()
                     .title(articleRequest.getTitle())
                     .subTitle(articleRequest.getSubTitle())
                     .description(articleRequest.getDescription())
-                    .image(imageName)
                     .categoryId(articleRequest.getCategoryId())
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .build();
 
 
             Article article1 = articleService.insertArticle(article);
-            article1.setImage(generateImageUrl);
 
 
             genericResponse = GenericResponse.builder()
@@ -169,7 +166,7 @@ public class ArticleControllerImpl implements IArticleController {
 
     @Override
     @GetMapping("{articleId}")
-    @Operation(summary = "get article by id")
+    @Operation(summary = "(Get article by id)")
     public ResponseEntity<?> getArticleById(@PathVariable String articleId) {
         GenericResponse genericResponse;
         try {
@@ -231,7 +228,7 @@ public class ArticleControllerImpl implements IArticleController {
 
     @Override
     @DeleteMapping("{articleId}")
-    @Operation(summary = "delete article by id (for current user).")
+    @Operation(summary = "(Delete article by id for current user)")
     public ResponseEntity<?> deleteArticle(@PathVariable String articleId) {
         GenericResponse genericResponse;
         try {

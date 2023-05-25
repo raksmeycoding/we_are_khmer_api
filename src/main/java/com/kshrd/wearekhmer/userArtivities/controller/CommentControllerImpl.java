@@ -50,7 +50,7 @@ public class CommentControllerImpl implements ICommentController {
 
     @Override
     @PostMapping
-    public ResponseEntity<?> creatArticleComment(CommentRequest commentRequest) {
+    public ResponseEntity<?> creatArticleComment(@RequestBody CommentRequest commentRequest) {
         GenericResponse genericResponse;
         try {
             UserComment userComment = commentService.creatArticleComment(weAreKhmerCurrentUser.getUserId(), commentRequest.getArticleId(), commentRequest.getComment());

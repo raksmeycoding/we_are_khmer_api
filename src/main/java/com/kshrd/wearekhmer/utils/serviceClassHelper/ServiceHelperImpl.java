@@ -1,16 +1,17 @@
 package com.kshrd.wearekhmer.utils.serviceClassHelper;
 
 
-import com.kshrd.wearekhmer.security.WeAreKhmerSecurity;
+import com.kshrd.wearekhmer.exception.CustomRuntimeException;
+import com.kshrd.wearekhmer.repository.WeAreKhmerRepositorySupport;
 import com.kshrd.wearekhmer.user.model.entity.*;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.repository.EducationMapper;
 import com.kshrd.wearekhmer.user.repository.QuoteMapper;
 import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
+import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @Service
-public class ServiceHelperImpl implements ServiceClassHelper{
+public class ServiceHelperImpl implements ServiceClassHelper {
     private final WeAreKhmerCurrentUser weAreKhmerCurrentUser;
     private final EducationMapper educationMapper;
     private final QuoteMapper quoteMapper;
@@ -26,6 +27,10 @@ public class ServiceHelperImpl implements ServiceClassHelper{
     private final WorkingExperienceMapper workingExperienceMapper;
 
     private final AuthorRepository authorRepository;
+
+    private final WeAreKhmerConstant weAreKhmerConstant;
+
+    private final WeAreKhmerRepositorySupport weAreKhmerRepositorySupport;
 
     @Override
     public AuthorRequestTable insertAndGetAuthorRequestFromDatabase(AuthorRequest authorRequest) {
@@ -38,7 +43,7 @@ public class ServiceHelperImpl implements ServiceClassHelper{
         List<String> quotes = authorRequest.getQuote();
         assert quotes != null;
 
-        for (String education: educations) {
+        for (String education : educations) {
             Education education1 = Education.builder()
                     .educationName(education)
                     .userId(weAreKhmerCurrentUser.getUserId())
@@ -46,7 +51,7 @@ public class ServiceHelperImpl implements ServiceClassHelper{
             Education education11 = educationMapper.insert(education1);
         }
 
-        for (String quote: quotes) {
+        for (String quote : quotes) {
             Quote toInsertQuote = Quote.builder()
                     .quoteName(quote)
                     .userId(weAreKhmerCurrentUser.getUserId())
@@ -55,7 +60,7 @@ public class ServiceHelperImpl implements ServiceClassHelper{
             Quote insertedQuote = quoteMapper.insert(toInsertQuote);
         }
 
-        for (String workingExperience: workingExperiences) {
+        for (String workingExperience : workingExperiences) {
             WorkingExperience toInsertWorkingExperience = WorkingExperience.builder()
                     .workingExperienceName(workingExperience)
                     .userId(weAreKhmerCurrentUser.getUserId())
@@ -73,5 +78,18 @@ public class ServiceHelperImpl implements ServiceClassHelper{
                         .build();
 
         return authorRepository.insert(authorRequestTable);
+    }
+
+
+    @Override
+    public String uploadImageToSpecificTable(String imageType, String imageName, String primaryId) {
+        if (imageType.equalsIgnoreCase("CATEGORY")) {
+            return weAreKhmerRepositorySupport.uploadImageToCategoryTb(imageName, primaryId);
+        } else if (imageType.equalsIgnoreCase("USER")) {
+            return weAreKhmerRepositorySupport.uploadImageToUserTb(imageName, primaryId);
+        } else if (imageType.equalsIgnoreCase("ARTICLE")) {
+            return weAreKhmerRepositorySupport.uploadImageToArticleTb(imageName, primaryId);
+        }
+        throw new CustomRuntimeException("Incorrect part variable. (We only accept category, user, article.)");
     }
 }

@@ -14,11 +14,11 @@ public interface IArticleController {
 
     ResponseEntity<?> getAllArticles();
 
-    ResponseEntity<?> getAllArticleForCurrentUser();
+//    ResponseEntity<?> getAllArticleForCurrentUser();
 
     ResponseEntity<?> getAllArticlesForCurrentUser();
 
-    ResponseEntity<?> insertArticle(MultipartFile multipartFile, ArticleRequest articleRequest);
+    ResponseEntity<?> insertArticle(ArticleRequest articleRequest);
 
     ResponseEntity<?> getArticleById(String articleId);
 

@@ -24,4 +24,7 @@ public class WeAreKhmerConstant {
 
     public final String PASSWORD_PATTERN =
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@#$%^&+=]).{8,}$";
+
+
+    public final String[] listOfImageType = {"CATEGORY", "USER", "ARTICLE"};
 }

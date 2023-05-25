@@ -88,7 +88,7 @@ public class CategoryController implements CategoryControllerInterface {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "(Only administrator can create this category.)")
-    public ResponseEntity<?> insertCategory(CategoryRequestDTO category) {
+    public ResponseEntity<?> insertCategory(@RequestBody CategoryRequestDTO category) {
         if (!weAreKhmerValidation.isAdmin()) {
             throw new CustomRuntimeException("You are not administrator.");
         }

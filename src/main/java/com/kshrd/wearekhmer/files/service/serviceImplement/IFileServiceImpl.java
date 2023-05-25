@@ -2,6 +2,7 @@ package com.kshrd.wearekhmer.files.service.serviceImplement;
 
 import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.files.service.IFileService;
+import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
@@ -23,10 +24,12 @@ import java.util.UUID;
 public class IFileServiceImpl implements IFileService {
 
     private final FileConfig fileConfig;
+    private final ServiceClassHelper serviceClassHelper;
     Path root;
 
-    public IFileServiceImpl(FileConfig fileConfig) {
+    public IFileServiceImpl(FileConfig fileConfig, ServiceClassHelper serviceClassHelper) {
         this.fileConfig = fileConfig;
+        this.serviceClassHelper = serviceClassHelper;
     }
 
 
@@ -40,12 +43,11 @@ public class IFileServiceImpl implements IFileService {
     public String uploadFile(MultipartFile multipartFile) throws IOException {
         String fileName = multipartFile.getOriginalFilename();
         assert fileName != null;
-        if (isFileNameContains(fileName))
-        {
+        if (isFileNameContains(fileName)) {
             fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(fileName);
 
 
-            if(!Files.exists(root)){
+            if (!Files.exists(root)) {
                 Files.createDirectories(root);
             }
             Files.copy(multipartFile.getInputStream(), this.root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
@@ -55,6 +57,29 @@ public class IFileServiceImpl implements IFileService {
 
         return null;
     }
+
+
+    @Override
+    public String uploadFileV2(MultipartFile multipartFile, String imageType, String primaryId) throws IOException {
+        String fileName = multipartFile.getOriginalFilename();
+        assert fileName != null;
+        if (isFileNameContains(fileName)) {
+            fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(fileName);
+
+
+            if (!Files.exists(root)) {
+                Files.createDirectories(root);
+            }
+            Files.copy(multipartFile.getInputStream(), this.root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+
+            String message =  serviceClassHelper.uploadImageToSpecificTable(imageType, fileName, primaryId);
+
+            return fileName;
+        }
+
+        return null;
+    }
+
     boolean isFileNameContains(String fileName) {
         return
                 fileName.contains(".jpeg") ||
@@ -64,8 +89,9 @@ public class IFileServiceImpl implements IFileService {
                         fileName.contains(".pptx") ||
                         fileName.contains(".gif");
     }
+
     @Override
-    public ResponseEntity<?> getFile( String fileName) throws IOException {
+    public ResponseEntity<?> getFile(String fileName) throws IOException {
         try {
             Path imagePath = Paths.get(this.root + "/" + fileName);
             ByteArrayResource byteArrayResource = new ByteArrayResource(Files.readAllBytes(imagePath));

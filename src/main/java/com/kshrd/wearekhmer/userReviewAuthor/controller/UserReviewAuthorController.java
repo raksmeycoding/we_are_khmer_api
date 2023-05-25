@@ -22,7 +22,7 @@ public class UserReviewAuthorController {
 
     @PostMapping
     @Operation(summary = "(Review author for specific author.)")
-    public ResponseEntity<?> insertUserReviewAuthorByCurrentUserId(UserReviewAuthorRequest userReviewAuthorRequest) {
+    public ResponseEntity<?> insertUserReviewAuthorByCurrentUserId(@RequestBody UserReviewAuthorRequest userReviewAuthorRequest) {
         try {
             UserReviewAuthor userReviewAuthor = UserReviewAuthor.builder()
                     .user_id(weAreKhmerCurrentUser.getUserId())

@@ -24,7 +24,7 @@ public interface WeAreKhmerRepositorySupport {
                     @Result(property = "isAuthor", column = "is_author"),
                     @Result(property = "gender", column = "gender"),
                     @Result(property = "roles", column = "user_id",
-                    many = @Many(select = "getUserRolesById"))
+                            many = @Many(select = "getUserRolesById"))
             }
     )
     UserApp findUserByEmail(@Param("email") String email);
@@ -45,9 +45,6 @@ public interface WeAreKhmerRepositorySupport {
     List<String> getUserRolesByUserEmail(@Param("email") String email);
 
 
-
-
-
     @Select("""
             insert into user_tb (email, password, gender) values ( #{para.email}, #{para.password}, cast(#{para.gender} as gender)) returning * 
             """)
@@ -55,8 +52,7 @@ public interface WeAreKhmerRepositorySupport {
     <P> UserApp normalUserRegister(@Param("para") P p);
 
 
-
-//    insert role to normal user just register as author
+    //    insert role to normal user just register as author
     @Select("""
             insert into user_role_tb (user_id, role_id) values ((select user_id from user_tb where user_tb.user_id = #{userId}),(select role_id from role_tb where name = 'ROLE_AUTHOR')) returning user_id
             """)
@@ -77,36 +73,21 @@ public interface WeAreKhmerRepositorySupport {
     }
 
 
+    @Select("""
+            select * from upload_image_to_specific_table_User_tb(#{imageName}, #{userId});
+            """)
+    String uploadImageToUserTb(String imageName, String userId);
+
+    @Select("""
+            select * from upload_image_to_specific_table_article_tb (#{imageName} ,#{articleId})
+            """)
+    String uploadImageToArticleTb(String imageName, String articleId);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Select("""
+            select * from upload_image_to_specific_table_category_tb (#{imageName} ,#{categoryId})
+            """)
+    String uploadImageToCategoryTb(String imageName, String categoryId);
 
 
     @Select("""
@@ -129,9 +110,6 @@ public interface WeAreKhmerRepositorySupport {
             }
     )
     UserApp getAllUsers(@Param("email") String email);
-
-
-
 
 
 }

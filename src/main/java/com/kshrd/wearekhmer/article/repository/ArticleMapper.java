@@ -19,7 +19,7 @@ public interface ArticleMapper {
                    ab.publish_date,
                    ab.description,
                    ab.updatedat,
-                   ab.image,
+                   concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
@@ -40,14 +40,16 @@ public interface ArticleMapper {
                    ab.publish_date,
                    ab.description,
                    ab.updatedat,
-                   ab.image,
+                   concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
-                   ub.username as author_name,
+                   ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
-            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
+            from article_tb ab
+                     inner join user_tb ub on ab.user_id = ub.user_id
+                     inner join category c on c.category_id = ab.category_id
             where ab.user_id = #{userId}
             """)
     List<ArticleResponse> getArticlesForCurrentUser(String userId);
@@ -74,8 +76,8 @@ public interface ArticleMapper {
             """)
     ArticleResponse getArticleById(String articleId);
 
-    @Select("INSERT INTO article_tb (title, sub_title, description, image, user_id, category_id) " +
-            "VALUES (#{title}, #{subTitle}, #{description}, #{image}, #{userId}, #{categoryId}) returning *")
+    @Select("INSERT INTO article_tb (title, sub_title, description, user_id, category_id) " +
+            "VALUES (#{title}, #{subTitle}, #{description}, #{userId}, #{categoryId}) returning *")
     @Results(id = "articleResultMap", value = {
             @Result(property = "articleId", column = "article_id"),
             @Result(property = "title", column = "title"),

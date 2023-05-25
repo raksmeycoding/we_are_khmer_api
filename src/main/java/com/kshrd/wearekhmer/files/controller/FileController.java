@@ -3,6 +3,7 @@ package com.kshrd.wearekhmer.files.controller;
 
 import com.kshrd.wearekhmer.files.model.response.FileResponse;
 import com.kshrd.wearekhmer.files.service.IFileService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,22 +23,25 @@ public class FileController {
         this.IFileService = IFileService;
     }
 
-    @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadFile(@RequestParam MultipartFile multipartFile){
+    @PostMapping(value = "/file/{type}/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "You can chose either id of category, user, or article. type = type of category, article, or user image")
+    public ResponseEntity<?> uploadFile(@PathVariable String type, @PathVariable String id, @RequestParam MultipartFile multipartFile) {
+        ResponseEntity<?> result;
 
         try {
-            String fileName = IFileService.uploadFile(multipartFile);
+            String fileName = IFileService.uploadFileV2(multipartFile, type, id);
             FileResponse fileResponse = FileResponse.builder()
                     .status("200")
                     .message("upload successfully")
                     .payload(fileName)
                     .build();
-            return ResponseEntity.ok(fileResponse);
+            result = ResponseEntity.ok(fileResponse);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
 
+        return result;
     }
 
 
