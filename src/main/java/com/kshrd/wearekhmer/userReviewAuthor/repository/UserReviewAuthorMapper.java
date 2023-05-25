@@ -20,7 +20,7 @@ public interface UserReviewAuthorMapper {
 
 
     @Select("""
-            select * from user_review_author_tb
+            select * from user_review_author_tb where author_id = #{authorId}
             """)
     List<UserReviewAuthor> getAllUserReviewAuthorByAuthorId(String authorId);
 }

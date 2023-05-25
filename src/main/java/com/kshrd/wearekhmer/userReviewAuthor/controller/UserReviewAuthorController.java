@@ -10,9 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/review")
@@ -24,7 +22,7 @@ public class UserReviewAuthorController {
 
     @PostMapping
     @Operation(summary = "(Review author for specific author.)")
-    ResponseEntity<?> insertUserReviewAuthorByCurrentUserId(UserReviewAuthorRequest userReviewAuthorRequest) {
+    public ResponseEntity<?> insertUserReviewAuthorByCurrentUserId(UserReviewAuthorRequest userReviewAuthorRequest) {
         try {
             UserReviewAuthor userReviewAuthor = UserReviewAuthor.builder()
                     .user_id(weAreKhmerCurrentUser.getUserId())
@@ -45,6 +43,26 @@ public class UserReviewAuthorController {
                     .title("error.")
                     .status("500")
                     .message(ex.getMessage())
+                    .build());
+        }
+    }
+
+
+    @GetMapping("{authorId}")
+    public ResponseEntity<?> getAllUserReviewAuthorByAuthorId(@PathVariable String authorId) {
+        try {
+            return ResponseEntity.ok().body(GenericResponse.builder()
+                    .message("Get data success fully.")
+                    .status("200")
+                    .payload(userReviewAuthorService.getAllUserReviewAuthorByAuthorId(authorId))
+                    .title("success")
+                    .build());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseEntity.internalServerError().body(GenericResponse.builder()
+                    .status("500")
+                    .title("Interna server error")
+                    .message(exception.getMessage())
                     .build());
         }
     }

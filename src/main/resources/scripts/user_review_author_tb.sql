@@ -19,3 +19,4 @@ values ('1a816fc1-90cb-480a-93ed-6b5e21322bd0', (select user_tb.user_id from use
 
 
 
+select * from user_review_author_tb where author_id = '1a816fc1-90cb-480a-93ed-6b5e21322bd0';
