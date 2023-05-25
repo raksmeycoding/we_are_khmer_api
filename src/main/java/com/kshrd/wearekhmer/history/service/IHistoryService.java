@@ -22,4 +22,5 @@ public interface IHistoryService {
 
     Boolean getAllHistoryByCurrentId(String articleId, String userId);
 
+
 }

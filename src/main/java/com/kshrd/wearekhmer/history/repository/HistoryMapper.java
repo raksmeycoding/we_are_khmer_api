@@ -19,6 +19,12 @@ public interface HistoryMapper {
             "VALUES (#{userId}, #{articleId}) returning *")
     History insertHistory(History history);
 
+//    @Select("""
+//            SELECT * FROM history_tb WHERE user_id = #{userId}
+//            """)
+//    @ResultMap("historyResultMap")
+//    List<History> getAllHistoryByCurrentUser(History history);
+
 
     @Select("""
             DELETE FROM history_tb WHERE history_id = #{historyId} returning *
@@ -61,12 +67,20 @@ public interface HistoryMapper {
     Boolean getAllHistoryCurrentId(String articleId, String userId);
 
 
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM history_tb WHERE history_id = #{historyId})
+            """)
+    Boolean validateHistoryId(String historyId);
 
 
 
 
 
-
-
-
+//    @Select("""
+//            SELECT * FROM history_tb
+//            WHERE user_id = #{userId}
+//            ORDER BY created_at DESC
+//            ;
+//            """)
+//    HistoryResponse validateHistoryRemoveAll(History history);
 }

@@ -3,7 +3,12 @@ package com.kshrd.wearekhmer.utils.validation;
 
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import com.kshrd.wearekhmer.article.service.IArticleService;
+import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
+import com.kshrd.wearekhmer.bookmark.repository.BookmarkMapper;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
+import com.kshrd.wearekhmer.history.model.entity.History;
+import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
+import com.kshrd.wearekhmer.history.repository.HistoryMapper;
 import com.kshrd.wearekhmer.userReport.repository.ReportMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
@@ -27,6 +32,10 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     private final ReportMapper reportMapper;
 
     private final IArticleService articleService;
+
+    private final HistoryMapper historyMapper;
+
+    private final BookmarkMapper bookmarkMapper;
 
     @Override
     public void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize) {
@@ -99,7 +108,28 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     public boolean validateReportId(String reportId) {
         return reportMapper.isReportExistByIs(reportId);
     }
+
+    @Override
+    public boolean validateHistoryId(String historyId) {
+        return historyMapper.validateHistoryId(historyId);
+    }
+
+    @Override
+    public List<HistoryResponse> validateHistoryRemoveAll(String userId) {
+        return historyMapper.getAllHistoryByCurrentUser(userId);
+    }
+
+    @Override
+    public boolean validateBookmarkId(String bookmarkId) {
+        return bookmarkMapper.validateBookmarkId(bookmarkId);
+    }
+
+    @Override
+    public List<BookmarkResponse> validateBookmarkRemoveAll(String userId) {
+        return bookmarkMapper.getAllBookmarkByCurrentId(userId);
+    }
 }
+
 
 
 

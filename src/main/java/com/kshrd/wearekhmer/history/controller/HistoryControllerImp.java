@@ -3,20 +3,22 @@ package com.kshrd.wearekhmer.history.controller;
 import com.kshrd.wearekhmer.article.controller.IArticleController;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.service.IArticleService;
+import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.history.model.entity.History;
 import com.kshrd.wearekhmer.history.model.request.HistoryRequest;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import com.kshrd.wearekhmer.history.service.IHistoryService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 
 @RestController
@@ -29,6 +31,8 @@ public class HistoryControllerImp implements IHistoryController {
     private final IHistoryService historyService;
     private final IArticleService articleService;
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
+
+    private WeAreKhmerValidation weAreKhmerValidation;
 
 
     @Override
@@ -50,7 +54,7 @@ public class HistoryControllerImp implements IHistoryController {
                     .build();
             return ResponseEntity.ok(genericResponse);
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             genericResponse =
                     GenericResponse
                             .builder()
@@ -75,30 +79,39 @@ public class HistoryControllerImp implements IHistoryController {
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .articleId(articleId)
                     .build();
-
-            if(historyService.getAllHistoryByCurrentId(articleId, weAreKhmerCurrentUser.getUserId()) == true){
-                History update = historyService.updateHistory(articleId, weAreKhmerCurrentUser.getUserId());
-                genericResponse = GenericResponse.builder()
-                        .status("200")
-                        .payload(update)
-                        .title("success")
-                        .message("You have update this record successfully")
-                        .build();
-                return ResponseEntity.ok(genericResponse);
-            }else{
-                History history = History.builder()
-                        .userId(weAreKhmerCurrentUser.getUserId())
-                        .articleId(articleId)
-                        .build();
-                History history1 = historyService.insertHistory(history);
-                genericResponse = GenericResponse.builder()
-                        .status("200")
-                        .payload(history1)
-                        .title("success")
-                        .message("You have successfully recorded history")
-                        .build();
-                return ResponseEntity.ok(genericResponse);
+            if (!weAreKhmerValidation.validateArticleId(requestInsert.getArticleId())) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(GenericResponse.builder()
+                        .status("404")
+                        .message("article id : "+requestInsert.getArticleId()+ "does not exist")
+                        .title("error")
+                        .build()
+                );
+            } else {
+                if (historyService.getAllHistoryByCurrentId(articleId, weAreKhmerCurrentUser.getUserId())) {
+                    History update = historyService.updateHistory(articleId, weAreKhmerCurrentUser.getUserId());
+                    genericResponse = GenericResponse.builder()
+                            .status("200")
+                            .payload(update)
+                            .title("success")
+                            .message("You have update this record successfully")
+                            .build();
+                    return ResponseEntity.ok(genericResponse);
+                } else {
+                    History history = History.builder()
+                            .userId(weAreKhmerCurrentUser.getUserId())
+                            .articleId(articleId)
+                            .build();
+                    History history1 = historyService.insertHistory(history);
+                    genericResponse = GenericResponse.builder()
+                            .status("200")
+                            .payload(history1)
+                            .title("success")
+                            .message("You have successfully recorded history")
+                            .build();
+                    return ResponseEntity.ok(genericResponse);
+                }
             }
+
         } catch (Exception ex) {
             genericResponse =
                     GenericResponse
@@ -122,16 +135,22 @@ public class HistoryControllerImp implements IHistoryController {
                     .historyId(historyId)
                     .build();
 
-            History history1 = historyService.deleteHistory(history);
-
-
-            genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .message("You have deleted history record successfully")
-                    .payload(history1)
-                    .title("success")
-                    .build();
-            return ResponseEntity.ok(genericResponse);
+            if (!weAreKhmerValidation.validateHistoryId(history.getHistoryId())) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(GenericResponse.builder()
+                                .message("history id : "+history.getHistoryId()+ " does not exists")
+                                .title("error")
+                                .status("404")
+                        .build());
+            } else {
+                History history1 = historyService.deleteHistory(history);
+                genericResponse = GenericResponse.builder()
+                        .status("200")
+                        .message("You have deleted history record successfully")
+                        .payload(history1)
+                        .title("success")
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }
         } catch (Exception ex) {
             genericResponse =
                     GenericResponse
@@ -153,16 +172,27 @@ public class HistoryControllerImp implements IHistoryController {
             History history = History.builder()
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .build();
+            List<HistoryResponse> historyResponseList = historyService.getAllHistoryByCurrentUser(weAreKhmerCurrentUser.getUserId()) ;
 
-            List<History> history1 = historyService.removeAllHistory(history);
+            if(historyResponseList.size() > 0){
+                List<History> history1 = historyService.removeAllHistory(history);
+                genericResponse = GenericResponse.builder()
+                        .status("200")
+                        .message("You have deleted history record successfully")
+                        .payload(history1)
+                        .title("success")
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }
 
-            genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .message("You have deleted history record successfully")
-                    .payload(history1)
-                    .title("success")
-                    .build();
-            return ResponseEntity.ok(genericResponse);
+                genericResponse = GenericResponse.builder()
+                        .status("404")
+                        .message("You don't have any history records")
+                        .title("error")
+                        .build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(genericResponse);
+
+
         } catch (Exception ex) {
             genericResponse =
                     GenericResponse

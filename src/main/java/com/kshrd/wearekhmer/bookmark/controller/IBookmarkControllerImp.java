@@ -8,9 +8,11 @@ import com.kshrd.wearekhmer.bookmark.repository.BookmarkMapper;
 import com.kshrd.wearekhmer.bookmark.service.IBookService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,8 @@ public class IBookmarkControllerImp implements IBookmarkController {
     private final IArticleService articleService;
 
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
+
+    private WeAreKhmerValidation weAreKhmerValidation;
 
 
     @Override
@@ -76,27 +80,35 @@ public class IBookmarkControllerImp implements IBookmarkController {
                         .userId(weAreKhmerCurrentUser.getUserId())
                         .articleId(articleId)
                         .build();
-
-                if(bookmarkService.getAllBookmarkCurrentId(articleId, weAreKhmerCurrentUser.getUserId())){
-                    Bookmark bookmark1 = bookmarkService.deleteBookmarkByArticleId(bookmark);
-                    genericResponse =
-                            GenericResponse.builder()
-                                    .status("200")
-                                    .payload(bookmark1)
-                                    .title("success")
-                                    .message("You have deleted bookmark successfully")
-                                    .build();
-                    return ResponseEntity.ok(genericResponse);
-                }
-                Bookmark bookmark1 = bookmarkService.insertBookmark(bookmark);
+            if (!weAreKhmerValidation.validateArticleId(requestInsert.getArticleId())) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(GenericResponse.builder()
+                        .status("404")
+                        .message("article id : " + requestInsert.getArticleId() + "does not exist")
+                        .title("error")
+                        .build()
+                );
+            }
+            if(bookmarkService.getAllBookmarkCurrentId(articleId, weAreKhmerCurrentUser.getUserId())){
+                Bookmark bookmark1 = bookmarkService.deleteBookmarkByArticleId(bookmark);
                 genericResponse =
                         GenericResponse.builder()
+                                .status("200")
+                                .payload(bookmark1)
+                                .title("success")
+                                .message("You have deleted bookmark successfully")
+                                .build();
+                return ResponseEntity.ok(genericResponse);
+            }
+            Bookmark bookmark1 = bookmarkService.insertBookmark(bookmark);
+            genericResponse =
+                    GenericResponse.builder()
                             .status("200")
                             .payload(bookmark1)
                             .title("success")
                             .message("You have saved to bookmark successfully")
                             .build();
-                    return ResponseEntity.ok(genericResponse);
+            return ResponseEntity.ok(genericResponse);
+
         } catch (Exception ex) {
             genericResponse =
                     GenericResponse
@@ -120,15 +132,25 @@ public class IBookmarkControllerImp implements IBookmarkController {
                     .bookmarkId(bookmarkId)
                     .build();
 
-            Bookmark bookmark1 = bookmarkService.deleteBookmark(bookmark);
+            if (!weAreKhmerValidation.validateBookmarkId(bookmark.getBookmarkId())) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(GenericResponse.builder()
+                        .message("bookmark id : "+bookmark.getBookmarkId()+ " does not exists")
+                        .title("error")
+                        .status("404")
+                        .build());
+            }else{
+                Bookmark bookmark1 = bookmarkService.deleteBookmark(bookmark);
 
-            genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .message("You have deleted bookmark record successfully")
-                    .payload(bookmark1)
-                    .title("success")
-                    .build();
-            return ResponseEntity.ok(genericResponse);
+                genericResponse = GenericResponse.builder()
+                        .status("200")
+                        .message("You have deleted bookmark record successfully")
+                        .payload(bookmark1)
+                        .title("success")
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }
+
+
 
         }catch(Exception ex){
             genericResponse =
@@ -152,15 +174,25 @@ public class IBookmarkControllerImp implements IBookmarkController {
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .build();
 
-            List<Bookmark> bookmark1 = bookmarkService.removeAllBookmark(bookmark);
+            List<BookmarkResponse> bookmarkResponseList = bookmarkService.getAllBookmarkByCurrentId(weAreKhmerCurrentUser.getUserId());
 
+            if(bookmarkResponseList.size()>0){
+                List<Bookmark> bookmark1 = bookmarkService.removeAllBookmark(bookmark);
+
+                genericResponse = GenericResponse.builder()
+                        .status("200")
+                        .message("You have deleted bookmark record successfully")
+                        .payload(bookmark1)
+                        .title("success")
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }
             genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .message("You have deleted bookmark record successfully")
-                    .payload(bookmark1)
-                    .title("success")
+                    .status("404")
+                    .message("You don't have any bookmark records")
+                    .title("error")
                     .build();
-            return ResponseEntity.ok(genericResponse);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(genericResponse);
 
         }catch(Exception ex){
             genericResponse =
