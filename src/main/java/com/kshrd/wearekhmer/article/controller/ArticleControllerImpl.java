@@ -40,13 +40,13 @@ public class ArticleControllerImpl implements IArticleController {
     public ResponseEntity<?> getAllArticles() {
         GenericResponse genericResponse;
         try {
-            List<Article> articles =
+            List<ArticleResponse> articleResponses =
                     articleService.getAllArticles();
             genericResponse = GenericResponse
                     .builder()
                     .status("200")
                     .title("success")
-                    .payload(articles)
+                    .payload(articleResponses)
                     .build();
             return ResponseEntity.ok(genericResponse);
         } catch (Exception ex) {

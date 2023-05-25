@@ -1,7 +1,6 @@
 package com.kshrd.wearekhmer.article.service;
 
 import com.kshrd.wearekhmer.article.model.entity.Article;
-import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import lombok.AllArgsConstructor;
@@ -12,13 +11,13 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ArticleServiceImpl implements IArticleService{
+public class ArticleServiceImpl implements IArticleService {
 
     private final ArticleMapper articleMapper;
 
 
     @Override
-    public List<Article> getAllArticles() {
+    public List<ArticleResponse> getAllArticles() {
         return articleMapper.getAllArticles();
 
     }
