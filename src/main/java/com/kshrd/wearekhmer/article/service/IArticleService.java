@@ -14,6 +14,8 @@ public interface IArticleService {
 
     ArticleResponse getArticleById(String articleId);
 
+    ArticleResponse getArticleByIdForCurrentUser(String articleId, String currentUserId);
+
     Article updateArticle(Article article);
 
     Article deleteArticleByIdAndCurrentUser(Article article);

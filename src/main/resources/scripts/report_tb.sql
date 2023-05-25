@@ -1,7 +1,7 @@
 create table report_tb
 (
     report_id   varchar primary key default uuid_generate_v4(),
-    article_id  varchar references article_tb (article_id) not null,
+    article_id  varchar references article_tb (article_id) on delete cascade not null,
     crate_at    timestamp           default current_timestamp,
     reason      varchar                                    not null,
     reciever_id varchar references user_tb (user_id)       not null,

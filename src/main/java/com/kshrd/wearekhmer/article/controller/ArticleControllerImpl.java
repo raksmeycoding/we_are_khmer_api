@@ -6,6 +6,7 @@ import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
 import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import com.kshrd.wearekhmer.article.service.IArticleService;
+import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.files.service.IFileService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
@@ -34,7 +35,7 @@ public class ArticleControllerImpl implements IArticleController {
     private final FileConfig fileConfig;
 
     @Override
-    @GetMapping
+    @GetMapping("/article")
     @Operation(summary = "(Get all articles)")
     public ResponseEntity<?> getAllArticles() {
         GenericResponse genericResponse;
@@ -90,7 +91,7 @@ public class ArticleControllerImpl implements IArticleController {
 
     @Override
     @Operation(summary = "(Get all articles current for current user)")
-    @GetMapping("currentUser")
+    @GetMapping("/user")
     public ResponseEntity<?> getAllArticlesForCurrentUser() {
         GenericResponse genericResponse;
         try {
@@ -118,7 +119,7 @@ public class ArticleControllerImpl implements IArticleController {
     }
 
     @Override
-    @PostMapping
+    @PostMapping("/user")
     @Operation(summary = "(Insert article for current user")
     public ResponseEntity<?> insertArticle(@RequestBody @Validated ArticleRequest articleRequest) {
         GenericResponse genericResponse;
@@ -165,7 +166,7 @@ public class ArticleControllerImpl implements IArticleController {
     }
 
     @Override
-    @GetMapping("{articleId}")
+    @GetMapping("/article/{articleId}")
     @Operation(summary = "(Get article by id)")
     public ResponseEntity<?> getArticleById(@PathVariable String articleId) {
         GenericResponse genericResponse;
@@ -189,10 +190,35 @@ public class ArticleControllerImpl implements IArticleController {
         }
     }
 
+    @Override
+    @GetMapping("/user/{articleId}")
+    @Operation(summary = "(Get article by id for current user)")
+    public ResponseEntity<?> getArticleByIdForCurrentUser(@PathVariable String articleId) {
+        try {
+
+            ArticleResponse articleResponse = articleService.getArticleByIdForCurrentUser(articleId, weAreKhmerCurrentUser.getUserId());
+            if (articleResponse == null) {
+                throw new CustomRuntimeException("This article is not exist or not own article.");
+            }
+            return ResponseEntity.ok().body(GenericResponse.builder()
+                    .title("success")
+                    .status("200")
+                    .payload(articleResponse)
+                    .message("Get article successfully.")
+                    .build());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(GenericResponse.builder()
+                    .title("error")
+                    .status("500")
+                    .message(ex.getMessage())
+                    .build());
+        }
+    }
 
     @Override
-    @PutMapping
-    @Operation(summary = "update article by id (for current user).")
+    @PutMapping("/user")
+    @Operation(summary = "(Update article by id for current user)")
     public ResponseEntity<?> updateArticle(ArticleUpdateRequest article) {
         GenericResponse genericResponse;
         try {
@@ -227,7 +253,7 @@ public class ArticleControllerImpl implements IArticleController {
 
 
     @Override
-    @DeleteMapping("{articleId}")
+    @DeleteMapping("/user/{articleId}")
     @Operation(summary = "(Delete article by id for current user)")
     public ResponseEntity<?> deleteArticle(@PathVariable String articleId) {
         GenericResponse genericResponse;
@@ -237,6 +263,9 @@ public class ArticleControllerImpl implements IArticleController {
                     .articleId(articleId)
                     .build();
             Article article1 = articleService.deleteArticleByIdAndCurrentUser(article);
+            if (article1 == null) {
+                throw new CustomRuntimeException("You are not you own of this article or this article is not exist.");
+            }
             genericResponse =
                     GenericResponse.builder()
                             .status("200")

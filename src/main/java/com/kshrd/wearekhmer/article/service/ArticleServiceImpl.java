@@ -33,6 +33,11 @@ public class ArticleServiceImpl implements IArticleService {
     }
 
     @Override
+    public ArticleResponse getArticleByIdForCurrentUser(String articleId, String currentUserId) {
+        return articleMapper.getArticleByIdForCurrentUser(articleId, currentUserId);
+    }
+
+    @Override
     public Article insertArticle(Article article) {
         return articleMapper.insertArticle(article);
     }

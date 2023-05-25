@@ -3,7 +3,7 @@ create table if not exists react_tb
 (
     react_id   varchar primary key default uuid_generate_v4(),
     user_id    varchar references user_tb (user_id) on delete cascade not null,
-    article_id varchar references article_tb (article_id) not null,
+    article_id varchar references article_tb (article_id) on delete cascade not null,
     status     bool                default false,
     createAt   timestamp           default current_timestamp,
     updateAt   timestamp           default current_timestamp
@@ -41,7 +41,7 @@ $$
 
 
 -- test
-select handle_user_like('5b1ed971-3338-4a65-be91-4979c0bbd427', '6ba98ca2-fa24-4165-a288-a54cbd12e1c2', 'unlike');
+select handle_user_like('5b1ed971-3338-4a65-be91-4979c0bbd427', '6ba98ca2-fa24-4165-a288-a54cbd12e1c2', 'like');
 
 -- must execute
 -- check user like limit, only exist one record on a table

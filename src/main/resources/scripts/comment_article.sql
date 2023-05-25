@@ -2,7 +2,7 @@ create table comment_tb
 (
     comment_id varchar primary key default uuid_generate_v4(),
     user_id    varchar references user_tb (user_id) on delete cascade not null,
-    article_id varchar references article_tb (article_id) not null,
+    article_id varchar references article_tb (article_id) on delete cascade not null,
     parent_id  varchar references comment_tb (comment_id),
     comment    varchar             default null,
     createAt   timestamp           default current_timestamp,
