@@ -7,6 +7,7 @@ create table report_tb
     reciever_id varchar references user_tb (user_id)       not null,
     sender_id   varchar references user_tb (user_id)       not null
 );
+alter table report_tb rename column sender_id to user_id;
 
 -- v1
 -- this query only work when exist admin in your application

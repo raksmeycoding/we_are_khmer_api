@@ -49,7 +49,10 @@ public class WeAreKhmerSecurity {
             "/api/v1/article/react/**",
             "/api/v1/history/**",
             "/api/v1/comment/article/**",
-            "/api/v1/report/**"
+            "/api/v1/report/**",
+            "/api/v1/notification",
+            "/api/v1/rating/**",
+            "/api/v1/review/**"
     };
 
     @Bean

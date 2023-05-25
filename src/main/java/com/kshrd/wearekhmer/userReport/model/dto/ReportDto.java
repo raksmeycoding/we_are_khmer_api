@@ -11,5 +11,5 @@ import lombok.Data;
 public class ReportDto {
     private String articleId;
     private String reason;
-    private String senderId;
+    private String userId;
 }
