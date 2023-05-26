@@ -80,7 +80,7 @@ public interface AuthorRepository {
                         
             UPDATE author_request_tb
             SET is_author_accepted = TRUE
-            WHERE author_request_tb.user_id = '1a816fc1-90cb-480a-93ed-6b5e21322bd0'
+            WHERE author_request_tb.user_id = #{userId}
             RETURNING user_id;
             """)
     String updateUserRequestToBeAsAuthor(String userId);
