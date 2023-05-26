@@ -155,4 +155,34 @@ public interface ArticleMapper {
             select exists(select 1 from article_tb where article_tb.article_id = #{articleId})
             """)
     boolean isArticleExist(String articleId);
+
+
+    @Select("""
+            select ab.article_id,
+                   ab.user_id,
+                   ab.category_id,
+                   ab.title,
+                   ab.sub_title,
+                   ab.publish_date,
+                   ab.description,
+                   ab.updatedat,
+                   concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
+                   ab.count_view,
+                   ab.isban,
+                   ab.hero_card_in,
+                   ub.username                                                                as author_name,
+                   c.category_name,
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
+            from article_tb ab
+                     inner join user_tb ub on ab.user_id = ub.user_id
+                     inner join category c on c.category_id = ab.category_id
+            where isBan = false order by count_view desc ;
+            """)
+    List<ArticleResponse> getArticleByMostViewLimit20();
+
+
+    @Select("""
+            update article_tb set count_view = count_view + 1 where article_id = #{articleId} returning article_id;
+            """)
+    String increaseArticleViewCount(String articleId);
 }

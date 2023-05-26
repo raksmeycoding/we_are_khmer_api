@@ -20,7 +20,12 @@ public interface IArticleService {
 
     Article updateArticle(Article article);
 
+    List<ArticleResponse> getArticleByMostViewLimit20();
+
     Article deleteArticleByIdAndCurrentUser(Article article);
 
     boolean isArticleExist(String articleId);
+
+
+    String increaseArticleViewCount(String articleId);
 }

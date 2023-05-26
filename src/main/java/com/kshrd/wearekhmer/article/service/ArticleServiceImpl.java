@@ -64,4 +64,16 @@ public class ArticleServiceImpl implements IArticleService {
     public boolean isArticleExist(String articleId) {
         return articleMapper.isArticleExist(articleId);
     }
+
+
+    @Override
+    public List<ArticleResponse> getArticleByMostViewLimit20() {
+        return articleMapper.getArticleByMostViewLimit20();
+    }
+
+
+    @Override
+    public String increaseArticleViewCount(String articleId) {
+        return articleMapper.increaseArticleViewCount(articleId);
+    }
 }

@@ -296,7 +296,7 @@ public class ArticleControllerImpl implements IArticleController {
     @Override
     public ResponseEntity<?> getAllArticleByCategoryName(@PathVariable String categoryName) {
         try {
-            System.out.println(categoryName );
+            System.out.println(categoryName);
             List<ArticleResponse> articleResponseList = articleService.getAllArticleByCategoryName(categoryName);
             if (articleResponseList.isEmpty()) {
                 throw new CustomRuntimeException("This article by this category is not exist");
@@ -313,6 +313,54 @@ public class ArticleControllerImpl implements IArticleController {
                     .message(ex.getMessage())
                     .status("500")
                     .title("error")
+                    .build());
+        }
+    }
+
+
+    @Override
+    @GetMapping("/most-view")
+    @Operation(summary = "(Get article by most view - only 20 rows was returned)")
+    public ResponseEntity<?> getArticleByMostViewLimit20() {
+        try {
+            List<ArticleResponse> articleResponseList = articleService.getArticleByMostViewLimit20();
+            return ResponseEntity.ok().body(GenericResponse.builder()
+                    .title("success")
+                    .message("Fetching data successfully.")
+                    .payload(articleResponseList)
+                    .status("200")
+                    .build());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(GenericResponse.builder()
+                    .status("500")
+                    .message(ex.getMessage())
+                    .title("error.")
+                    .build());
+        }
+    }
+
+
+    @Override
+    @PostMapping("/increase/{articleId}")
+    @Operation(summary = "(Increase article view count.")
+    public ResponseEntity<?> increaseArticleViewCount(@PathVariable String articleId) {
+        try {
+            String returnArticleId = articleService.increaseArticleViewCount(articleId);
+            if (returnArticleId == null || returnArticleId.isEmpty()) {
+                throw new CustomRuntimeException("This article id " + articleId + " is not is not exist");
+            }
+            return ResponseEntity.ok().body(GenericResponse.builder()
+                    .title("success")
+                    .message("Article insert successfully.")
+                    .payload(returnArticleId)
+                    .build());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(GenericResponse.builder()
+                    .status("500")
+                    .message("Internal server error.")
+                    .title("error.")
                     .build());
         }
     }
