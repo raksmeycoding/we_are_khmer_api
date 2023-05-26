@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.utils.serviceClassHelper;
 
 
+import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.repository.WeAreKhmerRepositorySupport;
 import com.kshrd.wearekhmer.user.model.entity.*;
@@ -10,6 +11,7 @@ import com.kshrd.wearekhmer.user.repository.QuoteMapper;
 import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,9 @@ public class ServiceHelperImpl implements ServiceClassHelper {
     private final WeAreKhmerConstant weAreKhmerConstant;
 
     private final WeAreKhmerRepositorySupport weAreKhmerRepositorySupport;
+
+    private final ArticleMapper articleMapper;
+
 
     @Override
     public AuthorRequestTable insertAndGetAuthorRequestFromDatabase(AuthorRequest authorRequest) {
@@ -91,5 +96,13 @@ public class ServiceHelperImpl implements ServiceClassHelper {
             return weAreKhmerRepositorySupport.uploadImageToArticleTb(imageName, primaryId);
         }
         throw new CustomRuntimeException("Incorrect part variable. (We only accept category, user, article.)");
+    }
+
+
+
+
+    @Override
+    public Integer getTotalOfRecordInArticleTb() {
+        return articleMapper.getTotalRecordOfArticleTb();
     }
 }

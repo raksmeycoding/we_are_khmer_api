@@ -11,12 +11,15 @@ public interface IArticleService {
     List<ArticleResponse> getArticlesForCurrentUser(String userId);
 
     Article insertArticle(Article article);
+    List<ArticleResponse> getAllArticlesWithPaginate(Integer pageSize, Integer offsetValue);
+
+    List<ArticleResponse> getArticlesForCurrentUserWithPaginate(String userId, Integer pageSize, Integer nextPage);
 
     ArticleResponse getArticleById(String articleId);
 
     ArticleResponse getArticleByIdForCurrentUser(String articleId, String currentUserId);
 
-    List<ArticleResponse> getAllArticleByCategoryName(String categoryName);
+    List<ArticleResponse> getAllArticleByCategoryName(String categoryName, Integer pageNumber, Integer nextPage);
 
     Article updateArticle(Article article);
 

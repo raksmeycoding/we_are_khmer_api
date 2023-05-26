@@ -44,6 +44,27 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.username as author_name,
+                   c.category_name,
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
+            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id limit #{pageSize} offset #{offsetValue};
+            """)
+    List<ArticleResponse> getAllArticlesWithPaginate(Integer pageSize, Integer offsetValue);
+
+
+    @Select("""
+            select ab.article_id,
+                   ab.user_id,
+                   ab.category_id,
+                   ab.title,
+                   ab.sub_title,
+                   ab.publish_date,
+                   ab.description,
+                   ab.updatedat,
+                   concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
+                   ab.count_view,
+                   ab.isban,
+                   ab.hero_card_in,
                    ub.username                                                                as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
@@ -74,9 +95,33 @@ public interface ArticleMapper {
             from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
-            where category_name = #{categoryName}
+            where ab.user_id = #{userId} limit #{pageSize} offset #{nextPage}
             """)
-    List<ArticleResponse> getAllArticleByCategoryName(String categoryName);
+    List<ArticleResponse> getArticlesForCurrentUserWithPaginate(String userId, Integer pageSize, Integer nextPage);
+
+
+    @Select("""
+            select ab.article_id,
+                   ab.user_id,
+                   ab.category_id,
+                   ab.title,
+                   ab.sub_title,
+                   ab.publish_date,
+                   ab.description,
+                   ab.updatedat,
+                   concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
+                   ab.count_view,
+                   ab.isban,
+                   ab.hero_card_in,
+                   ub.username                                                                as author_name,
+                   c.category_name,
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
+            from article_tb ab
+                     inner join user_tb ub on ab.user_id = ub.user_id
+                     inner join category c on c.category_id = ab.category_id
+            where lower(category_name)  = lower(#{categoryName}) limit #{pageNumber} offset #{nextPage}
+            """)
+    List<ArticleResponse> getAllArticleByCategoryName(String categoryName, Integer pageNumber, Integer nextPage);
 
 
     @Select("""
@@ -176,7 +221,7 @@ public interface ArticleMapper {
             from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
-            where isBan = false order by count_view desc ;
+            where isBan = false order by count_view desc limit 20 offset 0;
             """)
     List<ArticleResponse> getArticleByMostViewLimit20();
 
@@ -185,4 +230,10 @@ public interface ArticleMapper {
             update article_tb set count_view = count_view + 1 where article_id = #{articleId} returning article_id;
             """)
     String increaseArticleViewCount(String articleId);
+
+
+    @Select("""
+            select count(*) from article_tb as article_count
+            """)
+    Integer getTotalRecordOfArticleTb();
 }

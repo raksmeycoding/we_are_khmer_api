@@ -6,13 +6,13 @@ import com.kshrd.wearekhmer.article.service.IArticleService;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.bookmark.repository.BookmarkMapper;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
-import com.kshrd.wearekhmer.history.model.entity.History;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import com.kshrd.wearekhmer.history.repository.HistoryMapper;
 import com.kshrd.wearekhmer.userReport.repository.ReportMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -36,6 +36,11 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     private final HistoryMapper historyMapper;
 
     private final BookmarkMapper bookmarkMapper;
+
+
+
+
+
 
     @Override
     public void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize) {
@@ -100,6 +105,14 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
 
     @Override
+    public void validatePageNumber(Integer page) {
+        boolean is = page >= 0 && page != 0;
+        if (!is) {
+            throw new CustomRuntimeException("Page number must be grater than 0 and not equal zero.");
+        }
+    }
+
+    @Override
     public boolean validateArticleId(String articleId) {
         return articleService.isArticleExist(articleId);
     }
@@ -128,6 +141,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     public List<BookmarkResponse> validateBookmarkRemoveAll(String userId) {
         return bookmarkMapper.getAllBookmarkByCurrentId(userId);
     }
+
+
 }
 
 

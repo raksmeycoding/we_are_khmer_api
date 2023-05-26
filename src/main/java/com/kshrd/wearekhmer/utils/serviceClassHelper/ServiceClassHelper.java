@@ -8,6 +8,10 @@ public interface ServiceClassHelper {
 
     String uploadImageToSpecificTable(String imageType, String imageName, String primaryId);
 
+    public Integer getTotalOfRecordInArticleTb();
+
+
+
 
 
 

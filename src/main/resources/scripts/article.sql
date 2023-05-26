@@ -110,7 +110,7 @@ where category_name = 'Khmer Angkor';
 
 
 
-
+-- get all article by category name
 select ab.article_id,
        ab.user_id,
        ab.category_id,
@@ -165,5 +165,29 @@ update article_tb set count_view = count_view + 1 where article_id = '2014f4dd-d
 
 
 
+
+-- test
+-- test with paginate
+select ab.article_id,
+       ab.user_id,
+       ab.category_id,
+       ab.title,
+       ab.sub_title,
+       ab.publish_date,
+       ab.description,
+       ab.updatedat,
+       concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
+       ab.count_view,
+       ab.isban,
+       ab.hero_card_in,
+       ub.username as author_name,
+       c.category_name,
+       (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
+from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id limit #{} offset #{};
+
+
+select count(*) as record_count from article_tb;
+
+select * from article_tb;
 
 

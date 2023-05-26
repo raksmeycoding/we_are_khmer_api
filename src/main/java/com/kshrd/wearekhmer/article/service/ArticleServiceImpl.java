@@ -22,6 +22,12 @@ public class ArticleServiceImpl implements IArticleService {
 
     }
 
+
+    @Override
+    public List<ArticleResponse> getAllArticlesWithPaginate(Integer pageSize, Integer offsetValue) {
+        return articleMapper.getAllArticlesWithPaginate(pageSize, offsetValue);
+    }
+
     @Override
     public List<ArticleResponse> getArticlesForCurrentUser(String userId) {
         return articleMapper.getArticlesForCurrentUser(userId);
@@ -29,8 +35,13 @@ public class ArticleServiceImpl implements IArticleService {
 
 
     @Override
-    public List<ArticleResponse> getAllArticleByCategoryName(String categoryName) {
-        return articleMapper.getAllArticleByCategoryName(categoryName);
+    public List<ArticleResponse> getArticlesForCurrentUserWithPaginate(String userId, Integer pageSize, Integer nextPage) {
+        return articleMapper.getArticlesForCurrentUserWithPaginate(userId, pageSize, nextPage);
+    }
+
+    @Override
+    public List<ArticleResponse> getAllArticleByCategoryName(String categoryName, Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllArticleByCategoryName(categoryName, pageNumber, nextPage);
     }
 
     @Override

@@ -11,6 +11,8 @@ import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.files.service.IFileService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
+import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
@@ -24,7 +26,7 @@ import java.util.List;
 @RequestMapping("/api/v1/article")
 @SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
-public class ArticleControllerImpl implements IArticleController {
+public class ArticleControllerImpl {
 
 
     private IArticleService articleService;
@@ -33,13 +35,41 @@ public class ArticleControllerImpl implements IArticleController {
     private final IFileService fileService;
 
     private final FileConfig fileConfig;
+    private static final Integer PAGE_SIZE = 10;
 
-    @Override
+    private final WeAreKhmerValidation weAreKhmerValidation;
+
+    private final ServiceClassHelper serviceClassHelper;
+
+
+    private Integer getNextPage(Integer page) {
+        int numberOfRecord = serviceClassHelper.getTotalOfRecordInArticleTb();
+        System.out.println(numberOfRecord);
+        int totalPage = (int) Math.ceil((double) numberOfRecord / PAGE_SIZE);
+        System.out.println(totalPage);
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        weAreKhmerValidation.validatePageNumber(page);
+        return (page - 1) * PAGE_SIZE;
+    }
+
     @GetMapping
     @Operation(summary = "(Get all articles)")
-    public ResponseEntity<?> getAllArticles() {
+    public ResponseEntity<?> getAllArticles(@RequestParam(value = "page", required = false) Integer page) {
         GenericResponse genericResponse;
+
         try {
+            if (page != null) {
+                Integer nextPage = getNextPage(page);
+                List<ArticleResponse> articleResponseList = articleService.getAllArticlesWithPaginate(PAGE_SIZE, nextPage);
+                return ResponseEntity.ok().body(GenericResponse.builder()
+                        .title("success")
+                        .payload(articleResponseList)
+                        .message("Get data successfully.")
+                        .status("200")
+                        .build());
+            }
             List<ArticleResponse> articleResponses =
                     articleService.getAllArticles();
             genericResponse = GenericResponse
@@ -49,6 +79,7 @@ public class ArticleControllerImpl implements IArticleController {
                     .payload(articleResponses)
                     .build();
             return ResponseEntity.ok(genericResponse);
+
         } catch (Exception ex) {
             genericResponse =
                     GenericResponse
@@ -63,38 +94,22 @@ public class ArticleControllerImpl implements IArticleController {
     }
 
 
-//    @Override
-//    public ResponseEntity<?> getAllArticleForCurrentUser() {
-//        GenericResponse genericResponse;
-//        try {
-//            List<ArticleResponse> articleResponses = articleService.getArticlesForCurrentUser(weAreKhmerCurrentUser.getUserId());
-//            genericResponse =
-//                    GenericResponse.builder()
-//                            .title("success")
-//                            .message("request successfully")
-//                            .payload(articleResponses)
-//                            .build();
-//
-//            return ResponseEntity.ok(genericResponse);
-//
-//        } catch (Exception ex) {
-//            genericResponse = GenericResponse.builder()
-//                    .status("500")
-//                    .message(ex.getMessage())
-//                    .title("internal server error!")
-//                    .build();
-//            ex.printStackTrace();
-//            return ResponseEntity.internalServerError().body(genericResponse);
-//        }
-//
-//    }
-
-    @Override
     @Operation(summary = "(Get all articles current for current user)")
     @GetMapping("/user")
-    public ResponseEntity<?> getAllArticlesForCurrentUser() {
+    public ResponseEntity<?> getAllArticlesForCurrentUser(@RequestParam(value = "page", required = false) Integer page) {
         GenericResponse genericResponse;
         try {
+
+            if (page != null) {
+                Integer nextPage = getNextPage(page);
+                List<ArticleResponse> articleResponseList = articleService.getArticlesForCurrentUserWithPaginate(weAreKhmerCurrentUser.getUserId(), PAGE_SIZE, nextPage);
+                return ResponseEntity.ok().body(GenericResponse.builder()
+                        .status("200")
+                        .message("Get data successfully.")
+                        .payload(articleResponseList)
+                        .title("error.")
+                        .build());
+            }
             String currentUerId = weAreKhmerCurrentUser.getUserId();
             List<ArticleResponse> articles = articleService.getArticlesForCurrentUser(currentUerId);
             genericResponse = GenericResponse.builder()
@@ -118,7 +133,7 @@ public class ArticleControllerImpl implements IArticleController {
         }
     }
 
-    @Override
+
     @PostMapping("/user")
     @Operation(summary = "(Insert article for current user")
     public ResponseEntity<?> insertArticle(@RequestBody @Validated ArticleRequest articleRequest) {
@@ -165,7 +180,7 @@ public class ArticleControllerImpl implements IArticleController {
         }
     }
 
-    @Override
+
     @GetMapping("/{articleId}")
     @Operation(summary = "(Get article by id)")
     public ResponseEntity<?> getArticleById(@PathVariable String articleId) {
@@ -190,7 +205,7 @@ public class ArticleControllerImpl implements IArticleController {
         }
     }
 
-    @Override
+
     @GetMapping("/user/{articleId}")
     @Operation(summary = "(Get article by id for current user)")
     public ResponseEntity<?> getArticleByIdForCurrentUser(@PathVariable String articleId) {
@@ -216,7 +231,7 @@ public class ArticleControllerImpl implements IArticleController {
         }
     }
 
-    @Override
+
     @PutMapping("/user")
     @Operation(summary = "(Update article by id for current user)")
     public ResponseEntity<?> updateArticle(ArticleUpdateRequest article) {
@@ -252,7 +267,6 @@ public class ArticleControllerImpl implements IArticleController {
     }
 
 
-    @Override
     @DeleteMapping("/user/{articleId}")
     @Operation(summary = "(Delete article by id for current user)")
     public ResponseEntity<?> deleteArticle(@PathVariable String articleId) {
@@ -293,11 +307,10 @@ public class ArticleControllerImpl implements IArticleController {
 
     @Operation(summary = "(Get Articles by category name)")
     @GetMapping("/category/{categoryName}")
-    @Override
-    public ResponseEntity<?> getAllArticleByCategoryName(@PathVariable String categoryName) {
+    public ResponseEntity<?> getAllArticleByCategoryName(@PathVariable String categoryName, @RequestParam(defaultValue = "1", required = false) Integer page) {
         try {
-            System.out.println(categoryName);
-            List<ArticleResponse> articleResponseList = articleService.getAllArticleByCategoryName(categoryName);
+            Integer nextPage = getNextPage(page);
+            List<ArticleResponse> articleResponseList = articleService.getAllArticleByCategoryName(categoryName, PAGE_SIZE, nextPage);
             if (articleResponseList.isEmpty()) {
                 throw new CustomRuntimeException("This article by this category is not exist");
             }
@@ -318,7 +331,6 @@ public class ArticleControllerImpl implements IArticleController {
     }
 
 
-    @Override
     @GetMapping("/most-view")
     @Operation(summary = "(Get article by most view - only 20 rows was returned)")
     public ResponseEntity<?> getArticleByMostViewLimit20() {
@@ -341,7 +353,6 @@ public class ArticleControllerImpl implements IArticleController {
     }
 
 
-    @Override
     @PostMapping("/increase/{articleId}")
     @Operation(summary = "(Increase article view count.")
     public ResponseEntity<?> increaseArticleViewCount(@PathVariable String articleId) {

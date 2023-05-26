@@ -1,9 +1,6 @@
 package com.kshrd.wearekhmer.history.controller;
 
-import com.kshrd.wearekhmer.article.controller.IArticleController;
-import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.service.IArticleService;
-import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.history.model.entity.History;
 import com.kshrd.wearekhmer.history.model.request.HistoryRequest;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
