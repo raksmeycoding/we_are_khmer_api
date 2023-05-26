@@ -2,6 +2,7 @@ package com.kshrd.wearekhmer.authenticatoin.controller;
 
 
 import com.kshrd.wearekhmer.authenticatoin.AuthenticationService;
+import com.kshrd.wearekhmer.emailVerification.controller.TokenRequest;
 import com.kshrd.wearekhmer.emailVerification.service.EmailService;
 import com.kshrd.wearekhmer.exception.DuplicateKeyException;
 import com.kshrd.wearekhmer.opt.model.Otp;
@@ -155,5 +156,45 @@ public class AuthenticationController {
             }
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
+    }
+
+
+
+
+
+
+
+    @PostMapping("/verification/token")
+    public ResponseEntity<?> emailVerificatoin(@RequestBody TokenRequest tokenRequest) {
+
+        System.out.println(tokenRequest.getToken());
+        GenericResponse genericResponse;
+        try {
+            log.info("sending email");
+            Otp otp = otpService.enableUserByToken(tokenRequest.getToken());
+            System.out.println(otp);
+
+//            after verification, then login
+            UserLoginRequest userLoginRequest =
+                    UserLoginRequest.builder()
+                            .email(otp.getEmail())
+                            .password(otp.getTemp_password())
+                            .build();
+            ResponseEntity<?> response = authenticationService.authenticate(userLoginRequest);
+            otpService.removeByToken(otp.getToken());
+            return ResponseEntity.ok(response.getBody());
+        } catch (Exception exception) {
+            genericResponse = GenericResponse.builder()
+                    .status("500")
+                    .message(exception.getMessage())
+                    .title("internal server error!")
+                    .build();
+
+            return ResponseEntity.internalServerError().body(genericResponse);
+
+
+        }
+
+
     }
 }

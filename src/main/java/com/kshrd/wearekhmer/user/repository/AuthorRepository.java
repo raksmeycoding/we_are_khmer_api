@@ -69,7 +69,7 @@ public interface AuthorRepository {
             WITH inserted_user_role AS (
                 INSERT INTO user_role_tb (user_id, role_id)
                     VALUES (
-                               (SELECT user_id FROM user_tb WHERE user_id = '1a816fc1-90cb-480a-93ed-6b5e21322bd0'),
+                               (SELECT user_id FROM user_tb WHERE user_id = #{userId}),
                                (SELECT role_id FROM role_tb WHERE name = 'ROLE_AUTHOR')
                            )
                     RETURNING user_id

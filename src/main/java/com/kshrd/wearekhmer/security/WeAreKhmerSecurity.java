@@ -52,7 +52,8 @@ public class WeAreKhmerSecurity {
             "/api/v1/report/**",
             "/api/v1/notification",
             "/api/v1/rating/**",
-            "/api/v1/review/**"
+            "/api/v1/review/**",
+            "api/v1/auth/verification/token"
     };
 
     @Bean
