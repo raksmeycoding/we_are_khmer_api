@@ -5,10 +5,12 @@ create table notification_tb
 (
     notification_id   varchar primary key default uuid_generate_v4(),
     createAt          timestamp           default current_timestamp,
-    sender_id         varchar not null references user_tb (user_id),
-    receiver_id       varchar not null references user_tb (user_id),
+    sender_id         varchar not null references user_tb (user_id) on delete cascade,
+    receiver_id       varchar not null references user_tb (user_id) on delete cascade ,
     notification_type notification_type
 );
+
+
 
 drop table notification_tb;
 
@@ -53,7 +55,7 @@ END;
 $$
     LANGUAGE plpgsql;
 
-drop function insert_notification cascade;
+-- drop function insert_notification cascade;
 
 
 
@@ -63,7 +65,7 @@ CREATE TRIGGER react_notification_trigger
     ON react_tb
     FOR EACH ROW
 EXECUTE FUNCTION insert_notification();
-drop trigger react_notification_trigger on report_tb;
+-- drop trigger react_notification_trigger on report_tb;
 
 -- Trigger for comment_tb
 CREATE TRIGGER comment_notification_trigger
@@ -71,7 +73,7 @@ CREATE TRIGGER comment_notification_trigger
     ON comment_tb
     FOR EACH ROW
 EXECUTE FUNCTION insert_notification();
-drop trigger comment_notification_trigger on comment_tb;
+-- drop trigger comment_notification_trigger on comment_tb;
 
 -- Trigger for report_tb
 CREATE TRIGGER report_notification_trigger
@@ -81,10 +83,12 @@ CREATE TRIGGER report_notification_trigger
 EXECUTE FUNCTION insert_notification();
 
 
+
 -- create trigger for author_request_table;
 CREATE TRIGGER author_request_tb_trigger
     AFTER INSERT
     ON author_request_tb
     FOR EACH ROW
 EXECUTE FUNCTION insert_notification();
+drop trigger author_request_tb_trigger on author_request_tb;
 

@@ -46,7 +46,7 @@ public interface WeAreKhmerRepositorySupport {
 
 
     @Select("""
-            insert into user_tb (email, password, gender) values ( #{para.email}, #{para.password}, cast(#{para.gender} as gender)) returning * 
+            insert into user_tb (username, email, password, gender) values (#{para.username}, #{para.email}, #{para.password}, cast(#{para.gender} as gender)) returning * 
             """)
     @ResultMap("userMapper")
     <P> UserApp normalUserRegister(@Param("para") P p);
