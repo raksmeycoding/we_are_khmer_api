@@ -236,4 +236,100 @@ public interface ArticleMapper {
             select count(*) from article_tb as article_count
             """)
     Integer getTotalRecordOfArticleTb();
+
+    @Select("""
+            select ab.article_id,
+                   ab.user_id,
+                   ab.category_id,
+                   ab.title,
+                   ab.sub_title,
+                   ab.publish_date,
+                   ab.description,
+                   ab.updatedat,
+                   concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
+                   ab.count_view,
+                   ab.isban,
+                   ab.hero_card_in,
+                   ub.username as author_name,
+                   c.category_name,
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
+            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
+            WHERE  publish_date :: date = current_date -1 AND isban = false
+            ORDER BY publish_date DESC LIMIT 20 OFFSET 0
+            """)
+    List<ArticleResponse> getAllArticlesByYesterday();
+
+    @Select("""
+            select ab.article_id,
+                   ab.user_id,
+                   ab.category_id,
+                   ab.title,
+                   ab.sub_title,
+                   ab.publish_date,
+                   ab.description,
+                   ab.updatedat,
+                   concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
+                   ab.count_view,
+                   ab.isban,
+                   ab.hero_card_in,
+                   ub.username as author_name,
+                   c.category_name,
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
+            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
+            WHERE publish_date >= current_date - interval '6 days'
+            AND publish_date < current_date + interval '1 day' 
+            AND isban = false
+            ORDER BY publish_date DESC LIMIT 20 OFFSET 0
+            """)
+    List<ArticleResponse> getAllArticlesByLastWeek();
+
+    @Select("""
+            select ab.article_id,
+                   ab.user_id,
+                   ab.category_id,
+                   ab.title,
+                   ab.sub_title,
+                   ab.publish_date,
+                   ab.description,
+                   ab.updatedat,
+                   concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
+                   ab.count_view,
+                   ab.isban,
+                   ab.hero_card_in,
+                   ub.username as author_name,
+                   c.category_name,
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
+            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
+            WHERE date_trunc('month', publish_date)=
+            date_trunc('month', current_date - interval '1 month')
+            AND isban = false 
+            ORDER BY publish_date DESC LIMIT 20 OFFSET 0
+            """)
+    List<ArticleResponse> getAllArticlesByLastMonth();
+
+    @Select("""
+            select ab.article_id,
+                   ab.user_id,
+                   ab.category_id,
+                   ab.title,
+                   ab.sub_title,
+                   ab.publish_date,
+                   ab.description,
+                   ab.updatedat,
+                   concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
+                   ab.count_view,
+                   ab.isban,
+                   ab.hero_card_in,
+                   ub.username as author_name,
+                   c.category_name,
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
+            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
+            WHERE publish_date BETWEEN DATE_TRUNC('year', CURRENT_DATE - INTERVAL '1 year') AND DATE_TRUNC('year', CURRENT_DATE) - INTERVAL '1 day'
+            AND isban = false 
+            ORDER BY publish_date DESC LIMIT 20 OFFSET 0
+            """)
+    List<ArticleResponse> getAllArticlesByLastYear();
+
+
+
 }

@@ -5,7 +5,7 @@ import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
 import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
-import com.kshrd.wearekhmer.article.service.IArticleService;
+import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.files.service.IFileService;
@@ -26,10 +26,10 @@ import java.util.List;
 @RequestMapping("/api/v1/article")
 @SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
-public class ArticleControllerImpl {
+public class ArticleController {
 
 
-    private IArticleService articleService;
+    private ArticleService articleService;
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
     private final IFileService fileService;
@@ -373,6 +373,113 @@ public class ArticleControllerImpl {
                     .message("Internal server error.")
                     .title("error.")
                     .build());
+        }
+    }
+
+    @GetMapping("/last-24h")
+    @Operation(summary = "Get article by last 24 hours")
+    public ResponseEntity<?> getAllArticlesByYesterday(){
+        GenericResponse genericResponse;
+        try {
+
+            List<ArticleResponse> articleResponseList = articleService.getAllArticlesByYesterday();
+            genericResponse = GenericResponse.builder()
+                    .status("200")
+                    .payload(articleResponseList)
+                    .title("success")
+                    .message("You have successfully got last 24 hour articles recorded")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+
+        } catch (Exception ex) {
+            genericResponse =
+                    GenericResponse
+                            .builder()
+                            .status("500")
+                            .message(ex.getMessage())
+                            .build();
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(genericResponse);
+        }
+    }
+    @GetMapping("/last-week")
+    @Operation(summary = "Get article by last week")
+    public ResponseEntity<?> getAllArticlesByLastWeek(){
+        GenericResponse genericResponse;
+        try {
+
+            List<ArticleResponse> articleResponseList = articleService.getAllArticlesByLastWeek();
+            genericResponse = GenericResponse.builder()
+                    .status("200")
+                    .payload(articleResponseList)
+                    .title("success")
+                    .message("You have successfully got last week articles recorded")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+
+        } catch (Exception ex) {
+            genericResponse =
+                    GenericResponse
+                            .builder()
+                            .status("500")
+                            .message(ex.getMessage())
+                            .build();
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(genericResponse);
+        }
+    }
+
+    @GetMapping("/last-month")
+    @Operation(summary = "Get article by last month")
+    public ResponseEntity<?> getAllArticlesByLastMonth(){
+        GenericResponse genericResponse;
+        try {
+
+            List<ArticleResponse> articleResponseList = articleService.getAllArticlesByLastMonth();
+            genericResponse = GenericResponse.builder()
+                    .status("200")
+                    .payload(articleResponseList)
+                    .title("success")
+                    .message("You have successfully got last month articles recorded")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+
+        } catch (Exception ex) {
+            genericResponse =
+                    GenericResponse
+                            .builder()
+                            .status("500")
+                            .message(ex.getMessage())
+                            .build();
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(genericResponse);
+        }
+    }
+
+    @GetMapping("/last-year")
+    @Operation(summary = "Get article by last year")
+    public ResponseEntity<?> getAllArticlesByLastYear(){
+        GenericResponse genericResponse;
+        try {
+
+            List<ArticleResponse> articleResponseList = articleService.getAllArticlesByLastYear();
+            genericResponse = GenericResponse.builder()
+                    .status("200")
+                    .payload(articleResponseList)
+                    .title("success")
+                    .message("You have successfully got last year articles recorded")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+
+        } catch (Exception ex) {
+            genericResponse =
+                    GenericResponse
+                            .builder()
+                            .status("500")
+                            .message(ex.getMessage())
+                            .build();
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(genericResponse);
         }
     }
 }

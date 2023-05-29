@@ -21,14 +21,14 @@ import java.util.List;
 @RequestMapping("/api/v1/category")
 @SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
-public class CategoryController implements CategoryControllerInterface {
+public class CategoryController {
 
     private final CategoryService categoryService;
 
     private WeAreKhmerValidation weAreKhmerValidation;
 
 
-    @Override
+
     @GetMapping
     public ResponseEntity<?> getAllCategories() throws Exception {
         System.out.println(SecurityContextHolder.getContext().getAuthentication());
@@ -56,7 +56,7 @@ public class CategoryController implements CategoryControllerInterface {
         }
     }
 
-    @Override
+
     @GetMapping("{categoryId}")
     public ResponseEntity<?> getCategoryById(@PathVariable String categoryId) {
         GenericResponse genericResponse;
@@ -84,7 +84,7 @@ public class CategoryController implements CategoryControllerInterface {
 
     @PostMapping
 
-    @Override
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "(Only administrator can create this category.)")
@@ -119,7 +119,7 @@ public class CategoryController implements CategoryControllerInterface {
         }
     }
 
-    @Override
+
     @PutMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "(Only administrator can update this category.)")
@@ -150,7 +150,7 @@ public class CategoryController implements CategoryControllerInterface {
         }
     }
 
-    @Override
+
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "(Only administrator can delete this category.)")

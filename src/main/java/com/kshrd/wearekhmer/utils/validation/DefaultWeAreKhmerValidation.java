@@ -1,8 +1,7 @@
 package com.kshrd.wearekhmer.utils.validation;
 
 
-import com.kshrd.wearekhmer.article.repository.ArticleMapper;
-import com.kshrd.wearekhmer.article.service.IArticleService;
+import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.bookmark.repository.BookmarkMapper;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
@@ -12,7 +11,6 @@ import com.kshrd.wearekhmer.userReport.repository.ReportMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -31,7 +29,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     private final ReportMapper reportMapper;
 
-    private final IArticleService articleService;
+    private final ArticleService articleService;
 
     private final HistoryMapper historyMapper;
 

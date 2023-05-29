@@ -1,22 +1,31 @@
 package com.kshrd.wearekhmer.security;
 
 import com.kshrd.wearekhmer.user.service.userService.UserAppDetailsServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -27,6 +36,9 @@ public class WeAreKhmerSecurity {
     private final UserAppDetailsServiceImpl userAppDetailsService;
 
     private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
+
+
 
     private static String[] ENDPOINTS_WHITELIST = {
             "/v3/api-docs/**",
@@ -36,24 +48,17 @@ public class WeAreKhmerSecurity {
             "/api/v1/auth/register/**",
             "/api/v1/auth/register",
             "/api/v1/auth/login",
-            "/api/v1/files/**",
             "/images/**",
             "/api/v1/email/**",
             "/api/v1/email/verification/token",
-            "/user/verify/email/token/**",
-            "/api/v1/author/**",
             "/api/v1/author/authorUser",
-            "/api/v1/category/**",
+            "/api/v1/category",
             "/api/v1/article",
-            "/api/v1/article/**",
-            "/api/v1/article/react/**",
-            "/api/v1/history/**",
-            "/api/v1/comment/article/**",
-            "/api/v1/report/**",
-            "/api/v1/notification",
-            "/api/v1/rating/**",
-            "/api/v1/review/**",
-            "api/v1/auth/verification/token"
+            "/api/v1/article/{articleId}",
+            "/api/v1/article/category/**",
+            "/api/v1/article/most-view",
+            "/api/v1/article/increase/{articleId}",
+            "/api/v1/review/**"
     };
 
     @Bean
@@ -108,6 +113,8 @@ public class WeAreKhmerSecurity {
         return cofig.getAuthenticationManager();
     }
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)
             throws Exception {
@@ -120,18 +127,39 @@ public class WeAreKhmerSecurity {
                 //                .authorizeHttpRequests()
                 //                .requestMatchers("/", "/user", "/swagger-ui/index.html").permitAll()
                 .authorizeHttpRequests()
-                //                .requestMatchers("/user").hasRole("USER")
-                //                .requestMatchers("/api/v1/auth/register/as-author").hasRole("USER")
+                .requestMatchers("/api/v1/files/**").hasAnyRole("ADMIN","AUTHOR")
+                .requestMatchers( "/api/v1/article/react/**").hasAnyRole("ADMIN", "AUTHOR", "USER")
+                .requestMatchers("/api/v1/comment/article/**").hasAnyRole("ADMIN", "AUTHOR", "USER")
+                .requestMatchers("/api/v1/notification").hasAnyRole("ADMIN","AUTHOR")
+                .requestMatchers("/api/v1/rating/**").hasAnyRole("ADMIN", "AUTHOR","USER")
+                .requestMatchers("/api/v1/report/**").hasAnyRole("ADMIN","AUTHOR")
+                .requestMatchers("/api/v1/history/**").hasAnyRole("ADMIN", "AUTHOR", "USER")
+                .requestMatchers("/api/v1/bookmark/**").hasAnyRole("ADMIN","AUTHOR","USER")
+                .requestMatchers(     "/api/v1/author/accept/{userId}").hasRole("ADMIN")
+                .requestMatchers("/api/v1/author/authorRequest").hasRole("ADMIN")
+                .requestMatchers(  "/api/v1/auth/register/as-author").hasRole("USER")
+                .requestMatchers(HttpMethod.POST,"/api/v1/category").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/category").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/api/v1/category").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST,"/api/v1/article/user").hasRole("AUTHOR")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/article/user").hasRole("AUTHOR")
+                .requestMatchers(HttpMethod.DELETE,"/api/v1/article/user").hasRole("AUTHOR")
+                .requestMatchers(HttpMethod.GET,"/api/v1/article/user").hasRole("AUTHOR")
+
+
                 .requestMatchers(ENDPOINTS_WHITELIST)
+
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(this.authenticationEntryPoint)
+                .and()
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(
                         jwtAuthenticationTokenFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                )
+                        UsernamePasswordAuthenticationFilter.class)
                 .logout()
                 .and()
                 .build();

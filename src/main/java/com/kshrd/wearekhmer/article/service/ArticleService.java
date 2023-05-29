@@ -5,7 +5,7 @@ import com.kshrd.wearekhmer.article.response.ArticleResponse;
 
 import java.util.List;
 
-public interface IArticleService {
+public interface ArticleService {
     List<ArticleResponse> getAllArticles();
 
     List<ArticleResponse> getArticlesForCurrentUser(String userId);
@@ -31,4 +31,12 @@ public interface IArticleService {
 
 
     String increaseArticleViewCount(String articleId);
+
+    List<ArticleResponse> getAllArticlesByYesterday();
+
+    List<ArticleResponse> getAllArticlesByLastWeek();
+
+    List<ArticleResponse> getAllArticlesByLastMonth();
+
+    List<ArticleResponse> getAllArticlesByLastYear();
 }

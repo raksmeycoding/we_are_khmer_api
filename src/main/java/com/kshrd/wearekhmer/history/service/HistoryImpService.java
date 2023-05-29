@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class HistoryImpService implements IHistoryService{
+public class HistoryImpService implements HistoryService {
 
     private final HistoryMapper historyMapper;
 

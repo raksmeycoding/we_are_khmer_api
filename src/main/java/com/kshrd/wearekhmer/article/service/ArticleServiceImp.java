@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ArticleServiceImpl implements IArticleService {
+public class ArticleServiceImp implements ArticleService {
 
     private final ArticleMapper articleMapper;
 
@@ -86,5 +86,25 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public String increaseArticleViewCount(String articleId) {
         return articleMapper.increaseArticleViewCount(articleId);
+    }
+
+    @Override
+    public List<ArticleResponse> getAllArticlesByYesterday() {
+        return articleMapper.getAllArticlesByYesterday();
+    }
+
+    @Override
+    public List<ArticleResponse> getAllArticlesByLastWeek() {
+        return articleMapper.getAllArticlesByLastWeek();
+    }
+
+    @Override
+    public List<ArticleResponse> getAllArticlesByLastMonth() {
+        return articleMapper.getAllArticlesByLastMonth();
+    }
+
+    @Override
+    public List<ArticleResponse> getAllArticlesByLastYear() {
+        return articleMapper.getAllArticlesByLastYear();
     }
 }

@@ -1,10 +1,8 @@
 package com.kshrd.wearekhmer;
 
-import com.kshrd.wearekhmer.article.service.IArticleService;
-import com.kshrd.wearekhmer.history.model.entity.History;
-import com.kshrd.wearekhmer.history.service.IHistoryService;
+import com.kshrd.wearekhmer.article.service.ArticleService;
+import com.kshrd.wearekhmer.history.service.HistoryService;
 import com.kshrd.wearekhmer.opt.service.OtpService;
-import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.repository.EducationMapper;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
@@ -12,7 +10,6 @@ import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
 import com.kshrd.wearekhmer.user.service.AuthorService;
 import com.kshrd.wearekhmer.user.service.UserAppService;
 import com.kshrd.wearekhmer.files.config.FileConfig;
-import com.kshrd.wearekhmer.userArtivities.model.UserComment;
 import com.kshrd.wearekhmer.userArtivities.repository.ICommentRepository;
 import com.kshrd.wearekhmer.utils.OtpUtil;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
@@ -28,7 +25,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.List;
 import java.util.Random;
 
 @SpringBootApplication
@@ -66,11 +62,11 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 
     private final AuthorService authorService;
 
-    private final IArticleService articleService;
+    private final ArticleService articleService;
 
     private final ICommentRepository ICommentRepository;
 
-    private final IHistoryService iHistoryService;
+    private final HistoryService iHistoryService;
 
     private final AuthorRepository authorRepository;
 

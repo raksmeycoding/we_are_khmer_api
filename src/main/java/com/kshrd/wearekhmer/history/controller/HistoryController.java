@@ -1,10 +1,10 @@
 package com.kshrd.wearekhmer.history.controller;
 
-import com.kshrd.wearekhmer.article.service.IArticleService;
+import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.history.model.entity.History;
 import com.kshrd.wearekhmer.history.model.request.HistoryRequest;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
-import com.kshrd.wearekhmer.history.service.IHistoryService;
+import com.kshrd.wearekhmer.history.service.HistoryService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
@@ -23,16 +23,16 @@ import java.util.List;
 @SecurityRequirement(name = "bearerAuth")
 
 @AllArgsConstructor
-public class HistoryControllerImp implements IHistoryController {
+public class HistoryController {
 
-    private final IHistoryService historyService;
-    private final IArticleService articleService;
+    private final HistoryService historyService;
+    private final ArticleService articleService;
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
     private WeAreKhmerValidation weAreKhmerValidation;
 
 
-    @Override
+
     @GetMapping
     @Operation(summary = "get all history (for current user)")
     public ResponseEntity<?> getAllHistoryByCurrentId() {
@@ -64,7 +64,7 @@ public class HistoryControllerImp implements IHistoryController {
     }
 
 
-    @Override
+
     @PostMapping
     @Operation(summary = "insert history (for current user) ")
     public ResponseEntity<?> insertHistory(String articleId) {
@@ -121,7 +121,7 @@ public class HistoryControllerImp implements IHistoryController {
         }
     }
 
-    @Override
+
     @DeleteMapping("/history")
     @Operation(summary = "delete history (for current user) ")
     public ResponseEntity<?> deleteHistory(String historyId) {
@@ -160,7 +160,7 @@ public class HistoryControllerImp implements IHistoryController {
         }
     }
 
-    @Override
+
     @DeleteMapping("histories")
     @Operation(summary = "delete all history (for current user) ")
     public ResponseEntity<?> removeAllHistory() {

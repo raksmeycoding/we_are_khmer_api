@@ -1,10 +1,9 @@
 package com.kshrd.wearekhmer.bookmark.controller;
 
-import com.kshrd.wearekhmer.article.service.IArticleService;
+import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.bookmark.model.entity.Bookmark;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.bookmark.model.request.BookmarkRequest;
-import com.kshrd.wearekhmer.bookmark.repository.BookmarkMapper;
 import com.kshrd.wearekhmer.bookmark.service.IBookService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
@@ -17,23 +16,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/bookmark")
 @SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
-public class IBookmarkControllerImp implements IBookmarkController {
+public class BookmarkController {
 
     private final IBookService bookmarkService;
-    private final IArticleService articleService;
+    private final ArticleService articleService;
 
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
     private WeAreKhmerValidation weAreKhmerValidation;
 
 
-    @Override
+
     @GetMapping
     @Operation(summary = "get all bookmark (for current user)")
     public ResponseEntity<?> getAllBookmarkCurrentId() {
@@ -64,7 +62,7 @@ public class IBookmarkControllerImp implements IBookmarkController {
         }
     }
 
-    @Override
+
     @PostMapping
     @Operation(summary = "insert bookmark (for current user)")
     public ResponseEntity<?> insertBookmark(String articleId) {
@@ -121,7 +119,7 @@ public class IBookmarkControllerImp implements IBookmarkController {
 
         }
     }
-    @Override
+
     @DeleteMapping("/Bookmark")
     @Operation(summary = "delete bookmark (for current user)")
     public ResponseEntity<?> deleteBookmark(String bookmarkId) {
@@ -164,7 +162,7 @@ public class IBookmarkControllerImp implements IBookmarkController {
         }
     }
 
-    @Override
+
     @DeleteMapping("/Bookmarks")
     @Operation(summary = "delete all bookmark (for current user)")
     public ResponseEntity<?> removeAllBookmark() {

@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/v1/comment/article")
 @SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
-public class CommentControllerImpl implements ICommentController {
+public class CommentController implements ICommentController {
     private final ICommentService commentService;
     private final WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 

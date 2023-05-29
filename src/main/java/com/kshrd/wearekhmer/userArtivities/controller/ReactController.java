@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/article/react")
 @SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
-public class ReactControllerImpl implements IReactController{
+public class ReactController implements IReactController{
 
 
     private final IReactService reactService;
