@@ -31,7 +31,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         errorDetails.put("time", LocalDateTime.now());
         errorDetails.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         errorDetails.put("error", "Unauthorized");
-        errorDetails.put("message", "Access Denied !!");
+        errorDetails.put("message", authException.getMessage());
         String requestPath = request.getRequestURI();
         errorDetails.put("path", requestPath);
         response.setContentType("application/json");

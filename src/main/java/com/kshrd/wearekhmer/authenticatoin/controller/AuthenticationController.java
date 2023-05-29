@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -144,6 +145,8 @@ public class AuthenticationController {
     private ResponseEntity<?> userLogin(@RequestBody UserLoginRequest userLoginRequest) {
         GenericResponse genericResponse;
         try {
+
+
             return ResponseEntity.ok(authenticationService.authenticate(userLoginRequest));
         } catch (Exception ex) {
             if (ex instanceof DisabledException) {
@@ -154,7 +157,11 @@ public class AuthenticationController {
                         .build();
                 return ResponseEntity.badRequest().body(genericResponse);
             }
-            return ResponseEntity.badRequest().body(ex.getMessage());
+            if(ex instanceof BadCredentialsException) {
+                throw new BadCredentialsException("Incorrect username or password.");
+            }
+//            return ResponseEntity.badRequest().body(ex.getMessage());
+            throw new RuntimeException();
         }
     }
 
