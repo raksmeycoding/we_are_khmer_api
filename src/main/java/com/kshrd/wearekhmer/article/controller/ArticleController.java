@@ -20,6 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.Path;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -468,6 +471,33 @@ public class ArticleController {
                     .payload(articleResponseList)
                     .title("success")
                     .message("You have successfully got last year articles recorded")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+
+        } catch (Exception ex) {
+            genericResponse =
+                    GenericResponse
+                            .builder()
+                            .status("500")
+                            .message(ex.getMessage())
+                            .build();
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(genericResponse);
+        }
+    }
+
+    @GetMapping("/date-range")
+    @Operation(summary = "Get article by date range")
+    public ResponseEntity<?> getAllArticlesByDateRange(Date startDate, Date endDate){
+        GenericResponse genericResponse;
+        try {
+
+            List<ArticleResponse> articleResponseList = articleService.getAllArticlesByDateRange(startDate,endDate);
+            genericResponse = GenericResponse.builder()
+                    .status("200")
+                    .payload(articleResponseList)
+                    .title("success")
+                    .message("You have successfully got articles recorded between " + startDate + " and "+endDate)
                     .build();
             return ResponseEntity.ok(genericResponse);
 

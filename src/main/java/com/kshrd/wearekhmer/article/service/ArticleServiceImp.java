@@ -6,6 +6,8 @@ import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -106,5 +108,10 @@ public class ArticleServiceImp implements ArticleService {
     @Override
     public List<ArticleResponse> getAllArticlesByLastYear() {
         return articleMapper.getAllArticlesByLastYear();
+    }
+
+    @Override
+    public List<ArticleResponse> getAllArticlesByDateRange(Date startDate, Date endDate) {
+        return articleMapper.getAllArticlesByDateRange(startDate,endDate);
     }
 }

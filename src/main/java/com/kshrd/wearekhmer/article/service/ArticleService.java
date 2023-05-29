@@ -3,6 +3,8 @@ package com.kshrd.wearekhmer.article.service;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface ArticleService {
@@ -39,4 +41,6 @@ public interface ArticleService {
     List<ArticleResponse> getAllArticlesByLastMonth();
 
     List<ArticleResponse> getAllArticlesByLastYear();
+
+    List<ArticleResponse> getAllArticlesByDateRange(Date startDate, Date endDate);
 }

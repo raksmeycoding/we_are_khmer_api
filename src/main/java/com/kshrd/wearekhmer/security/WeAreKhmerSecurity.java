@@ -46,19 +46,17 @@ public class WeAreKhmerSecurity {
             "/swagger-ui.html",
             "/api/v1/user/**",
             "/api/v1/auth/register/**",
-            "/api/v1/auth/register",
             "/api/v1/auth/login",
             "/images/**",
             "/api/v1/email/**",
             "/api/v1/auth/verification/token",
             "/api/v1/author/authorUser",
             "/api/v1/category",
-            "/api/v1/article",
+            "/api/v1/article/**",
             "/api/v1/article/{articleId}",
             "/api/v1/article/category/**",
-            "/api/v1/article/most-view",
-            "/api/v1/article/increase/{articleId}",
-            "/api/v1/review/**"
+            "/api/v1/review/**",
+            "/api/v1/auth/register",
     };
 
     @Bean
@@ -145,6 +143,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers(HttpMethod.PUT,"/api/v1/article/user").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.DELETE,"/api/v1/article/user").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.GET,"/api/v1/article/user").hasRole("AUTHOR")
+
 
 
                 .requestMatchers(ENDPOINTS_WHITELIST)
