@@ -50,7 +50,7 @@ public class WeAreKhmerSecurity {
             "/api/v1/auth/login",
             "/images/**",
             "/api/v1/email/**",
-            "/api/v1/email/verification/token",
+            "/api/v1/auth/verification/token",
             "/api/v1/author/authorUser",
             "/api/v1/category",
             "/api/v1/article",
