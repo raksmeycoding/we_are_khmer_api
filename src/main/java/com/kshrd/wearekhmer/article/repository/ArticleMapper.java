@@ -4,6 +4,8 @@ import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import org.apache.ibatis.annotations.*;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -330,6 +332,28 @@ public interface ArticleMapper {
             """)
     List<ArticleResponse> getAllArticlesByLastYear();
 
+    @Select("""
+            select ab.article_id,
+                   ab.user_id,
+                   ab.category_id,
+                   ab.title,
+                   ab.sub_title,
+                   ab.publish_date,
+                   ab.description,
+                   ab.updatedat,
+                   concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
+                   ab.count_view,
+                   ab.isban,
+                   ab.hero_card_in,
+                   ub.username as author_name,
+                   c.category_name,
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
+            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
+            WHERE publish_date >= #{startDate} AND publish_date <= #{endDate}
+            AND isban = false 
+            ORDER BY publish_date DESC LIMIT 20 OFFSET 0
+            """)
+    List<ArticleResponse> getAllArticlesByDateRange(Date startDate, java.sql.Date endDate);
 
 
 }
