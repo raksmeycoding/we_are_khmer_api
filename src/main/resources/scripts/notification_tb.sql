@@ -40,7 +40,7 @@ BEGIN
 
             -- Insert the notification record
             INSERT INTO notification_tb (createAt, sender_id, receiver_id, notification_type)
-            VALUES (current_timestamp, NEW.user_id, (select user_tb.user_id
+            VALUES (current_timestamp, NEW.user_id , (select user_tb.user_id
                                                      from user_tb
                                                               inner join user_role_tb on user_tb.user_id = user_role_tb.user_id
                                                               inner join role_tb on role_tb.role_id = user_role_tb.role_id
@@ -81,6 +81,7 @@ CREATE TRIGGER report_notification_trigger
     ON report_tb
     FOR EACH ROW
 EXECUTE FUNCTION insert_notification();
+drop trigger report_notification_trigger on report_tb;
 
 
 
