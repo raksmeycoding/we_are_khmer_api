@@ -8,6 +8,7 @@ import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.service.AuthorRequestTableService;
 import com.kshrd.wearekhmer.user.service.AuthorService;
+import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,8 @@ public class AuthorController {
     private final AuthorService authorService;
 
     private final AuthorRepository authorRepository;
+
+    private final WeAreKhmerValidation weAreKhmerValidation;
 
 
     @GetMapping("authorRequest")
@@ -62,6 +65,9 @@ public class AuthorController {
     public ResponseEntity<?> updateUserRequestToBeAsAuthor(@PathVariable String userId) {
         String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
         System.out.println(hasRoleAuthor);
+        if(!weAreKhmerValidation.isAdmin()){
+            throw new CustomRuntimeException("You are not admin.");
+        }
         if (hasRoleAuthor != null && hasRoleAuthor.equalsIgnoreCase("ROLE_AUTHOR")) {
             throw new CustomRuntimeException("User Already Exist.");
         }
@@ -76,7 +82,7 @@ public class AuthorController {
         }
         res = GenericResponse.builder()
                 .status("200")
-                .message("success")
+                .message("User is accepted as author.")
                 .build();
         return ResponseEntity.ok(res);
 
