@@ -50,4 +50,28 @@ SELECT * FROM otp2;
 
 
 
+-- bug error
+-- WITH updated_users AS (
+-- UPDATE user_tb
+-- SET is_enable = true
+-- WHERE user_id = (SELECT user_id FROM otp2 WHERE otp2.token = '248521')
+--     RETURNING *
+--     )
+-- SELECT * from otp2 where otp2.user_id = updated_users.user_id;
+
+
+
+WITH updated_users AS (
+    UPDATE user_tb
+        SET is_enable = true
+        WHERE user_id = (SELECT user_id FROM otp2 WHERE otp2.token = '248521')
+        RETURNING *
+)
+SELECT otp2.*
+FROM otp2
+         JOIN updated_users ON otp2.user_id = updated_users.user_id;
+
+
+
+
 

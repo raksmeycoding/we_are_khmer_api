@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.opt.service;
 
 import com.kshrd.wearekhmer.opt.model.Otp;
+import com.kshrd.wearekhmer.user.model.entity.UserApp;
 import org.apache.ibatis.annotations.Param;
 
 import java.sql.Timestamp;

@@ -51,7 +51,9 @@ public interface OtpServiceRepository {
                     WHERE user_id = (SELECT user_id FROM otp2 WHERE otp2.token = #{token})
                     RETURNING *
             )
-            SELECT * FROM otp2;
+            SELECT otp2.*
+            FROM otp2
+                     JOIN updated_users ON otp2.user_id = updated_users.user_id;
             """)
     @Result(property = "optId", column = "token_id")
     @Result(property = "token", column = "token")
