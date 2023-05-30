@@ -2,7 +2,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <img src="http://localhost:8080/api/v1/files/file/filename?name=c8402d4c-acce-4e6b-b8cb-a512cefa3564.png" alt="Logo" width="180" height="180">
+  <img src="https://i.pinimg.com/564x/ac/d1/58/acd1583c24771218945a240816a3ad1a.jpg" alt="Logo" width="180" height="180">
 
   <h3 align="center">Domrra</h3>
 
