@@ -57,6 +57,10 @@ public class WeAreKhmerSecurity {
             "/api/v1/article/category/**",
             "/api/v1/review/**",
             "/api/v1/auth/register",
+            "/api/v1/category/{categoryId}",
+            "/api/v1/rating/{authorId}",
+            "/api/v1/files/file/filename",
+            "/api/v1/comment/article/{articleId}"
     };
 
     @Bean
@@ -125,12 +129,14 @@ public class WeAreKhmerSecurity {
                 //                .authorizeHttpRequests()
                 //                .requestMatchers("/", "/user", "/swagger-ui/index.html").permitAll()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/files/**").hasAnyRole("ADMIN","AUTHOR")
+                .requestMatchers("/api/v1/files/file/**").hasAnyRole("ADMIN","AUTHOR")
                 .requestMatchers( "/api/v1/article/react/**").hasAnyRole("ADMIN", "AUTHOR", "USER")
-                .requestMatchers("/api/v1/comment/article/**").hasAnyRole("ADMIN", "AUTHOR", "USER")
+                .requestMatchers("/api/v1/comment/article").hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers("/api/v1/notification").hasAnyRole("ADMIN","AUTHOR")
-                .requestMatchers("/api/v1/rating/**").hasAnyRole("ADMIN", "AUTHOR","USER")
-                .requestMatchers("/api/v1/report/**").hasAnyRole("ADMIN","AUTHOR")
+                .requestMatchers("/api/v1/rating").hasAnyRole("ADMIN", "AUTHOR","USER")
+                .requestMatchers(HttpMethod.POST,"/api/v1/report").hasAnyRole("ADMIN","AUTHOR","USER")
+                .requestMatchers(HttpMethod.GET, "/api/v1/report").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/report/{reportId}").hasRole("ADMIN")
                 .requestMatchers("/api/v1/history/**").hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers("/api/v1/bookmark/**").hasAnyRole("ADMIN","AUTHOR","USER")
                 .requestMatchers(     "/api/v1/author/accept/{userId}").hasRole("ADMIN")
