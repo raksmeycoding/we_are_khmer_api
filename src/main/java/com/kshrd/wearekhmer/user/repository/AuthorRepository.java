@@ -92,6 +92,13 @@ public interface AuthorRepository {
     boolean updateUserRequestToBeAsAuthorAsReject(String userId);
 
 
+
+    @Select("""
+            select rt.name from user_tb inner join user_role_tb urt on user_tb.user_id = urt.user_id inner join role_tb rt on urt.role_id = rt.role_id where urt.user_id = #{userId} and rt.name = 'ROLE_AUTHOR'
+            """)
+    String userAlreadyAuthor(String userId);
+
+
 }
 
 

@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.user.controller;
 
 
+import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
@@ -26,6 +27,8 @@ public class AuthorController {
 
     private final AuthorRequestTableService authorRequestTableService;
     private final AuthorService authorService;
+
+    private final AuthorRepository authorRepository;
 
 
     @GetMapping("authorRequest")
@@ -57,25 +60,26 @@ public class AuthorController {
     @PostMapping("accept/{userId}")
     @Operation(summary = "(Accept user request as author.)")
     public ResponseEntity<?> updateUserRequestToBeAsAuthor(@PathVariable String userId) {
-        try {
-            String userIdAccepted = authorService.updateUserRequestToBeAsAuthor(userId);
-            GenericResponse res;
-            if (userIdAccepted == null) {
-                res = GenericResponse.builder()
-                        .status("500")
-                        .message("is not accepted.")
-                        .build();
-                return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            res = GenericResponse.builder()
-                    .status("200")
-                    .message("success")
-                    .build();
-            return ResponseEntity.ok(res);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException();
+        String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
+        System.out.println(hasRoleAuthor);
+        if (hasRoleAuthor != null && hasRoleAuthor.equalsIgnoreCase("ROLE_AUTHOR")) {
+            throw new CustomRuntimeException("User Already Exist.");
         }
+        String userIdAccepted = authorService.updateUserRequestToBeAsAuthor(userId);
+        GenericResponse res;
+        if (userIdAccepted == null) {
+            res = GenericResponse.builder()
+                    .status("500")
+                    .message("is not accepted.")
+                    .build();
+            return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        res = GenericResponse.builder()
+                .status("200")
+                .message("success")
+                .build();
+        return ResponseEntity.ok(res);
+
     }
 
 }
