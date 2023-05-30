@@ -46,6 +46,12 @@ thymeleaf:
     location: classpath:/templates/
     extension: .html
 
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
 
 
 

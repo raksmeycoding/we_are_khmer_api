@@ -61,6 +61,8 @@ public class WeAreKhmerSecurity {
             "/api/v1/rating/{authorId}",
             "/api/v1/files/file/filename",
             "/api/v1/comment/article/{articleId}"
+//            "/api/v1/notification"
+
     };
 
     @Bean
@@ -132,7 +134,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers("/api/v1/files/file/**").hasAnyRole("ADMIN","AUTHOR")
                 .requestMatchers( "/api/v1/article/react/**").hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers("/api/v1/comment/article").hasAnyRole("ADMIN", "AUTHOR", "USER")
-                .requestMatchers("/api/v1/notification").hasAnyRole("ADMIN","AUTHOR")
+//                .requestMatchers(HttpMethod.GET,"/api/v1/notification").hasAnyRole("ADMIN","AUTHOR")
                 .requestMatchers("/api/v1/rating").hasAnyRole("ADMIN", "AUTHOR","USER")
                 .requestMatchers(HttpMethod.POST,"/api/v1/report").hasAnyRole("ADMIN","AUTHOR","USER")
                 .requestMatchers(HttpMethod.GET, "/api/v1/report").hasRole("ADMIN")
@@ -149,6 +151,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers(HttpMethod.PUT,"/api/v1/article/user").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.DELETE,"/api/v1/article/user").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.GET,"/api/v1/article/user").hasRole("AUTHOR")
+                .requestMatchers(HttpMethod.GET, "/api/v1/notification").hasAnyRole("ADMIN", "AUTHOR")
 
 
 
