@@ -58,8 +58,8 @@ public interface BookmarkMapper {
 
     @Select(
             """
-            SELECT EXISTS(SELECT 1 FROM bookmark_tb WHERE bookmark_id = #{bookmarkId});
+            SELECT EXISTS(SELECT 1 FROM bookmark_tb WHERE bookmark_id = #{bookmarkId} AND user_id = #{userId});
             """
     )
-    boolean validateBookmarkId(String bookmarkId);
+    boolean validateBookmarkId(String bookmarkId, String userId);
 }

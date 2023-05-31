@@ -1,7 +1,11 @@
 package com.kshrd.wearekhmer.utils.validation;
 
 
+import com.kshrd.wearekhmer.Category.model.Category;
 import com.kshrd.wearekhmer.Category.repository.CategoryMapper;
+import com.kshrd.wearekhmer.article.model.entity.Article;
+import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
+import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.bookmark.repository.BookmarkMapper;
@@ -15,6 +19,7 @@ import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -40,6 +45,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     private final BookmarkMapper bookmarkMapper;
 
     private final CategoryMapper categoryMapper;
+
+    private final ArticleMapper articleMapper;
 
     private final UserAppRepository userAppRepository;
 
@@ -142,8 +149,11 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     }
 
     @Override
-    public boolean validateBookmarkId(String bookmarkId) {
-        return bookmarkMapper.validateBookmarkId(bookmarkId);
+    public boolean validateBookmarkId(String bookmarkId, String userId) {
+        if(!bookmarkMapper.validateBookmarkId(bookmarkId,userId)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User have no Bookmark ID : "+ bookmarkId);
+        }
+        return bookmarkMapper.validateBookmarkId(bookmarkId, userId);
     }
 
     @Override
@@ -189,6 +199,25 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id :" + id + " is not found!");
             }
         }
+    }
+
+    @Override
+    public boolean validateCategoryId(String categoryId) {
+
+        if(!categoryMapper.isCategoryExist(categoryId)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"categoryId "+ categoryId + " does not exists");
+        }
+        return categoryMapper.isCategoryExist(categoryId);
+    }
+
+    @Override
+    public boolean validateArticleIdByCurrentUser(String articleId, String userId) {
+
+        if(!articleMapper.validateArticleIdByCurrentUser(articleId,userId))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You are not own this article or this article is not exist.");
+
+        return articleMapper.validateArticleIdByCurrentUser(articleId,userId);
+
     }
 }
 

@@ -1,5 +1,8 @@
 package com.kshrd.wearekhmer.utils.validation;
 
+import com.kshrd.wearekhmer.Category.model.Category;
+import com.kshrd.wearekhmer.article.model.entity.Article;
+import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import org.apache.ibatis.annotations.Select;
@@ -26,13 +29,19 @@ public interface WeAreKhmerValidation {
 
     public List<HistoryResponse> validateHistoryRemoveAll(String userId);
 
-    public boolean validateBookmarkId(String bookmarkId);
+    public boolean validateBookmarkId(String bookmarkId, String userId);
 
     public List<BookmarkResponse> validateBookmarkRemoveAll(String userId);
 
     void validateTypeFileUpload(String type);
 
     void validateTypeFileUploadAndIdWithType(String type, String id);
+
+    boolean validateCategoryId(String categoryId);
+
+    boolean validateArticleIdByCurrentUser(String articleId, String userId);
+
+
 
 
 

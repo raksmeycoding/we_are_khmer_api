@@ -67,25 +67,17 @@ public class BookmarkController {
     @Operation(summary = "insert bookmark (for current user)")
     public ResponseEntity<?> insertBookmark(String articleId) {
         GenericResponse genericResponse;
+        BookmarkRequest requestInsert = BookmarkRequest.builder()
+                .userId(weAreKhmerCurrentUser.getUserId())
+                .articleId(articleId)
+                .build();
+        weAreKhmerValidation.validateArticleId(articleId);
         try {
-
-            BookmarkRequest requestInsert = BookmarkRequest.builder()
-                    .userId(weAreKhmerCurrentUser.getUserId())
-                    .articleId(articleId)
-                    .build();
 
                 Bookmark bookmark = Bookmark.builder()
                         .userId(weAreKhmerCurrentUser.getUserId())
                         .articleId(articleId)
                         .build();
-            if (!weAreKhmerValidation.validateArticleId(requestInsert.getArticleId())) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(GenericResponse.builder()
-                        .status("404")
-                        .message("article id : " + requestInsert.getArticleId() + "does not exist")
-                        .title("error")
-                        .build()
-                );
-            }
             if(bookmarkService.getAllBookmarkCurrentId(articleId, weAreKhmerCurrentUser.getUserId())){
                 Bookmark bookmark1 = bookmarkService.deleteBookmarkByArticleId(bookmark);
                 genericResponse =
@@ -124,19 +116,12 @@ public class BookmarkController {
     @Operation(summary = "delete bookmark (for current user)")
     public ResponseEntity<?> deleteBookmark(String bookmarkId) {
         GenericResponse genericResponse;
+        Bookmark bookmark = Bookmark.builder()
+                .userId(weAreKhmerCurrentUser.getUserId())
+                .bookmarkId(bookmarkId)
+                .build();
+        weAreKhmerValidation.validateBookmarkId(bookmarkId,weAreKhmerCurrentUser.getUserId());
         try{
-            Bookmark bookmark = Bookmark.builder()
-                    .userId(weAreKhmerCurrentUser.getUserId())
-                    .bookmarkId(bookmarkId)
-                    .build();
-
-            if (!weAreKhmerValidation.validateBookmarkId(bookmark.getBookmarkId())) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(GenericResponse.builder()
-                        .message("bookmark id : "+bookmark.getBookmarkId()+ " does not exists")
-                        .title("error")
-                        .status("404")
-                        .build());
-            }else{
                 Bookmark bookmark1 = bookmarkService.deleteBookmark(bookmark);
 
                 genericResponse = GenericResponse.builder()
@@ -146,9 +131,6 @@ public class BookmarkController {
                         .title("success")
                         .build();
                 return ResponseEntity.ok(genericResponse);
-            }
-
-
 
         }catch(Exception ex){
             genericResponse =
@@ -188,7 +170,7 @@ public class BookmarkController {
             genericResponse = GenericResponse.builder()
                     .status("404")
                     .message("You don't have any bookmark records")
-                    .title("error")
+                    .title("Empty bookmark")
                     .build();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(genericResponse);
 

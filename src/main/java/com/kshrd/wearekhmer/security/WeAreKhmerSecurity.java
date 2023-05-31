@@ -53,7 +53,7 @@ public class WeAreKhmerSecurity {
             "/api/v1/auth/verification/token",
             "/api/v1/author/authorUser",
             "/api/v1/category",
-            "/api/v1/article/**",
+            "/api/v1/article",
             "/api/v1/article/{articleId}",
             "/api/v1/article/category/**",
             "/api/v1/review/**",

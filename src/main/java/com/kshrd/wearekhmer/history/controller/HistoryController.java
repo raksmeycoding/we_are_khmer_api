@@ -167,7 +167,7 @@ public class HistoryController {
             genericResponse = GenericResponse.builder()
                     .status("404")
                     .message("You don't have any history records")
-                    .title("error")
+                    .title("Empty history")
                     .build();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(genericResponse);
 
