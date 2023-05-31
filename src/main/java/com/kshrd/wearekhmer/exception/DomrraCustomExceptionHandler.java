@@ -62,9 +62,8 @@ public class DomrraCustomExceptionHandler {
 
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<?> responseStatusException(ResponseStatusException ex) {
-        GenericResponse genericResponse = GenericResponse.builder().title("error").status(ex.getStatusCode().toString()).message(ex.getMessage()).build();
-        return ResponseEntity.status(ex.getStatusCode()).body(genericResponse);
+    public ResponseStatusException responseStatusException(ResponseStatusException ex) {
+        return new ResponseStatusException(ex.getStatusCode(), ex.getReason());
     }
 
 
