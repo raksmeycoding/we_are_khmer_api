@@ -1,12 +1,14 @@
 package com.kshrd.wearekhmer.utils.validation;
 
 
+import com.kshrd.wearekhmer.Category.repository.CategoryMapper;
 import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.bookmark.repository.BookmarkMapper;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import com.kshrd.wearekhmer.history.repository.HistoryMapper;
+import com.kshrd.wearekhmer.user.repository.UserAppRepository;
 import com.kshrd.wearekhmer.userReport.repository.ReportMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
@@ -17,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -38,9 +39,9 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     private final BookmarkMapper bookmarkMapper;
 
+    private final CategoryMapper categoryMapper;
 
-
-
+    private final UserAppRepository userAppRepository;
 
 
     @Override
@@ -147,7 +148,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     @Override
     public void validateTypeFileUpload(String type) {
         boolean matchCondition = false;
-        String [] listFileUploadType = {"CATEGORY", "ARTICLE", "USER"};
+        String[] listFileUploadType = {"CATEGORY", "ARTICLE", "USER"};
         for (String t : listFileUploadType) {
             if (type.equalsIgnoreCase(t)) {
                 matchCondition = true;
@@ -155,8 +156,31 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
             }
         }
 
-        if(!matchCondition) {
+        if (!matchCondition) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid part variable type");
+        }
+
+    }
+
+
+    @Override
+    public void validateTypeFileUploadAndIdWithType(String type, String id) {
+        validateTypeFileUpload(type);
+        if (type.equalsIgnoreCase("article")) {
+            boolean isExist = validateArticleId(id);
+            if (!isExist) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Article with id: " + id + " is not found!");
+            }
+        } else if (type.equalsIgnoreCase("category")) {
+            boolean isExist = categoryMapper.isCategoryExist(id);
+            if (!isExist) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with id: " + id + " is not found!");
+            }
+        } else if (type.equalsIgnoreCase("user")) {
+            boolean isExist = userAppRepository.userExist(id);
+            if (!isExist) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id :" + id + " is not found!");
+            }
         }
     }
 }

@@ -32,5 +32,8 @@ public interface WeAreKhmerValidation {
 
     void validateTypeFileUpload(String type);
 
+    void validateTypeFileUploadAndIdWithType(String type, String id);
+
+
 
 }

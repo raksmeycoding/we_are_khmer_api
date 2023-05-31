@@ -43,5 +43,13 @@ public interface CategoryMapper {
     @Select("DELETE FROM category WHERE category_id = #{categoryId} returning *")
     @ResultMap("categoryMap")
     Category deleteCategory(@Param("categoryId") String categoryId);
+
+
+
+
+    @Select("""
+            select exists(select 1 from category where category.category_id = #{categoryId})
+            """)
+    boolean isCategoryExist(String categoryId);
 }
 

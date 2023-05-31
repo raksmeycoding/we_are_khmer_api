@@ -31,6 +31,7 @@ public class FileController {
     @Operation(summary = "You can chose either id of category, user, or article. type = type of category, article, or user image")
     public ResponseEntity<?> uploadFile(@PathVariable String type, @PathVariable String id, @RequestParam MultipartFile multipartFile) {
         weAreKhmerValidation.validateTypeFileUpload(type);
+        weAreKhmerValidation.validateTypeFileUploadAndIdWithType(type, id);
         ResponseEntity<?> result;
         try {
             String fileName = IFileService.uploadFileV2(multipartFile, type, id);

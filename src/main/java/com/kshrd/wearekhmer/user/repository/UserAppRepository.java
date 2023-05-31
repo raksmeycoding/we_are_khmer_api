@@ -26,5 +26,11 @@ public interface UserAppRepository extends WeAreKhmerRepositorySupport {
     UserApp getByStatusIsAuthorById(String authorId);
 
 
+    @Select("""
+            select exists(select 1 from user_tb where user_tb.user_id = #{userId})
+            """)
+    boolean userExist(String userId);
+
+
 
 }

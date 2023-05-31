@@ -48,6 +48,7 @@ public class WeAreKhmerSecurity {
             "/api/v1/auth/register/**",
             "/api/v1/auth/login",
             "/images/**",
+            "/api/v1/files/file/**",
             "/api/v1/email/**",
             "/api/v1/auth/verification/token",
             "/api/v1/author/authorUser",
@@ -131,7 +132,7 @@ public class WeAreKhmerSecurity {
                 //                .authorizeHttpRequests()
                 //                .requestMatchers("/", "/user", "/swagger-ui/index.html").permitAll()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/files/file/**").hasAnyRole("ADMIN","AUTHOR")
+                .requestMatchers(HttpMethod.POST,"/api/v1/files/file/**").hasAnyRole("ADMIN","AUTHOR")
                 .requestMatchers( "/api/v1/article/react/**").hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers("/api/v1/comment/article").hasAnyRole("ADMIN", "AUTHOR", "USER")
 //                .requestMatchers(HttpMethod.GET,"/api/v1/notification").hasAnyRole("ADMIN","AUTHOR")

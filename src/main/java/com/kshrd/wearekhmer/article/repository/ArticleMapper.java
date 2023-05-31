@@ -135,7 +135,7 @@ public interface ArticleMapper {
                    ab.publish_date,
                    ab.description,
                    ab.updatedat,
-                   ab.image,
+                   concat('http://localhost:8080/api/v1/files/file/filename?name=', ab.image) as image,
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
