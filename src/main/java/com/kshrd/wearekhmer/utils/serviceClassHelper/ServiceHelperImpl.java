@@ -3,6 +3,7 @@ package com.kshrd.wearekhmer.utils.serviceClassHelper;
 
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
+import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.repository.WeAreKhmerRepositorySupport;
 import com.kshrd.wearekhmer.user.model.entity.*;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
@@ -11,11 +12,18 @@ import com.kshrd.wearekhmer.user.repository.QuoteMapper;
 import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Data
@@ -104,5 +112,45 @@ public class ServiceHelperImpl implements ServiceClassHelper {
     @Override
     public Integer getTotalOfRecordInArticleTb() {
         return articleMapper.getTotalRecordOfArticleTb();
+    }
+
+
+    @Override
+    public Integer getTotalOfRecordInArticleTbForCurrentUser() {
+        return articleMapper.getTotalRecordOfArticleForCurrentUser(weAreKhmerCurrentUser.getUserId());
+    }
+
+    public static class FileDeletion {
+        private final ResourceLoader resourceLoader;
+
+
+        private final String[] imagePath = {"static",  "images"};
+
+        public FileDeletion() {
+            this.resourceLoader = new DefaultResourceLoader();
+        }
+
+
+        public void deleteFileByName(String fileName) throws IOException {
+            String filePath = String.join("/", imagePath) + "/" + fileName;
+            Resource resource = resourceLoader.getResource("classpath:" + filePath);
+            File file = resource.getFile();
+            System.out.println(fileName);
+            Path path = file.toPath();
+            Files.delete(path);
+            if (Files.exists(path)) {
+                System.out.println("Unable to delete file!");
+            } else {
+                System.out.println("File deleted!");
+            }
+        }
+
+
+
+        public static FileDeletion getInstance() {
+            return new FileDeletion();
+        }
+
+
     }
 }

@@ -21,13 +21,13 @@ import java.util.UUID;
 
 
 @Service
-public class IFileServiceImpl implements IFileService {
+public class FileServiceImpl implements IFileService {
 
     private final FileConfig fileConfig;
     private final ServiceClassHelper serviceClassHelper;
     Path root;
 
-    public IFileServiceImpl(FileConfig fileConfig, ServiceClassHelper serviceClassHelper) {
+    public FileServiceImpl(FileConfig fileConfig, ServiceClassHelper serviceClassHelper) {
         this.fileConfig = fileConfig;
         this.serviceClassHelper = serviceClassHelper;
     }
@@ -72,7 +72,7 @@ public class IFileServiceImpl implements IFileService {
             }
             Files.copy(multipartFile.getInputStream(), this.root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 
-            String message =  serviceClassHelper.uploadImageToSpecificTable(imageType, fileName, primaryId);
+            String message = serviceClassHelper.uploadImageToSpecificTable(imageType, fileName, primaryId);
 
             return fileName;
         }
@@ -105,5 +105,22 @@ public class IFileServiceImpl implements IFileService {
     @Override
     public ResponseEntity<?> uploadMultiFile(MultipartFile[] files) throws IOException {
         return null;
+    }
+
+
+    @Override
+    public void deleteFileByFileName(String fileName) {
+        try {
+            final String[] imagePath = {"main", "resources", "static", "images"};
+            final Path root = Paths.get("src", imagePath);
+
+            Path file = root.resolve(fileName);
+            boolean deleteFile = Files.deleteIfExists(file);
+            if (deleteFile) {
+                System.out.println("File was delete.");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

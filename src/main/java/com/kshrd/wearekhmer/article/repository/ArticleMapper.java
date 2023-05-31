@@ -239,6 +239,12 @@ public interface ArticleMapper {
             """)
     Integer getTotalRecordOfArticleTb();
 
+
+    @Select("""
+            select count(*) from article_tb  as article_count where user_id = #{userId}
+            """)
+    Integer getTotalRecordOfArticleForCurrentUser(String userId);
+
     @Select("""
             select ab.article_id,
                    ab.user_id,

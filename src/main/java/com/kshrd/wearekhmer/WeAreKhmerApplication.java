@@ -13,6 +13,8 @@ import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.userArtivities.repository.ICommentRepository;
 import com.kshrd.wearekhmer.utils.OtpUtil;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
+import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceHelperImpl;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
@@ -21,10 +23,22 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.io.Resources;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.util.StreamUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 
 @SpringBootApplication
@@ -69,6 +83,8 @@ public class WeAreKhmerApplication implements CommandLineRunner {
     private final HistoryService iHistoryService;
 
     private final AuthorRepository authorRepository;
+
+    private final ServiceClassHelper serviceClassHelper;
 
 
     public static void main(String[] args) {
@@ -151,6 +167,8 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 
 
         System.out.println(articleService.isArticleExist("773066fb-bd6c-4a75-94d6-9c8b3c24e31c"));
+
+
 
 
 

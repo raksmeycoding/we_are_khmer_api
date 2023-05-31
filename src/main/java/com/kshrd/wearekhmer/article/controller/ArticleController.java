@@ -8,6 +8,7 @@ import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.files.config.FileConfig;
+import com.kshrd.wearekhmer.files.controller.FileController;
 import com.kshrd.wearekhmer.files.service.IFileService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
@@ -20,9 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.Path;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -35,7 +34,7 @@ public class ArticleController {
     private ArticleService articleService;
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
-    private final IFileService fileService;
+    private final IFileService IFileService;
 
     private final FileConfig fileConfig;
     private static final Integer PAGE_SIZE = 10;
@@ -44,9 +43,23 @@ public class ArticleController {
 
     private final ServiceClassHelper serviceClassHelper;
 
+    private final IFileService fileService;
+
 
     private Integer getNextPage(Integer page) {
         int numberOfRecord = serviceClassHelper.getTotalOfRecordInArticleTb();
+        System.out.println(numberOfRecord);
+        int totalPage = (int) Math.ceil((double) numberOfRecord / PAGE_SIZE);
+        System.out.println(totalPage);
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        weAreKhmerValidation.validatePageNumber(page);
+        return (page - 1) * PAGE_SIZE;
+    }
+
+    private Integer getNextPageForCurrentUser(Integer page) {
+        int numberOfRecord = serviceClassHelper.getTotalOfRecordInArticleTbForCurrentUser();
         System.out.println(numberOfRecord);
         int totalPage = (int) Math.ceil((double) numberOfRecord / PAGE_SIZE);
         System.out.println(totalPage);
@@ -104,7 +117,7 @@ public class ArticleController {
         try {
 
             if (page != null) {
-                Integer nextPage = getNextPage(page);
+                Integer nextPage = getNextPageForCurrentUser(page);
                 List<ArticleResponse> articleResponseList = articleService.getArticlesForCurrentUserWithPaginate(weAreKhmerCurrentUser.getUserId(), PAGE_SIZE, nextPage);
                 return ResponseEntity.ok().body(GenericResponse.builder()
                         .status("200")
@@ -283,6 +296,10 @@ public class ArticleController {
             if (article1 == null) {
                 throw new CustomRuntimeException("You are not you own of this article or this article is not exist.");
             }
+
+//            delete image file if article exist
+            fileService.deleteFileByFileName(article1.getImage());
+
             genericResponse =
                     GenericResponse.builder()
                             .status("200")

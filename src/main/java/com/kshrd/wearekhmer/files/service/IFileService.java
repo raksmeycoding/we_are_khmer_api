@@ -15,4 +15,7 @@ public interface IFileService {
     ResponseEntity<?> getFile(String fileName) throws IOException;
 
     ResponseEntity<?> uploadMultiFile(MultipartFile[] files) throws IOException;
+
+
+    void deleteFileByFileName(String fileName);
 }

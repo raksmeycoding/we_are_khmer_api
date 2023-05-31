@@ -1,9 +1,7 @@
 package com.kshrd.wearekhmer.files.controller;
 
 
-import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.files.model.response.FileResponse;
-import com.kshrd.wearekhmer.files.service.IFileService;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -21,7 +19,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class FileController {
 
-    private final IFileService IFileService;
+    private final com.kshrd.wearekhmer.files.service.IFileService IFileService;
 
     private final WeAreKhmerValidation weAreKhmerValidation;
 
