@@ -3,8 +3,11 @@ package com.kshrd.wearekhmer.article.service;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
+import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -16,6 +19,8 @@ import java.util.List;
 public class ArticleServiceImp implements ArticleService {
 
     private final ArticleMapper articleMapper;
+
+
 
 
     @Override
@@ -58,6 +63,13 @@ public class ArticleServiceImp implements ArticleService {
 
     @Override
     public Article insertArticle(Article article) {
+//        if(article.getTitle().isBlank())
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"title field must not be blank");
+//        else if(article.getSubTitle().isBlank())
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"subTitle field must not be blank");
+//        else if(article.getDescription().isBlank())
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "description field must not be blank");
+
         return articleMapper.insertArticle(article);
     }
 

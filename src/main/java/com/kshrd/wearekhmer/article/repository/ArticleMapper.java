@@ -355,5 +355,10 @@ public interface ArticleMapper {
             """)
     List<ArticleResponse> getAllArticlesByDateRange(Date startDate, java.sql.Date endDate);
 
+    @Select("""
+            select exists(select 1 from article_tb where article_id = #{articleId} and user_id = #{userId})
+            """)
+    boolean validateArticleIdByCurrentUser(String articleId, String userId);
+
 
 }

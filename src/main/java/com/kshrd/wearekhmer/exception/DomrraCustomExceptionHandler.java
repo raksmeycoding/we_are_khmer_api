@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @ControllerAdvice
@@ -32,12 +34,12 @@ public class DomrraCustomExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> methodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        List<String> errors = new ArrayList<>();
+        Map<String ,Object> errors = new HashMap<>();
         for (ObjectError objectError : ex.getBindingResult().getAllErrors()) {
             if (objectError instanceof FieldError fieldError) {
-                errors.add(fieldError.getField() + ": " + fieldError.getDefaultMessage());
+                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
             } else {
-                errors.add(objectError.getDefaultMessage());
+                errors.put(objectError.getObjectName(), objectError.getDefaultMessage());
             }
         }
         GenericResponse genericResponse =
@@ -45,7 +47,7 @@ public class DomrraCustomExceptionHandler {
                         .payload(errors)
                         .status("400")
                         .build();
-        return ResponseEntity.ok(genericResponse);
+        return ResponseEntity.badRequest().body(genericResponse);
     }
 
     @ExceptionHandler(CustomRuntimeException.class)

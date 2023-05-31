@@ -13,12 +13,15 @@ import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
+import com.sun.research.ws.wadl.HTTPMethods;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.ws.rs.Path;
 import java.sql.Date;
@@ -141,7 +144,7 @@ public class ArticleController {
     @Operation(summary = "(Insert article for current user")
     public ResponseEntity<?> insertArticle(@RequestBody @Validated ArticleRequest articleRequest) {
         GenericResponse genericResponse;
-        try {
+
 
 //            processing image and article
 //            String imageName = fileService.uploadFile(multipartFile);
@@ -151,26 +154,23 @@ public class ArticleController {
 //            generateImageUrl = "http://localhost:8080/api/v1/files/file/filename?name=" + imageName;
 //            Save image url to article object
 
-            Article article = Article.builder()
-                    .title(articleRequest.getTitle())
-                    .subTitle(articleRequest.getSubTitle())
-                    .description(articleRequest.getDescription())
-                    .categoryId(articleRequest.getCategoryId())
-                    .userId(weAreKhmerCurrentUser.getUserId())
-                    .build();
+        Article article = Article.builder()
+                .title(articleRequest.getTitle())
+                .subTitle(articleRequest.getSubTitle())
+                .description(articleRequest.getDescription())
+                .categoryId(articleRequest.getCategoryId())
+                .userId(weAreKhmerCurrentUser.getUserId())
+                .build();
 
-
+        weAreKhmerValidation.validateCategoryId(article.getCategoryId());
+        try {
             Article article1 = articleService.insertArticle(article);
-
-
             genericResponse = GenericResponse.builder()
                     .title("success")
                     .status("200")
                     .message("insert successfully successfully")
                     .payload(article1)
                     .build();
-
-
             return ResponseEntity.ok(genericResponse);
         } catch (Exception ex) {
             genericResponse = GenericResponse.builder()
@@ -188,6 +188,7 @@ public class ArticleController {
     @Operation(summary = "(Get article by id)")
     public ResponseEntity<?> getArticleById(@PathVariable String articleId) {
         GenericResponse genericResponse;
+        weAreKhmerValidation.validateArticleId(articleId);
         try {
             ArticleResponse article = articleService.getArticleById(articleId);
             genericResponse = GenericResponse.builder()
@@ -212,12 +213,11 @@ public class ArticleController {
     @GetMapping("/user/{articleId}")
     @Operation(summary = "(Get article by id for current user)")
     public ResponseEntity<?> getArticleByIdForCurrentUser(@PathVariable String articleId) {
+        weAreKhmerValidation.validateArticleIdByCurrentUser(articleId, weAreKhmerCurrentUser.getUserId());
         try {
 
             ArticleResponse articleResponse = articleService.getArticleByIdForCurrentUser(articleId, weAreKhmerCurrentUser.getUserId());
-            if (articleResponse == null) {
-                throw new CustomRuntimeException("This article is not exist or not own article.");
-            }
+
             return ResponseEntity.ok().body(GenericResponse.builder()
                     .title("success")
                     .status("200")
@@ -237,8 +237,11 @@ public class ArticleController {
 
     @PutMapping("/user")
     @Operation(summary = "(Update article by id for current user)")
-    public ResponseEntity<?> updateArticle(ArticleUpdateRequest article) {
+    public ResponseEntity<?> updateArticle(@RequestBody @Validated ArticleUpdateRequest article) {
         GenericResponse genericResponse;
+
+        weAreKhmerValidation.validateArticleIdByCurrentUser(article.getArticleId(), weAreKhmerCurrentUser.getUserId());
+        weAreKhmerValidation.validateCategoryId(article.getCategoryId());
         try {
             Article article1 = Article.builder()
                     .articleId(article.getArticleId())
@@ -248,6 +251,7 @@ public class ArticleController {
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .categoryId(article.getCategoryId())
                     .build();
+
             Article article2 = articleService.updateArticle(article1);
             genericResponse = GenericResponse.builder()
                     .status("200")
@@ -266,7 +270,6 @@ public class ArticleController {
             ex.printStackTrace();
             return ResponseEntity.internalServerError().body(genericResponse);
         }
-
     }
 
 
@@ -274,21 +277,20 @@ public class ArticleController {
     @Operation(summary = "(Delete article by id for current user)")
     public ResponseEntity<?> deleteArticle(@PathVariable String articleId) {
         GenericResponse genericResponse;
+        weAreKhmerValidation.validateArticleIdByCurrentUser(articleId, weAreKhmerCurrentUser.getUserId());
         try {
             Article article = Article.builder()
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .articleId(articleId)
                     .build();
+
             Article article1 = articleService.deleteArticleByIdAndCurrentUser(article);
-            if (article1 == null) {
-                throw new CustomRuntimeException("You are not you own of this article or this article is not exist.");
-            }
+
             genericResponse =
                     GenericResponse.builder()
                             .status("200")
                             .message("success")
                             .message("delete successfully")
-//                            .payload(article1)
                             .build();
 
             return ResponseEntity.ok(genericResponse);
@@ -304,7 +306,6 @@ public class ArticleController {
             ex.printStackTrace();
             return ResponseEntity.ok(genericResponse);
         }
-
     }
 
 
@@ -359,6 +360,7 @@ public class ArticleController {
     @PostMapping("/increase/{articleId}")
     @Operation(summary = "(Increase article view count.")
     public ResponseEntity<?> increaseArticleViewCount(@PathVariable String articleId) {
+        weAreKhmerValidation.validateArticleId(articleId);
         try {
             String returnArticleId = articleService.increaseArticleViewCount(articleId);
             if (returnArticleId == null || returnArticleId.isEmpty()) {
@@ -381,7 +383,7 @@ public class ArticleController {
 
     @GetMapping("/last-24h")
     @Operation(summary = "Get article by last 24 hours")
-    public ResponseEntity<?> getAllArticlesByYesterday(){
+    public ResponseEntity<?> getAllArticlesByYesterday() {
         GenericResponse genericResponse;
         try {
 
@@ -405,9 +407,10 @@ public class ArticleController {
             return ResponseEntity.internalServerError().body(genericResponse);
         }
     }
+
     @GetMapping("/last-week")
     @Operation(summary = "Get article by last week")
-    public ResponseEntity<?> getAllArticlesByLastWeek(){
+    public ResponseEntity<?> getAllArticlesByLastWeek() {
         GenericResponse genericResponse;
         try {
 
@@ -434,7 +437,7 @@ public class ArticleController {
 
     @GetMapping("/last-month")
     @Operation(summary = "Get article by last month")
-    public ResponseEntity<?> getAllArticlesByLastMonth(){
+    public ResponseEntity<?> getAllArticlesByLastMonth() {
         GenericResponse genericResponse;
         try {
 
@@ -461,7 +464,7 @@ public class ArticleController {
 
     @GetMapping("/last-year")
     @Operation(summary = "Get article by last year")
-    public ResponseEntity<?> getAllArticlesByLastYear(){
+    public ResponseEntity<?> getAllArticlesByLastYear() {
         GenericResponse genericResponse;
         try {
 
@@ -488,16 +491,16 @@ public class ArticleController {
 
     @GetMapping("/date-range")
     @Operation(summary = "Get article by date range")
-    public ResponseEntity<?> getAllArticlesByDateRange(Date startDate, Date endDate){
+    public ResponseEntity<?> getAllArticlesByDateRange(Date startDate, Date endDate) {
         GenericResponse genericResponse;
         try {
 
-            List<ArticleResponse> articleResponseList = articleService.getAllArticlesByDateRange(startDate,endDate);
+            List<ArticleResponse> articleResponseList = articleService.getAllArticlesByDateRange(startDate, endDate);
             genericResponse = GenericResponse.builder()
                     .status("200")
                     .payload(articleResponseList)
                     .title("success")
-                    .message("You have successfully got articles recorded between " + startDate + " and "+endDate)
+                    .message("You have successfully got articles recorded between " + startDate + " and " + endDate)
                     .build();
             return ResponseEntity.ok(genericResponse);
 
