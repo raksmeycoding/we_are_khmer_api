@@ -30,6 +30,7 @@ public interface WeAreKhmerValidation {
 
     public List<BookmarkResponse> validateBookmarkRemoveAll(String userId);
 
+    void validateTypeFileUpload(String type);
 
 
 }

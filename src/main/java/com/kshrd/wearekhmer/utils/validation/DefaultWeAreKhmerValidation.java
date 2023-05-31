@@ -13,8 +13,11 @@ import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -141,6 +144,21 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     }
 
 
+    @Override
+    public void validateTypeFileUpload(String type) {
+        boolean matchCondition = false;
+        String [] listFileUploadType = {"CATEGORY", "ARTICLE", "USER"};
+        for (String t : listFileUploadType) {
+            if (type.equalsIgnoreCase(t)) {
+                matchCondition = true;
+                break;
+            }
+        }
+
+        if(!matchCondition) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid part variable type");
+        }
+    }
 }
 
 

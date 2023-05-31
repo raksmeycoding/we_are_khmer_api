@@ -3,16 +3,14 @@ package com.kshrd.wearekhmer.exception;
 
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +33,8 @@ public class DomrraCustomExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> methodArgumentNotValidException(MethodArgumentNotValidException ex) {
         List<String> errors = new ArrayList<>();
-        for (ObjectError objectError : ex.getBindingResult().getAllErrors()){
-            if(objectError instanceof FieldError fieldError) {
+        for (ObjectError objectError : ex.getBindingResult().getAllErrors()) {
+            if (objectError instanceof FieldError fieldError) {
                 errors.add(fieldError.getField() + ": " + fieldError.getDefaultMessage());
             } else {
                 errors.add(objectError.getDefaultMessage());
@@ -60,6 +58,13 @@ public class DomrraCustomExceptionHandler {
                         .build();
         return ResponseEntity.badRequest().body(genericResponse);
 
+    }
+
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<?> responseStatusException(ResponseStatusException ex) {
+        GenericResponse genericResponse = GenericResponse.builder().title("error").status(ex.getStatusCode().toString()).message(ex.getMessage()).build();
+        return ResponseEntity.status(ex.getStatusCode()).body(genericResponse);
     }
 
 
