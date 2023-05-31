@@ -68,9 +68,9 @@ public interface HistoryMapper {
 
 
     @Select("""
-            SELECT EXISTS(SELECT 1 FROM history_tb WHERE history_id = #{historyId})
+            SELECT EXISTS(SELECT 1 FROM history_tb WHERE history_id = #{historyId} AND user_id = #{userId})
             """)
-    Boolean validateHistoryId(String historyId);
+    Boolean validateHistoryId(String historyId, String userId);
 
 
 

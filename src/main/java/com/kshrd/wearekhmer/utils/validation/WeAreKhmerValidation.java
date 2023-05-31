@@ -20,7 +20,7 @@ public interface WeAreKhmerValidation {
 
     public boolean validateReportId(String reportId);
 
-    public boolean validateHistoryId(String historyId);
+    public boolean validateHistoryId(String historyId, String userId);
 
     public void validatePageNumber(Integer page);
 
@@ -31,6 +31,9 @@ public interface WeAreKhmerValidation {
     public List<BookmarkResponse> validateBookmarkRemoveAll(String userId);
 
     void validateTypeFileUpload(String type);
+
+
+
 
 
 }

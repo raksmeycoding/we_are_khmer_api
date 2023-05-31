@@ -115,7 +115,11 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     @Override
     public boolean validateArticleId(String articleId) {
+        if(!articleService.isArticleExist(articleId)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Article ID : "+articleId+ " does not exists");
+        }
         return articleService.isArticleExist(articleId);
+
     }
 
     @Override
@@ -124,8 +128,11 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     }
 
     @Override
-    public boolean validateHistoryId(String historyId) {
-        return historyMapper.validateHistoryId(historyId);
+    public boolean validateHistoryId(String historyId, String userId) {
+        if(!historyMapper.validateHistoryId(historyId,userId)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User have no History ID : "+ historyId );
+        }
+        return historyMapper.validateHistoryId(historyId, userId);
     }
 
     @Override
