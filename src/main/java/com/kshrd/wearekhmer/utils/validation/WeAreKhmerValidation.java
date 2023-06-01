@@ -8,6 +8,7 @@ import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface WeAreKhmerValidation {
     void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize);
@@ -40,6 +41,8 @@ public interface WeAreKhmerValidation {
     boolean validateCategoryId(String categoryId);
 
     boolean validateArticleIdByCurrentUser(String articleId, String userId);
+
+    boolean checkAuthorExist(String authorId);
 
 
 

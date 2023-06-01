@@ -31,5 +31,9 @@ public interface RatingRepository {
             """)
     RatingResponse getRatingByAuthorId(String authorId);
 
+    @Select("""
+            select exists(select 1 from user_tb where user_id = #{authorId} and is_author = true );
+            """)
+    boolean isExistAuthor(String authorId);
 
 }

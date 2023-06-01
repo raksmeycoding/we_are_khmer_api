@@ -13,7 +13,9 @@ import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import com.kshrd.wearekhmer.history.repository.HistoryMapper;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
+import com.kshrd.wearekhmer.userRating.RatingRepository;
 import com.kshrd.wearekhmer.userReport.repository.ReportMapper;
+import com.kshrd.wearekhmer.userReviewAuthor.repository.UserReviewAuthorMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 @Service
@@ -49,6 +52,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     private final ArticleMapper articleMapper;
 
     private final UserAppRepository userAppRepository;
+
+   private final RatingRepository ratingRepository;
 
 
     @Override
@@ -218,6 +223,14 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
         return articleMapper.validateArticleIdByCurrentUser(articleId,userId);
 
+    }
+
+    @Override
+    public boolean checkAuthorExist(String authorId) {
+        if(!(ratingRepository.isExistAuthor(authorId)))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"author does not exists");
+        else
+            return ratingRepository.isExistAuthor(authorId);
     }
 }
 

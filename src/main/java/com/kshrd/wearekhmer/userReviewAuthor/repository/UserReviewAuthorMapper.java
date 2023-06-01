@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.UUID;
 
 @Mapper
 public interface UserReviewAuthorMapper {
@@ -23,4 +24,6 @@ public interface UserReviewAuthorMapper {
             select * from user_review_author_tb where author_id = #{authorId}
             """)
     List<UserReviewAuthor> getAllUserReviewAuthorByAuthorId(String authorId);
+
+
 }

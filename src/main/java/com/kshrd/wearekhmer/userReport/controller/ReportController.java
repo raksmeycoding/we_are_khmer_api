@@ -11,6 +11,7 @@ import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class ReportController {
 
     @Operation(summary = "Only user login can report article (current user can report.)")
     @PostMapping
-    private ResponseEntity<?> createUserReport(@RequestBody ReportRequest reportRequest) {
+    private ResponseEntity<?> createUserReport(@RequestBody @Valid ReportRequest reportRequest) {
         GenericResponse genericResponse;
 
 //        validate article id;
