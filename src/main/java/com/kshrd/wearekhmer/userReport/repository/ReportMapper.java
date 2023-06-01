@@ -14,7 +14,7 @@ public interface ReportMapper {
 
     @Select("""
             with report_table_return as (
-                insert into report_tb(article_id, reason, reciever_id, sender_id)
+                insert into report_tb(article_id, reason, reciever_id, user_id)
                     values (#{Report.articleId}, #{Report.reason}, (
                         select user_tb.user_id from user_tb inner join user_role_tb on user_tb.user_id = user_role_tb.user_id
                                                             inner join role_tb on role_tb.role_id = user_role_tb.role_id where role_tb.name = 'ROLE_ADMIN'
