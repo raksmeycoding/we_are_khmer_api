@@ -44,6 +44,8 @@ public interface WeAreKhmerValidation {
 
     boolean checkAuthorExist(String authorId);
 
+    boolean checkCategoryNameExist(String categoryName);
+
 
 
 

@@ -237,7 +237,13 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
             return ratingRepository.isExistAuthor(authorId);
     }
 
+    @Override
+    public boolean checkCategoryNameExist(String categoryName) {
+        if(!articleMapper.isCategoryNameExists(categoryName))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"categoryName : "+categoryName+ "does not exists");
+        return articleMapper.isCategoryNameExists(categoryName);
 
+    }
 }
 
 

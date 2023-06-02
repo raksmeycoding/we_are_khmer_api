@@ -388,6 +388,8 @@ public class ArticleController {
     @PathVariable String categoryName,
     @RequestParam(defaultValue = "1", required = false) Integer page
   ) {
+
+    weAreKhmerValidation.checkCategoryNameExist(categoryName);
     try {
       Integer nextPage = getNextPage(page);
       List<ArticleResponse> articleResponseList = articleService.getAllArticleByCategoryName(
@@ -395,11 +397,7 @@ public class ArticleController {
         PAGE_SIZE,
         nextPage
       );
-      if (articleResponseList.isEmpty()) {
-        throw new CustomRuntimeException(
-          "This article by this category is not exist"
-        );
-      }
+
       return ResponseEntity.ok(
         GenericResponse
           .builder()
@@ -639,5 +637,40 @@ public class ArticleController {
       ex.printStackTrace();
       return ResponseEntity.internalServerError().body(genericResponse);
     }
+  }
+
+  @Operation(summary = "(Get Articles by category id)")
+  @GetMapping("/category/categoryId")
+  public ResponseEntity<?> getAllArticleByCategoryId(
+           String categoryId,
+           @RequestParam(defaultValue = "1", required = false) Integer page
+  ) {
+    weAreKhmerValidation.validateCategoryId(categoryId);
+    Integer nextPage = getNextPage(page);
+      List<ArticleResponse> articleResponseList = articleService.getAllArticleByCategoryId(
+              categoryId,
+              PAGE_SIZE,
+              nextPage
+      );
+      GenericResponse genericResponse = GenericResponse.builder()
+              .status("200")
+              .title("success")
+              .payload(articleResponseList)
+              .message("You have successfully get artilcles in this category")
+              .build();
+      return ResponseEntity.ok(genericResponse);
+//    } catch (Exception ex) {
+//      ex.printStackTrace();
+//      return ResponseEntity
+//              .internalServerError()
+//              .body(
+//                      GenericResponse
+//                              .builder()
+//                              .message(ex.getMessage())
+//                              .status("500")
+//                              .title("error")
+//                              .build()
+//              );
+//    }
   }
 }

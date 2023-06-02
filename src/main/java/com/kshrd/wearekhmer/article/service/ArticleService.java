@@ -43,4 +43,6 @@ public interface ArticleService {
     List<ArticleResponse> getAllArticlesByLastYear();
 
     List<ArticleResponse> getAllArticlesByDateRange(Date startDate, Date endDate);
+
+    List<ArticleResponse> getAllArticleByCategoryId(String categoryId, Integer pageNumber, Integer nextPage);
 }

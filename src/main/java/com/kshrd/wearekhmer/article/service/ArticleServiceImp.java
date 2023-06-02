@@ -126,4 +126,9 @@ public class ArticleServiceImp implements ArticleService {
     public List<ArticleResponse> getAllArticlesByDateRange(Date startDate, Date endDate) {
         return articleMapper.getAllArticlesByDateRange(startDate,endDate);
     }
+
+    @Override
+    public List<ArticleResponse> getAllArticleByCategoryId(String categoryId, Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllArticleByCategoryId(categoryId, pageNumber,nextPage);
+    }
 }
