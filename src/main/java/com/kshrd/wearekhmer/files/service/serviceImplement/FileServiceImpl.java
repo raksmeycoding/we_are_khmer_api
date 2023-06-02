@@ -72,9 +72,10 @@ public class FileServiceImpl implements IFileService {
             }
             Files.copy(multipartFile.getInputStream(), this.root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 
-            String message = serviceClassHelper.uploadImageToSpecificTable(imageType, fileName, primaryId);
+            String plusURL = "http://localhost:8080/api/v1/files/file/filename?name=" + fileName;
+            String message = serviceClassHelper.uploadImageToSpecificTable(imageType, plusURL, primaryId);
 
-            return fileName;
+            return plusURL;
         }
 
         return null;
