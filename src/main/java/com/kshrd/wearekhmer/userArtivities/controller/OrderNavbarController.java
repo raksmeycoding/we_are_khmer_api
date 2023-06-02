@@ -4,24 +4,21 @@ package com.kshrd.wearekhmer.userArtivities.controller;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.userArtivities.model.navbar.Navbar;
 import com.kshrd.wearekhmer.userArtivities.service.NavbarService;
-import io.jsonwebtoken.lang.Assert;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,10 +31,8 @@ public class OrderNavbarController {
 
     @Operation(summary = "(Admin acc can post to order navbar)")
     @PostMapping
-    ResponseEntity<?> insertOrderNavbar(HttpServletRequest httpServletRequest, @RequestBody List<Navbar> navbar) {
-//        URI type = null;
+    ResponseEntity<?> insertOrderNavbar(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @RequestBody List<Navbar> navbar) {
         try {
-//            type = new URI(httpServletRequest.getRequestURI());
             List<Navbar> listUpdatedNavbar = new ArrayList<>();
             for (Navbar n : navbar) {
                 Navbar navbar1 = navbarService.updateNavbar(n);
@@ -48,12 +43,16 @@ public class OrderNavbarController {
             if (ex.getCause() instanceof SQLException) {
                 if (((SQLException) ex.getCause()).getSQLState().equals("23505")) {
                     ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Has some value duplicated");
-                    ErrorResponseException exception = new ErrorResponseException(HttpStatus.CONFLICT, problemDetail, ex.getCause());
-                    throw exception;
-
+                    URI myUri = URI.create(httpServletRequest.getRequestURL().toString());
+                    problemDetail.setType(myUri);
+                    throw new ErrorResponseException(HttpStatus.CONFLICT, problemDetail, ex.getCause());
                 }
             }
-            throw new RuntimeException();
+
+            ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            URI myUri = URI.create(httpServletRequest.getRequestURL().toString());
+            problemDetail.setType(myUri);
+            throw new ErrorResponseException(HttpStatus.INTERNAL_SERVER_ERROR, problemDetail, ex.getCause());
         }
     }
 

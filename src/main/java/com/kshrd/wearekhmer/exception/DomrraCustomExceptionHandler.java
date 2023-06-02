@@ -74,7 +74,7 @@ public class DomrraCustomExceptionHandler {
 
     @ExceptionHandler(ErrorResponseException.class)
     public ErrorResponseException responseStatusException(ErrorResponseException ex) {
-        return new ErrorResponseException(HttpStatus.NOT_FOUND, ex.getBody(), ex.getCause());
+        return new ErrorResponseException(ex.getStatusCode(), ex.getBody(), ex.getCause());
     }
 
 
