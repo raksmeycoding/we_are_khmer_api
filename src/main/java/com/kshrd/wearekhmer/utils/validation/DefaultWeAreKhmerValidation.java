@@ -13,6 +13,7 @@ import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import com.kshrd.wearekhmer.history.repository.HistoryMapper;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
+import com.kshrd.wearekhmer.userArtivities.repository.IReactRepository;
 import com.kshrd.wearekhmer.userRating.RatingRepository;
 import com.kshrd.wearekhmer.userReport.repository.ReportMapper;
 import com.kshrd.wearekhmer.userReviewAuthor.repository.UserReviewAuthorMapper;
@@ -55,6 +56,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
    private final RatingRepository ratingRepository;
 
+   private final IReactRepository reactRepository;
 
     @Override
     public void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize) {
@@ -137,6 +139,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     @Override
     public boolean validateReportId(String reportId) {
+        if(!reportMapper.isReportExistByIs(reportId))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Report ID : "+reportId+" does not exists");
         return reportMapper.isReportExistByIs(reportId);
     }
 
@@ -232,6 +236,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
         else
             return ratingRepository.isExistAuthor(authorId);
     }
+
+
 }
 
 

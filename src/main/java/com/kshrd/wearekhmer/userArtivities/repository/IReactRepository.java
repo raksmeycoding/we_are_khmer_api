@@ -28,4 +28,9 @@ public interface IReactRepository {
             select handle_user_like(#{userId}, #{articleId}, 'unlike');
             """)
     React deleteUserReactForCurrentUser(React react);
+
+    @Select("""
+    SELECT EXISTS(SELECT 1 FROM react_tb WHERE article_id = #{articleId} AND user_id = #{userId});
+            """)
+    boolean isLikeExist(String articleId, String userId);
 }

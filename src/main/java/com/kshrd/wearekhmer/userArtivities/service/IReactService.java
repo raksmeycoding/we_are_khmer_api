@@ -5,4 +5,6 @@ import com.kshrd.wearekhmer.userArtivities.model.React;
 public interface IReactService {
     React createUserReactForCurrentUser(React react);
     React deleteUserReactForCurrentUser(React react);
+
+    boolean isLikeExist(String articleId, String userId);
 }

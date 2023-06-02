@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.userArtivities.model;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,10 +15,15 @@ import java.sql.Timestamp;
 @Data
 public class React {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String reactId;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String userId;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String articleId;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Timestamp createAt;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Timestamp updateAt;
     private boolean status;
 

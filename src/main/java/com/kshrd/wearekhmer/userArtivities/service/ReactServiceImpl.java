@@ -22,4 +22,9 @@ public class ReactServiceImpl implements IReactService{
     public React deleteUserReactForCurrentUser(React react) {
         return reactRepository.deleteUserReactForCurrentUser(react);
     }
+
+    @Override
+    public boolean isLikeExist(String articleId, String userId) {
+        return reactRepository.isLikeExist(articleId,userId);
+    }
 }

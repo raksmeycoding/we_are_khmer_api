@@ -32,10 +32,7 @@ public class ReportController {
     private ResponseEntity<?> createUserReport(@RequestBody @Valid ReportRequest reportRequest) {
         GenericResponse genericResponse;
 
-//        validate article id;
-        if (!weAreKhmerValidation.validateArticleId(reportRequest.getArticleId())) {
-            throw new CustomRuntimeException("This article id :" + reportRequest.getArticleId() + " is not exist.");
-        }
+        weAreKhmerValidation.validateArticleId(reportRequest.getArticleId());
 
         try {
             Report report = reportService.createUserReport(new ReportDto(reportRequest.getArticleId(), reportRequest.getReason(), weAreKhmerCurrentUser.getUserId()));
@@ -64,14 +61,8 @@ public class ReportController {
     @DeleteMapping("{reportId}")
     @Operation(summary = "(Only admin can delete this report.)")
     public ResponseEntity<?> deleteReportByIdByAdmin(@PathVariable String reportId) {
+        weAreKhmerValidation.validateReportId(reportId);
         try {
-            if (!weAreKhmerValidation.isAdmin()) {
-                throw new CustomRuntimeException("Sorry you are not administrator.");
-            }
-            if (!weAreKhmerValidation.validateReportId(reportId)) {
-                throw new CustomRuntimeException("Report with id :" + reportId + " is not present.");
-            }
-
             Report report = reportService.deleteReportByIdByAdmin(reportId);
 
             return ResponseEntity.ok(GenericResponse.builder()

@@ -137,7 +137,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers("/api/v1/comment/article").hasAnyRole("ADMIN", "AUTHOR", "USER")
 //                .requestMatchers(HttpMethod.GET,"/api/v1/notification").hasAnyRole("ADMIN","AUTHOR")
                 .requestMatchers("/api/v1/rating").hasAnyRole("ADMIN", "AUTHOR","USER")
-                .requestMatchers(HttpMethod.POST,"/api/v1/report").hasAnyRole("ADMIN","AUTHOR","USER")
+                .requestMatchers(HttpMethod.POST,"/api/v1/report").hasAnyRole("AUTHOR","USER")
                 .requestMatchers(HttpMethod.GET, "/api/v1/report").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/report/{reportId}").hasRole("ADMIN")
                 .requestMatchers("/api/v1/history/**").hasAnyRole("ADMIN", "AUTHOR", "USER")
