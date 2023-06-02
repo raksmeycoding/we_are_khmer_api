@@ -61,8 +61,12 @@ public class WeAreKhmerSecurity {
             "/api/v1/rating/{authorId}",
             "/api/v1/files/file/filename",
             "/api/v1/comment/article/{articleId}",
+<<<<<<< HEAD
            "/api/v1/article/category/**"
 //            "/api/v1/notification"
+=======
+            "/api/v1/order-navbar"
+>>>>>>> 788b6c32d419be2a242564b5c5b356a08ca01753
 
     };
 
@@ -126,6 +130,8 @@ public class WeAreKhmerSecurity {
         return httpSecurity
                 .csrf()
                 .disable()
+                .cors()
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -153,6 +159,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers(HttpMethod.DELETE,"/api/v1/article/user").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.GET,"/api/v1/article/user").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.GET, "/api/v1/notification").hasAnyRole("ADMIN", "AUTHOR")
+                .requestMatchers(HttpMethod.POST, "/api/v1/order-navbar").hasRole("ADMIN")
 
 
 

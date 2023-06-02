@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -66,6 +67,14 @@ public class DomrraCustomExceptionHandler {
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseStatusException responseStatusException(ResponseStatusException ex) {
         return new ResponseStatusException(ex.getStatusCode(), ex.getReason());
+    }
+
+
+
+
+    @ExceptionHandler(ErrorResponseException.class)
+    public ErrorResponseException responseStatusException(ErrorResponseException ex) {
+        return new ErrorResponseException(HttpStatus.NOT_FOUND, ex.getBody(), ex.getCause());
     }
 
 
