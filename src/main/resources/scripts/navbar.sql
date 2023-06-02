@@ -7,7 +7,7 @@ create table navbar_tb
     order_number integer                                                     not null unique
 );
 
-drop table navbar_tb;
+-- drop table navbar_tb;
 
 
 -- first record
@@ -54,7 +54,7 @@ end;
 $$
     language plpgsql;
 
-drop function auto_insert_into_navbar_after_category_tb_inserted cascade ;
+-- drop function auto_insert_into_navbar_after_category_tb_inserted cascade ;
 
 create trigger trg_auto_insert_into_navbar_after_category_tb_inserted
     AFTER insert
@@ -62,11 +62,16 @@ create trigger trg_auto_insert_into_navbar_after_category_tb_inserted
     for each row
 execute function auto_insert_into_navbar_after_category_tb_inserted();
 
-drop trigger trg_auto_insert_into_navbar_after_category_tb_inserted on category CASCADE ;
+-- drop trigger trg_auto_insert_into_navbar_after_category_tb_inserted on category CASCADE ;
 
 
-select * from navbar_tb;
+select * from navbar_tb order by order_number;
 select coalesce(max(order_number) + 1, 1) from navbar_tb;
+
+
+-- update navbar if exist
+update navbar_tb set navbar_name = 'Khmer brashat', order_number = 5 where category_id = '67a5da27-71b6-4cca-a33f-38a156008263';
+select * from navbar_tb;
 
 
 

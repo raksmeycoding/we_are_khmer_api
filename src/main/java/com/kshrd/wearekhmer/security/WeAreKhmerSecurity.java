@@ -62,7 +62,7 @@ public class WeAreKhmerSecurity {
             "/api/v1/rating/{authorId}",
             "/api/v1/files/file/filename",
             "/api/v1/comment/article/{articleId}",
-//            "/api/v1/notification"
+            "/api/v1/order-navbar"
 
     };
 
@@ -155,6 +155,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers(HttpMethod.DELETE,"/api/v1/article/user").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.GET,"/api/v1/article/user").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.GET, "/api/v1/notification").hasAnyRole("ADMIN", "AUTHOR")
+                .requestMatchers(HttpMethod.POST, "/api/v1/order-navbar").hasRole("ADMIN")
 
 
 
