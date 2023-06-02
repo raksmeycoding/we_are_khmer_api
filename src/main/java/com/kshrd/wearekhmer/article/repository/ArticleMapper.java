@@ -25,6 +25,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
@@ -46,6 +47,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
@@ -67,6 +69,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
@@ -91,6 +94,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
@@ -115,6 +119,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
@@ -139,6 +144,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
@@ -161,6 +167,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
@@ -217,6 +224,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
@@ -258,6 +266,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
@@ -280,6 +289,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
@@ -304,6 +314,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
@@ -328,6 +339,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
@@ -351,6 +363,7 @@ public interface ArticleMapper {
                    ab.count_view,
                    ab.isban,
                    ab.hero_card_in,
+                   ub.photo_url,
                    ub.username as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count

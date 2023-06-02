@@ -24,6 +24,8 @@ public class ArticleResponse {
     private Integer count_view;
     private boolean isban;
     private String hero_card_in;
+
+    private String photo_url;
     private String author_name;
     private String category_name;
     private String react_count;

@@ -17,4 +17,5 @@ public class ArticleResponse {
     private String description;
     private String image;
     private String categoryId;
+    private String photoUrl;
 }
