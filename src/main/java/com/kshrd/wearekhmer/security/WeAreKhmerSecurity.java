@@ -61,7 +61,7 @@ public class WeAreKhmerSecurity {
             "/api/v1/category/{categoryId}",
             "/api/v1/rating/{authorId}",
             "/api/v1/files/file/filename",
-            "/api/v1/comment/article/{articleId}"
+            "/api/v1/comment/article/{articleId}",
 //            "/api/v1/notification"
 
     };
@@ -126,6 +126,8 @@ public class WeAreKhmerSecurity {
         return httpSecurity
                 .csrf()
                 .disable()
+                .cors()
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
