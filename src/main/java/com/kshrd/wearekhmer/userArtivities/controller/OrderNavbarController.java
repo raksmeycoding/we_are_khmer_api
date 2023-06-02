@@ -38,7 +38,19 @@ public class OrderNavbarController {
                 Navbar navbar1 = navbarService.updateNavbar(n);
                 listUpdatedNavbar.add(navbar1);
             }
-            return ResponseEntity.ok().body(listUpdatedNavbar);
+            if (listUpdatedNavbar.get(0) == null) {
+                return ResponseEntity.ok(GenericResponse.builder()
+                        .status("200")
+                        .message("Successfully, but there are no fields got updated please make sure you inputted the correct id.")
+                        .title("success")
+                        .build());
+            }
+            return ResponseEntity.ok().body(GenericResponse.builder()
+                    .title("success")
+                    .message("Navbar has been updated successfully.")
+                    .payload(listUpdatedNavbar)
+                    .status("200")
+                    .build());
         } catch (Exception ex) {
             if (ex.getCause() instanceof SQLException) {
                 if (((SQLException) ex.getCause()).getSQLState().equals("23505")) {
