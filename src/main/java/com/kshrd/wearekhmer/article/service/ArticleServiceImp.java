@@ -131,4 +131,29 @@ public class ArticleServiceImp implements ArticleService {
     public List<ArticleResponse> getAllArticleByCategoryId(String categoryId, Integer pageNumber, Integer nextPage) {
         return articleMapper.getAllArticleByCategoryId(categoryId, pageNumber,nextPage);
     }
+
+    @Override
+    public List<ArticleResponse> getAllArticleCurrentUserByMostView(String userId, Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllArticleCurrentUserByMostView(userId, pageNumber, nextPage);
+    }
+
+    @Override
+    public List<ArticleResponse> getAllArticleCurrentUserByLatest(String userId, Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllArticleCurrentUserByLatest(userId, pageNumber, nextPage);
+    }
+
+    @Override
+    public List<ArticleResponse> getAllArticleCurrentUserByYesterday(String userId, Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllArticleCurrentUserByYesterday(userId, pageNumber, nextPage);
+    }
+
+    @Override
+    public List<ArticleResponse> getAllArticleCurrentUserByLastWeek(String userId, Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllArticleCurrentUserByLastWeek(userId, pageNumber, nextPage);
+    }
+
+    @Override
+    public List<ArticleResponse> getAllArticleCurrentUserByLastMonth(String userId, Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllArticleCurrentUserByLastMonth(userId, pageNumber, nextPage);
+    }
 }

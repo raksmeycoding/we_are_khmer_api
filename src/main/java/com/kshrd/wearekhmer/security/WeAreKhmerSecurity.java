@@ -160,7 +160,7 @@ public class WeAreKhmerSecurity {
                 .hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/article/user")
                 .hasRole("AUTHOR")
-                .requestMatchers(HttpMethod.GET, "/api/v1/article/user")
+                .requestMatchers(HttpMethod.GET, "/api/v1/article/user/**")
                 .hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.GET, "/api/v1/notification")
                 .hasAnyRole("ADMIN", "AUTHOR")

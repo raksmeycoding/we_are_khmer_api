@@ -45,4 +45,9 @@ public interface ArticleService {
     List<ArticleResponse> getAllArticlesByDateRange(Date startDate, Date endDate);
 
     List<ArticleResponse> getAllArticleByCategoryId(String categoryId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse> getAllArticleCurrentUserByMostView(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse> getAllArticleCurrentUserByLatest(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse> getAllArticleCurrentUserByYesterday(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse> getAllArticleCurrentUserByLastWeek(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse> getAllArticleCurrentUserByLastMonth(String userId, Integer pageNumber, Integer nextPage);
 }

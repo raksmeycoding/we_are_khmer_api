@@ -656,21 +656,126 @@ public class ArticleController {
               .status("200")
               .title("success")
               .payload(articleResponseList)
-              .message("You have successfully get artilcles in this category")
+              .message("You have successfully get articles in this category")
               .build();
       return ResponseEntity.ok(genericResponse);
-//    } catch (Exception ex) {
-//      ex.printStackTrace();
-//      return ResponseEntity
-//              .internalServerError()
-//              .body(
-//                      GenericResponse
-//                              .builder()
-//                              .message(ex.getMessage())
-//                              .status("500")
-//                              .title("error")
-//                              .build()
-//              );
-//    }
+  }
+
+  @Operation(summary = "(Get Articles by most-view for author)")
+  @GetMapping("/user/most-view")
+  public ResponseEntity<?> getAllArticleCurrentUserByMostView(
+          @RequestParam(defaultValue = "1", required = false) Integer page
+  ) {
+
+    weAreKhmerValidation.checkAuthorExist(weAreKhmerCurrentUser.getUserId());
+
+    Integer nextPage = getNextPage(page);
+
+    List<ArticleResponse> articleResponseList = articleService.getAllArticleCurrentUserByMostView(
+            weAreKhmerCurrentUser.getUserId(),
+            PAGE_SIZE,
+            nextPage
+    );
+    GenericResponse genericResponse = GenericResponse.builder()
+            .status("200")
+            .title("success")
+            .payload(articleResponseList)
+            .message("You have successfully get all most view articles.")
+            .build();
+    return ResponseEntity.ok(genericResponse);
+  }
+  @Operation(summary = "(Get latest article for author)")
+  @GetMapping("/user/latest")
+  public ResponseEntity<?> getAllArticleCurrentUserByLatest(
+          @RequestParam(defaultValue = "1", required = false) Integer page
+  ) {
+
+    weAreKhmerValidation.checkAuthorExist(weAreKhmerCurrentUser.getUserId());
+
+    Integer nextPage = getNextPage(page);
+
+    List<ArticleResponse> articleResponseList = articleService.getAllArticleCurrentUserByLatest(
+            weAreKhmerCurrentUser.getUserId(),
+            PAGE_SIZE,
+            nextPage
+    );
+    GenericResponse genericResponse = GenericResponse.builder()
+            .status("200")
+            .title("success")
+            .payload(articleResponseList)
+            .message("You have successfully get all latest articles.")
+            .build();
+    return ResponseEntity.ok(genericResponse);
+  }
+
+  @Operation(summary = "(Get article by yesterday for author)")
+  @GetMapping("/user/yesterday")
+  public ResponseEntity<?> getAllArticleCurrentUserByYesterday(
+          @RequestParam(defaultValue = "1", required = false) Integer page
+  ) {
+
+    weAreKhmerValidation.checkAuthorExist(weAreKhmerCurrentUser.getUserId());
+
+    Integer nextPage = getNextPage(page);
+
+    List<ArticleResponse> articleResponseList = articleService.getAllArticleCurrentUserByYesterday(
+            weAreKhmerCurrentUser.getUserId(),
+            PAGE_SIZE,
+            nextPage
+    );
+    GenericResponse genericResponse = GenericResponse.builder()
+            .status("200")
+            .title("success")
+            .payload(articleResponseList)
+            .message("You have successfully get all articles by yesterday.")
+            .build();
+    return ResponseEntity.ok(genericResponse);
+  }
+
+  @Operation(summary = "(Get article by last week for author)")
+  @GetMapping("/user/last-week")
+  public ResponseEntity<?> getAllArticleCurrentUserByLastWeek(
+          @RequestParam(defaultValue = "1", required = false) Integer page
+  ) {
+
+    weAreKhmerValidation.checkAuthorExist(weAreKhmerCurrentUser.getUserId());
+
+    Integer nextPage = getNextPage(page);
+
+    List<ArticleResponse> articleResponseList = articleService.getAllArticleCurrentUserByLastWeek(
+            weAreKhmerCurrentUser.getUserId(),
+            PAGE_SIZE,
+            nextPage
+    );
+    GenericResponse genericResponse = GenericResponse.builder()
+            .status("200")
+            .title("success")
+            .payload(articleResponseList)
+            .message("You have successfully get all articles by last week.")
+            .build();
+    return ResponseEntity.ok(genericResponse);
+  }
+
+
+  @Operation(summary = "(Get article by last month for author)")
+  @GetMapping("/user/last-month")
+  public ResponseEntity<?> getAllArticleCurrentUserByLastMonth(
+          @RequestParam(defaultValue = "1", required = false) Integer page
+  ) {
+
+    Integer nextPage = getNextPage(page);
+
+    List<ArticleResponse> articleResponseList = articleService.getAllArticleCurrentUserByLastMonth(
+            weAreKhmerCurrentUser.getUserId(),
+            PAGE_SIZE,
+            nextPage
+    );
+    GenericResponse genericResponse = GenericResponse.builder()
+            .status("200")
+            .title("success")
+            .payload(articleResponseList)
+            .message("You have successfully get all articles by last month.")
+            .build();
+    return ResponseEntity.ok(genericResponse);
   }
 }
