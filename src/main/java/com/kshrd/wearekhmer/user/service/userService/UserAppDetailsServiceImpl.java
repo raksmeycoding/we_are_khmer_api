@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 
@@ -63,5 +65,11 @@ public class UserAppDetailsServiceImpl implements UserAppService, UserDetailsSer
     @Override
     public String registerAsAuthorAndReturnUserId(String userId) {
         return userAppRepository.registerAsAuthorAndReturnUserId(userId);
+    }
+
+
+    @Override
+    public List<UserApp> getAllUser() {
+        return userAppRepository.getAllUser();
     }
 }

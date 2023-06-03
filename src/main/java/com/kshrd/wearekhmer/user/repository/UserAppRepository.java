@@ -12,6 +12,14 @@ import java.util.List;
 @Mapper
 public interface UserAppRepository extends WeAreKhmerRepositorySupport {
 
+
+
+    @Select("""
+            select * from user_tb where is_enable = true;
+            """)
+    @ResultMap("userMapper")
+    List<UserApp> getAllUser();
+
     @Select("""
             select * from user_tb where is_author = true
             """)
