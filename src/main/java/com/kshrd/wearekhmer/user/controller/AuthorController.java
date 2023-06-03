@@ -11,11 +11,15 @@ import com.kshrd.wearekhmer.user.service.AuthorService;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 
@@ -60,12 +64,29 @@ public class AuthorController {
     }
 
 
+    @GetMapping("/{authorId}")
+    public ResponseEntity<?> getAllAuthorById(HttpServletRequest httpServletRequest, @PathVariable String authorId) {
+        AuthorDTO authorDTO = authorService.getAllAuthorById(authorId);
+        if ( authorDTO == null) {
+            ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Author had been not found!");
+            problemDetail.setType(URI.create(httpServletRequest.getRequestURL().toString()));
+            throw new ErrorResponseException(HttpStatus.NOT_FOUND, problemDetail, null);
+        }
+        return ResponseEntity.ok().body(GenericResponse.builder()
+                .status("200")
+                .title("success")
+                .message("Get author profile successfully.")
+                .payload(authorDTO)
+                .build());
+    }
+
+
     @PostMapping("accept/{userId}")
     @Operation(summary = "(Accept user request as author.)")
     public ResponseEntity<?> updateUserRequestToBeAsAuthor(@PathVariable String userId) {
         String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
         System.out.println(hasRoleAuthor);
-        if(!weAreKhmerValidation.isAdmin()){
+        if (!weAreKhmerValidation.isAdmin()) {
             throw new CustomRuntimeException("You are not admin.");
         }
         if (hasRoleAuthor != null && hasRoleAuthor.equalsIgnoreCase("ROLE_AUTHOR")) {

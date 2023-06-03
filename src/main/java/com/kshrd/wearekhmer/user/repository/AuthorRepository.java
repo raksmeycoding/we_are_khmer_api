@@ -66,6 +66,15 @@ public interface AuthorRepository {
 
 
     @Select("""
+            select * from user_tb where is_author = true and user_id = #{authorId}
+            """)
+
+    @ResultMap("authorDTO")
+    AuthorDTO getAllAuthorById(String authorId);
+
+
+
+    @Select("""
             WITH inserted_user_role AS (
                 INSERT INTO user_role_tb (user_id, role_id)
                     VALUES (
