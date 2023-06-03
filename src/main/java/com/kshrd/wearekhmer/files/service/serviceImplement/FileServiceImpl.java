@@ -51,8 +51,7 @@ public class FileServiceImpl implements IFileService {
                 Files.createDirectories(root);
             }
             Files.copy(multipartFile.getInputStream(), this.root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
-
-            return fileName;
+            return "http://localhost:8080/api/v1/files/file/filename?name=" + fileName;
         }
 
         return null;
