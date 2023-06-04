@@ -77,10 +77,10 @@ public class OrderNavbarController {
         GenericResponse genericResponse = GenericResponse.builder()
                 .message("Get data successfully.")
                 .title("success")
-                .status("201")
+                .status("200")
                 .payload(navbarList)
                 .build();
-        return new ResponseEntity<>(genericResponse, HttpStatus.CREATED);
+        return new ResponseEntity<>(genericResponse, HttpStatus.OK);
 
     }
 }
