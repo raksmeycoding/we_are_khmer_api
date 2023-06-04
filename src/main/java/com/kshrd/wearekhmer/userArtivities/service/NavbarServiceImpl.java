@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.userArtivities.service;
 
 import com.kshrd.wearekhmer.userArtivities.model.navbar.Navbar;
+import com.kshrd.wearekhmer.userArtivities.model.navbar.NavbarResponse;
 import com.kshrd.wearekhmer.userArtivities.repository.NavbarMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,11 @@ public class NavbarServiceImpl implements NavbarService {
     @Override
     public List<Navbar> getNavbar() {
         return navbarMapper.getNavbar();
+    }
+
+
+    @Override
+    public List<NavbarResponse> getNavbarAsNavbarResponse() {
+        return navbarMapper.getNavbarAsNavbarResponse();
     }
 }

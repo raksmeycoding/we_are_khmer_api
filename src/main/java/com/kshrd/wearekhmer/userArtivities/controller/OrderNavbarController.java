@@ -3,6 +3,7 @@ package com.kshrd.wearekhmer.userArtivities.controller;
 
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.userArtivities.model.navbar.Navbar;
+import com.kshrd.wearekhmer.userArtivities.model.navbar.NavbarResponse;
 import com.kshrd.wearekhmer.userArtivities.service.NavbarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -72,7 +73,7 @@ public class OrderNavbarController {
     @Operation(summary = "(get public navbar)")
     @GetMapping
     ResponseEntity<?> getOrderNavbar() {
-        List<Navbar> navbarList = navbarService.getNavbar();
+        List<NavbarResponse> navbarList = navbarService.getNavbarAsNavbarResponse();
         GenericResponse genericResponse = GenericResponse.builder()
                 .message("Get data successfully.")
                 .title("success")

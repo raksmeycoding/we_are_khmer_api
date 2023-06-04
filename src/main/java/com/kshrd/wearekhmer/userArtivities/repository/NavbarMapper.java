@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.userArtivities.repository;
 
 import com.kshrd.wearekhmer.userArtivities.model.navbar.Navbar;
+import com.kshrd.wearekhmer.userArtivities.model.navbar.NavbarResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -22,4 +23,10 @@ public interface NavbarMapper {
             select * from navbar_tb order by order_number
             """)
     List<Navbar> getNavbar();
+
+
+    @Select("""
+            select * from navbar_tb order by order_number
+            """)
+    List<NavbarResponse> getNavbarAsNavbarResponse();
 }

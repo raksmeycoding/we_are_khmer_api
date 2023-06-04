@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.io.Resources;
 import org.springframework.boot.CommandLineRunner;
@@ -168,10 +169,23 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 
         System.out.println(articleService.isArticleExist("773066fb-bd6c-4a75-94d6-9c8b3c24e31c"));
 
-
-
-
-
-
+        OkHttpClient client = new OkHttpClient();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, """
+                {"app_id":"afc89b92-a380-4797-9c77-d9829ccb8f98","included_segments":["Subscribed Users"],"contents":{"en":"English or Any Language Message","es":"Spanish Message"},"name":"INTERNAL_CAMPAIGN_NAME"}
+                """);
+        Request request = new Request.Builder()
+                .url("https://onesignal.com/api/v1/notifications")
+                .post(body)
+                .addHeader("accept", "application/json")
+                .addHeader("Authorization", "Basic NjM0ZTAzY2YtMmIzYS00MTQxLTkwMjAtYzg0YjQzNmI5NGE5")
+                .addHeader("Content-type", "application/json; charset=utf-8")
+                .build();
+        Response response = client.newCall(request).execute();
+        System.out.println(response.body());
+        System.out.println(response.message());
+        System.out.println(response.cacheResponse());
+        response.close();
+        System.out.println(response);
     }
 }
