@@ -24,8 +24,6 @@ CREATE TRIGGER delete_history_trigger
     FOR EACH ROW
 EXECUTE FUNCTION delete_history();
 
--- Create a new scheduled job to delete old history records
-SELECT cron.schedule('delete_old_history', '*/2 * * * *', $$DELETE FROM history_tb WHERE created_at < current_timestamp - interval '2 minutes'$$);
 
 
 
