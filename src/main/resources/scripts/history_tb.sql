@@ -1,8 +1,8 @@
 create table history_tb
 (
     history_id varchar primary key default uuid_generate_v4() unique,
-    user_id    varchar references user_tb (user_id) ON DELETE CASCADE       not null,
-    article_id varchar references article_tb (article_id) ON DELETE CASCADE not null,
+    user_id    varchar references user_tb (user_id) ON UPDATE CASCADE ON DELETE CASCADE       not null,
+    article_id varchar references article_tb (article_id) ON UPDATE CASCADE ON DELETE CASCADE not null,
     created_at timestamp default current_timestamp
 );
 
@@ -23,3 +23,11 @@ CREATE TRIGGER delete_history_trigger
     AFTER INSERT ON history_tb
     FOR EACH ROW
 EXECUTE FUNCTION delete_history();
+
+-- Create a new scheduled job to delete old history records
+SELECT cron.schedule('delete_old_history', '*/2 * * * *', $$DELETE FROM history_tb WHERE created_at < current_timestamp - interval '2 minutes'$$);
+
+
+
+
+
