@@ -2,6 +2,8 @@ package com.kshrd.wearekhmer.notification;
 
 
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
+import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,9 +23,11 @@ import java.util.List;
 @SecurityRequirement(name = "bearerAuth")
 public class NotificationController {
     private final INotificationService notificationService;
+    private final WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
     @GetMapping
     @Operation(summary = "Get all notification")
+    @Hidden
     public ResponseEntity<?> getAllNotificatoin() {
         try {
             List<Notification> notificationList = notificationService.getAllNotification();
@@ -44,9 +48,25 @@ public class NotificationController {
     }
 
 
-    @DeleteMapping("/{notificationId}")
+
+    public ResponseEntity<?> getNotificationForCurrentAuthor(){
+        return null;
+    }
+
+
+    @DeleteMapping("/{type}/{notificationId}")
     @Operation(summary = "(Admin can delete notification)")
-    public ResponseEntity<?> deleteNotificationById(HttpServletRequest httpServletRequest, @PathVariable String notificationId) {
+    public ResponseEntity<?> deleteNotificationById(HttpServletRequest httpServletRequest,@PathVariable String type, @PathVariable String notificationId) {
+
+        List<String> userRole = null;
+        userRole = weAreKhmerCurrentUser.getAuthorities();
+
+        for(String r : userRole) {
+            if (r.equalsIgnoreCase("ROLE_ADMIN")) {
+
+            }
+        }
+
         Notification notification = notificationService.deleteNotificationById(notificationId);
         if (notification == null) {
             URI uri = URI.create(httpServletRequest.getRequestURL().toString());

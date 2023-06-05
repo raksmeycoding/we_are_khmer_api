@@ -23,7 +23,7 @@ import java.sql.SQLException;
 @RequestMapping("/api/v1/article/react")
 @SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
-public class ReactController  {
+public class ReactController {
 
 
     private final IReactService reactService;
@@ -39,9 +39,13 @@ public class ReactController  {
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .articleId(articleId)
                     .build();
-            if (!reactService.isLikeExist(articleId, weAreKhmerCurrentUser.getUserId()))
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You already reacted on this article");
-
+//            ⚠️ This exception has been caught by database
+//            if (!reactService.isLikeExist(articleId, weAreKhmerCurrentUser.getUserId())) {
+//                ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "You already reacted on this article");
+//                URI uri = URI.create(httpServletRequest.getRequestURL().toString());
+//                problemDetail.setType(uri);
+//                throw new ErrorResponseException(HttpStatus.FORBIDDEN, problemDetail, null);
+//            }
             React react1 = reactService.createUserReactForCurrentUser(react);
             GenericResponse genericResponse = GenericResponse.builder()
                     .title("success")
@@ -53,15 +57,15 @@ public class ReactController  {
         } catch (Exception ex) {
             if (ex.getCause() instanceof SQLException) {
                 System.out.println(ex.getMessage());
-               String message = ex.getCause().getMessage();
+                String message = ex.getCause().getMessage();
                 System.out.println(message);
-               int startIndex = message.indexOf("ERROR:");
-               int endIndex = message.indexOf("\n");
-               String returnMessage = message.substring(startIndex, endIndex);
-               ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, returnMessage);
-               URI uri = URI.create(httpServletRequest.getRequestURL().toString());
-               problemDetail.setType(uri);
-               throw new ErrorResponseException(HttpStatus.FORBIDDEN, problemDetail, ex.getCause());
+                int startIndex = message.indexOf("ERROR:");
+                int endIndex = message.indexOf("\n");
+                String returnMessage = message.substring(startIndex, endIndex);
+                ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, returnMessage);
+                URI uri = URI.create(httpServletRequest.getRequestURL().toString());
+                problemDetail.setType(uri);
+                throw new ErrorResponseException(HttpStatus.FORBIDDEN, problemDetail, ex.getCause());
             }
             ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
             URI uri = URI.create(httpServletRequest.getRequestURL().toString());
