@@ -2,6 +2,7 @@ package com.kshrd.wearekhmer;
 
 import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.history.service.HistoryService;
+import com.kshrd.wearekhmer.oneSignal.Onesignal;
 import com.kshrd.wearekhmer.opt.service.OtpService;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.repository.EducationMapper;
@@ -24,6 +25,12 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.io.Resources;
 import org.springframework.boot.CommandLineRunner;
@@ -33,10 +40,7 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StreamUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -187,5 +191,25 @@ public class WeAreKhmerApplication implements CommandLineRunner {
         System.out.println(response.cacheResponse());
         response.close();
         System.out.println(response);
+
+
+//        String apiUrl = "https://onesignal.com/api/v1/players?app_id=" + Onesignal.builder().build().getAppId();
+//        HttpClient httpClient = HttpClientBuilder.create().build();
+//
+//        HttpGet request = new HttpGet(apiUrl);
+//        request.setHeader("Authorization", "Basic " + Onesignal.builder().build().getRestAPIKey());
+//
+//        try {
+//            HttpResponse response = httpClient.execute(request);
+//            HttpEntity entity = response.getEntity();
+//            String responseBody = EntityUtils.toString(entity);
+//
+//            // Process the response body (user record data)
+//            System.out.println(responseBody);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
     }
 }
