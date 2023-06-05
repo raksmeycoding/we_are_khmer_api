@@ -14,4 +14,10 @@ public class NotificationServiceImpl implements INotificationService {
     public List<Notification> getAllNotification() {
         return notificationMapper.getAllNotification();
     }
+
+
+    @Override
+    public Notification deleteNotificationById(String notificationId) {
+        return notificationMapper.deleteNotificationById(notificationId);
+    }
 }

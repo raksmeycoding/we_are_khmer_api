@@ -52,7 +52,6 @@ public class WeAreKhmerSecurity {
             "/api/v1/files/file/filename",
             "/api/v1/comment/article/{articleId}",
             "/api/v1/article/category/**",
-            //            "/api/v1/notification"
             "/api/v1/order-navbar",
     };
 
@@ -122,6 +121,7 @@ public class WeAreKhmerSecurity {
                 //                .authorizeHttpRequests()
                 //                .requestMatchers("/", "/user", "/swagger-ui/index.html").permitAll()
                 .authorizeHttpRequests()
+//                .requestMatchers("/api/v1/notification/**").hasRole("ADMIN")
                 .requestMatchers("/api/v1/author/{authorId}").hasAnyRole("AUTHOR", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/files/file/**")
                 .hasAnyRole("ADMIN", "AUTHOR")
@@ -129,7 +129,7 @@ public class WeAreKhmerSecurity {
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers("/api/v1/comment/article")
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")
-                //                .requestMatchers(HttpMethod.GET,"/api/v1/notification").hasAnyRole("ADMIN","AUTHOR")
+                .requestMatchers("/api/v1/notification/**").hasAnyRole("ADMIN", "AUTHOR")
                 .requestMatchers("/api/v1/rating")
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers(HttpMethod.POST, "/api/v1/report")

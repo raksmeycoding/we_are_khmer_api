@@ -13,4 +13,10 @@ public interface INotificationMapper {
             select * from notification_tb;
             """)
     List<Notification> getAllNotification();
+
+
+    @Select("""
+            delete from notification_tb where notification_id = #{notificationId} returning *;
+            """)
+    Notification deleteNotificationById(String notificationId);
 }

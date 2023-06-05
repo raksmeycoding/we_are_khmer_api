@@ -6,4 +6,8 @@ public interface INotificationService {
     List<Notification> getAllNotification();
 
 
+
+    Notification deleteNotificationById(String notificationId);
+
+
 }
