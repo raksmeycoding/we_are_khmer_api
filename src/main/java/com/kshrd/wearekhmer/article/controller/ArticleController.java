@@ -116,7 +116,7 @@ public class ArticleController {
   }
 
   @Operation(summary = "(Get all articles for current author)")
-  @GetMapping("/user")
+  @GetMapping("/author")
   public ResponseEntity<?> getAllArticlesForCurrentUser(
     @RequestParam(value = "page", required = false) Integer page
   ) {
@@ -168,8 +168,8 @@ public class ArticleController {
     }
   }
 
-  @PostMapping("/user")
-  @Operation(summary = "(Insert article for current author")
+  @PostMapping("/author")
+  @Operation(summary = "(Insert article for current author)")
   public ResponseEntity<?> insertArticle(
     @RequestBody @Validated ArticleRequest articleRequest
   ) {
@@ -246,7 +246,7 @@ public class ArticleController {
     }
   }
 
-  @GetMapping("/user/{articleId}")
+  @GetMapping("/author/{articleId}")
   @Operation(summary = "(Get article by id for current author)")
   public ResponseEntity<?> getArticleByIdForCurrentUser(
     @PathVariable String articleId
@@ -287,7 +287,7 @@ public class ArticleController {
     }
   }
 
-  @PutMapping("/user")
+  @PutMapping("/author")
   @Operation(summary = "(Update article by id for current author)")
   public ResponseEntity<?> updateArticle(
     @RequestBody @Validated ArticleUpdateRequest article
@@ -333,7 +333,7 @@ public class ArticleController {
     }
   }
 
-  @DeleteMapping("/user/{articleId}")
+  @DeleteMapping("/author/{articleId}")
   @Operation(summary = "(Delete article by id for current author)")
   public ResponseEntity<?> deleteArticle(@PathVariable String articleId) {
     GenericResponse genericResponse;
@@ -423,7 +423,7 @@ public class ArticleController {
   }
 
   @GetMapping("/most-view")
-  @Operation(summary = "(Get articles by most view - only 20 rows was returned)")
+  @Operation(summary = "(Filters articles by most view ( limit 20 row ))")
   public ResponseEntity<?> getArticleByMostViewLimit20() {
     try {
       List<ArticleResponse> articleResponseList = articleService.getArticleByMostViewLimit20();
@@ -454,7 +454,7 @@ public class ArticleController {
   }
 
   @PostMapping("/increase/{articleId}")
-  @Operation(summary = "(Increase article view count.")
+  @Operation(summary = "(Increase article view count)")
   public ResponseEntity<?> increaseArticleViewCount(
     @PathVariable String articleId
   ) {
@@ -493,12 +493,16 @@ public class ArticleController {
     }
   }
 
-  @GetMapping("/last-24h")
-  @Operation(summary = "Get articles by last 24 hours")
-  public ResponseEntity<?> getAllArticlesByYesterday() {
+  @GetMapping("/yesterday")
+  @Operation(summary = "Filter articles by yesterday")
+  public ResponseEntity<?> getAllArticlesByYesterday(@RequestParam(defaultValue = "1", required = false) Integer page) {
     GenericResponse genericResponse;
     try {
-      List<ArticleResponse> articleResponseList = articleService.getAllArticlesByYesterday();
+      Integer nextPage = getNextPage(page);
+      List<ArticleResponse> articleResponseList = articleService.getAllArticlesByYesterday(
+              PAGE_SIZE,
+              nextPage
+      );
       genericResponse =
         GenericResponse
           .builder()
@@ -520,19 +524,23 @@ public class ArticleController {
     }
   }
 
-  @GetMapping("/last-week")
-  @Operation(summary = "Get articles by last week")
-  public ResponseEntity<?> getAllArticlesByLastWeek() {
+  @GetMapping("/per-week")
+  @Operation(summary = "Filter articles per week")
+  public ResponseEntity<?> getAllArticlesPerWeek(@RequestParam(defaultValue = "1", required = false) Integer page) {
     GenericResponse genericResponse;
     try {
-      List<ArticleResponse> articleResponseList = articleService.getAllArticlesByLastWeek();
+      Integer nextPage = getNextPage(page);
+      List<ArticleResponse> articleResponseList = articleService.getAllArticlesPerWeek(
+              PAGE_SIZE,
+              nextPage
+      );
       genericResponse =
         GenericResponse
           .builder()
           .status("200")
           .payload(articleResponseList)
           .title("success")
-          .message("You have successfully got last week articles recorded")
+          .message("You have successfully got per week articles recorded")
           .build();
       return ResponseEntity.ok(genericResponse);
     } catch (Exception ex) {
@@ -547,19 +555,23 @@ public class ArticleController {
     }
   }
 
-  @GetMapping("/last-month")
-  @Operation(summary = "Get articles by last month")
-  public ResponseEntity<?> getAllArticlesByLastMonth() {
+  @GetMapping("/per-month")
+  @Operation(summary = "Filter articles per month")
+  public ResponseEntity<?> getAllArticlesPerMonth(@RequestParam(defaultValue = "1", required = false) Integer page) {
     GenericResponse genericResponse;
     try {
-      List<ArticleResponse> articleResponseList = articleService.getAllArticlesByLastMonth();
+      Integer nextPage = getNextPage(page);
+      List<ArticleResponse> articleResponseList = articleService.getAllArticlesPerMonth(
+              PAGE_SIZE,
+              nextPage
+      );
       genericResponse =
         GenericResponse
           .builder()
           .status("200")
           .payload(articleResponseList)
           .title("success")
-          .message("You have successfully got last month articles recorded")
+          .message("You have successfully got per month articles recorded")
           .build();
       return ResponseEntity.ok(genericResponse);
     } catch (Exception ex) {
@@ -574,19 +586,23 @@ public class ArticleController {
     }
   }
 
-  @GetMapping("/last-year")
-  @Operation(summary = "Get articles by last year")
-  public ResponseEntity<?> getAllArticlesByLastYear() {
+  @GetMapping("/per-year")
+  @Operation(summary = "Filter articles per year")
+  public ResponseEntity<?> getAllArticlesByPerYear(@RequestParam(defaultValue = "1", required = false) Integer page) {
     GenericResponse genericResponse;
     try {
-      List<ArticleResponse> articleResponseList = articleService.getAllArticlesByLastYear();
+      Integer nextPage = getNextPage(page);
+      List<ArticleResponse> articleResponseList = articleService.getAllArticlesPerYear(
+              PAGE_SIZE,
+              nextPage
+      );
       genericResponse =
         GenericResponse
           .builder()
           .status("200")
           .payload(articleResponseList)
           .title("success")
-          .message("You have successfully got last year articles recorded")
+          .message("You have successfully got per year articles recorded")
           .build();
       return ResponseEntity.ok(genericResponse);
     } catch (Exception ex) {
@@ -602,13 +618,16 @@ public class ArticleController {
   }
 
   @GetMapping("/date-range")
-  @Operation(summary = "Get article by date range")
+  @Operation(summary = "Filter articles by date range")
   public ResponseEntity<?> getAllArticlesByDateRange(
     Date startDate,
     Date endDate
   ) {
     GenericResponse genericResponse;
+    if(startDate.compareTo(endDate) >0)
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  " start date should not be greater than end date");
     try {
+
       List<ArticleResponse> articleResponseList = articleService.getAllArticlesByDateRange(
         startDate,
         endDate
@@ -662,7 +681,7 @@ public class ArticleController {
   }
 
   @Operation(summary = "(Get most-view articles for current author)")
-  @GetMapping("/user/most-view")
+  @GetMapping("/author/most-view")
   public ResponseEntity<?> getAllArticleCurrentUserByMostView(
           @RequestParam(defaultValue = "1", required = false) Integer page
   ) {
@@ -685,7 +704,7 @@ public class ArticleController {
     return ResponseEntity.ok(genericResponse);
   }
   @Operation(summary = "(Get latest article for current author)")
-  @GetMapping("/user/latest")
+  @GetMapping("/author/latest")
   public ResponseEntity<?> getAllArticleCurrentUserByLatest(
           @RequestParam(defaultValue = "1", required = false) Integer page
   ) {
@@ -709,7 +728,7 @@ public class ArticleController {
   }
 
   @Operation(summary = "(Get yesterday articles for current author)")
-  @GetMapping("/user/yesterday")
+  @GetMapping("/author/yesterday")
   public ResponseEntity<?> getAllArticleCurrentUserByYesterday(
           @RequestParam(defaultValue = "1", required = false) Integer page
   ) {
@@ -733,7 +752,7 @@ public class ArticleController {
   }
 
   @Operation(summary = "(Get articles per week for current author)")
-  @GetMapping("/user/per-week")
+  @GetMapping("/author/per-week")
   public ResponseEntity<?> getAllArticleCurrentUserPerWeek(
           @RequestParam(defaultValue = "1", required = false) Integer page
   ) {
@@ -758,7 +777,7 @@ public class ArticleController {
 
 
   @Operation(summary = "(Get articles per month for current author )")
-  @GetMapping("/user/per-month")
+  @GetMapping("/author/per-month")
   public ResponseEntity<?> getAllArticleCurrentUserPerMonth(
           @RequestParam(defaultValue = "1", required = false) Integer page
   ) {
@@ -781,7 +800,7 @@ public class ArticleController {
 
 
   @Operation(summary = "(Get articles per year for current author )")
-  @GetMapping("/user/per-year")
+  @GetMapping("/author/per-year")
   public ResponseEntity<?> getAllArticleCurrentUserPerYear(
           @RequestParam(defaultValue = "1", required = false) Integer page
   ) {
@@ -798,6 +817,99 @@ public class ArticleController {
             .title("success")
             .payload(articleResponseList)
             .message("You have successfully get all articles per year.")
+            .build();
+    return ResponseEntity.ok(genericResponse);
+  }
+
+  @Operation(summary = "(Get total views per week for current author )")
+  @GetMapping("/author/TotalViewPerWeek")
+  public ResponseEntity<?> getTotalViewCurrentAuthorPerWeek(
+  ) {
+    weAreKhmerValidation.checkAuthorExist(weAreKhmerCurrentUser.getUserId());
+
+    Integer totalView = articleService.getTotalViewCurrentAuthorPerWeek(weAreKhmerCurrentUser.getUserId());
+
+    GenericResponse genericResponse = GenericResponse.builder()
+            .status("200")
+            .title("success")
+            .payload(totalView)
+            .message("You have successfully get total views per week.")
+            .build();
+    return ResponseEntity.ok(genericResponse);
+  }
+
+  @Operation(summary = "(Get total views per month for current author )")
+  @GetMapping("/author/TotalViewPerMonth")
+  public ResponseEntity<?> getTotalViewCurrentAuthorPerMonth(
+  ) {
+    weAreKhmerValidation.checkAuthorExist(weAreKhmerCurrentUser.getUserId());
+
+    Integer totalView = articleService.getTotalViewCurrentAuthorPerMonth(weAreKhmerCurrentUser.getUserId());
+
+    GenericResponse genericResponse = GenericResponse.builder()
+            .status("200")
+            .title("success")
+            .payload(totalView)
+            .message("You have successfully get total views per month.")
+            .build();
+    return ResponseEntity.ok(genericResponse);
+  }
+
+  @Operation(summary = "(Get total views per year for current author )")
+  @GetMapping("/author/TotalViewPerYear")
+  public ResponseEntity<?> getTotalViewCurrentAuthorPerYear(
+  ) {
+    weAreKhmerValidation.checkAuthorExist(weAreKhmerCurrentUser.getUserId());
+
+    Integer totalView = articleService.getTotalViewCurrentAuthorPerYear(weAreKhmerCurrentUser.getUserId());
+
+    GenericResponse genericResponse = GenericResponse.builder()
+            .status("200")
+            .title("success")
+            .payload(totalView)
+            .message("You have successfully get total views per year.")
+            .build();
+    return ResponseEntity.ok(genericResponse);
+  }
+
+  @Operation(summary = "(Get total views per week for admin )")
+  @GetMapping("/admin/TotalViewPerWeek")
+  public ResponseEntity<?> getTotalViewAdminPerWeek(
+  ) {
+    Integer totalView = articleService.getTotalViewAdminPerWeek();
+    GenericResponse genericResponse = GenericResponse.builder()
+            .status("200")
+            .title("success")
+            .payload(totalView)
+            .message("You have successfully get total views per week.")
+            .build();
+    return ResponseEntity.ok(genericResponse);
+  }
+
+  @Operation(summary = "(Get total views per month for admin )")
+  @GetMapping("/admin/TotalViewPerMonth")
+  public ResponseEntity<?> getTotalViewAdminPerMonth(
+  ) {
+    Integer totalView = articleService.getTotalViewAdminPerMonth();
+    GenericResponse genericResponse = GenericResponse.builder()
+            .status("200")
+            .title("success")
+            .payload(totalView)
+            .message("You have successfully get total views per month.")
+            .build();
+    return ResponseEntity.ok(genericResponse);
+  }
+
+  @Operation(summary = "(Get total views per year for admin )")
+  @GetMapping("/admin/TotalViewPerYear")
+  public ResponseEntity<?> getTotalViewAdminPerYear(
+  ) {
+    Integer totalView = articleService.getTotalViewAdminPerYear();
+    GenericResponse genericResponse = GenericResponse.builder()
+            .status("200")
+            .title("success")
+            .payload(totalView)
+            .message("You have successfully get total views per year.")
             .build();
     return ResponseEntity.ok(genericResponse);
   }

@@ -52,6 +52,8 @@ public class WeAreKhmerSecurity {
             "/api/v1/files/file/filename",
             "/api/v1/comment/article/{articleId}",
             "/api/v1/article/category/**",
+            "/api/v1/article/increase/{articleId}",
+            //            "/api/v1/notification"
             "/api/v1/order-navbar",
     };
 
@@ -121,7 +123,6 @@ public class WeAreKhmerSecurity {
                 //                .authorizeHttpRequests()
                 //                .requestMatchers("/", "/user", "/swagger-ui/index.html").permitAll()
                 .authorizeHttpRequests()
-//                .requestMatchers("/api/v1/notification/**").hasRole("ADMIN")
                 .requestMatchers("/api/v1/author/{authorId}").hasAnyRole("AUTHOR", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/files/file/**")
                 .hasAnyRole("ADMIN", "AUTHOR")
@@ -129,7 +130,7 @@ public class WeAreKhmerSecurity {
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers("/api/v1/comment/article")
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")
-                .requestMatchers("/api/v1/notification/**").hasAnyRole("ADMIN", "AUTHOR")
+                //                .requestMatchers(HttpMethod.GET,"/api/v1/notification").hasAnyRole("ADMIN","AUTHOR")
                 .requestMatchers("/api/v1/rating")
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers(HttpMethod.POST, "/api/v1/report")
@@ -154,17 +155,19 @@ public class WeAreKhmerSecurity {
                 .hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/category")
                 .hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/v1/article/user")
+                .requestMatchers(HttpMethod.POST, "/api/v1/article/author")
                 .hasRole("AUTHOR")
-                .requestMatchers(HttpMethod.PUT, "/api/v1/article/user")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/article/author")
                 .hasRole("AUTHOR")
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/article/user")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/article/author")
                 .hasRole("AUTHOR")
-                .requestMatchers(HttpMethod.GET, "/api/v1/article/user/**")
+                .requestMatchers(HttpMethod.GET, "/api/v1/article/author/**")
                 .hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.GET, "/api/v1/notification")
                 .hasAnyRole("ADMIN", "AUTHOR")
                 .requestMatchers(HttpMethod.POST, "/api/v1/order-navbar")
+                .hasRole("ADMIN")
+                .requestMatchers("/api/v1/article/admin/**")
                 .hasRole("ADMIN")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()

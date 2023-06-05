@@ -103,23 +103,23 @@ public class ArticleServiceImp implements ArticleService {
     }
 
     @Override
-    public List<ArticleResponse> getAllArticlesByYesterday() {
-        return articleMapper.getAllArticlesByYesterday();
+    public List<ArticleResponse> getAllArticlesByYesterday(Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllArticlesByYesterday(pageNumber, nextPage);
     }
 
     @Override
-    public List<ArticleResponse> getAllArticlesByLastWeek() {
-        return articleMapper.getAllArticlesByLastWeek();
+    public List<ArticleResponse> getAllArticlesPerWeek(Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllArticlesPerWeek(pageNumber, nextPage);
     }
 
     @Override
-    public List<ArticleResponse> getAllArticlesByLastMonth() {
-        return articleMapper.getAllArticlesByLastMonth();
+    public List<ArticleResponse> getAllArticlesPerMonth(Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllArticlesPerMonth(pageNumber, nextPage);
     }
 
     @Override
-    public List<ArticleResponse> getAllArticlesByLastYear() {
-        return articleMapper.getAllArticlesByLastYear();
+    public List<ArticleResponse> getAllArticlesPerYear(Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllArticlesPerYear(pageNumber, nextPage);
     }
 
     @Override
@@ -161,5 +161,35 @@ public class ArticleServiceImp implements ArticleService {
     @Override
     public List<ArticleResponse> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage) {
         return articleMapper.getAllArticleCurrentUserPerYear(userId,pageNumber,nextPage);
+    }
+
+    @Override
+    public Integer getTotalViewCurrentAuthorPerWeek(String userId) {
+        return articleMapper.getTotalViewCurrentAuthorPerWeek(userId);
+    }
+
+    @Override
+    public Integer getTotalViewCurrentAuthorPerMonth(String userId) {
+        return articleMapper.getTotalViewCurrentAuthorPerMonth(userId);
+    }
+
+    @Override
+    public Integer getTotalViewCurrentAuthorPerYear(String userId) {
+        return articleMapper.getTotalViewCurrentAuthorPerYear(userId);
+    }
+
+    @Override
+    public Integer getTotalViewAdminPerWeek() {
+        return articleMapper.getTotalViewAdminPerWeek();
+    }
+
+    @Override
+    public Integer getTotalViewAdminPerMonth() {
+        return articleMapper.getTotalViewAdminPerMonth();
+    }
+
+    @Override
+    public Integer getTotalViewAdminPerYear() {
+        return articleMapper.getTotalViewAdminPerYear();
     }
 }
