@@ -1,4 +1,4 @@
-CREATE TYPE notification_type as ENUM ('COMMENT', 'LIKE', 'REPORT', 'USER_REQUEST_AS_AUTHOR');
+CREATE TYPE notification_type as ENUM ('COMMENT_ON_ARTICLE', 'LIKE_ON_ARTICLE', 'REPORT_ON_ARTICLE', 'USER_REQUEST_AS_AUTHOR');
 drop type if exists notification_type cascade;
 
 create table notification_tb
@@ -33,15 +33,15 @@ BEGIN
         BEGIN
             IF
                 (TG_TABLE_NAME = 'react_tb') THEN
-                notification_type_value := 'LIKE';
+                notification_type_value := 'LIKE_ON_ARTICLE';
                 SELECT rb.article_id INTO notification_type_id FROM react_tb rb WHERE rb.article_id = NEW.article_id;
             ELSIF
                 (TG_TABLE_NAME = 'comment_tb') THEN
-                notification_type_value := 'COMMENT';
+                notification_type_value := 'COMMENT_ON_ARTICLE';
                 SELECT cb.article_id INTO notification_type_id FROM comment_tb cb WHERE cb.article_id = NEW.article_id;
             ELSIF
                 (TG_TABLE_NAME = 'report_tb') THEN
-                notification_type_value := 'REPORT';
+                notification_type_value := 'REPORT_ON_ARTICLE';
                 SELECT rb.article_id INTO notification_type_id FROM report_tb rb WHERE rb.article_id = NEW.article_id;
             ELSIF
                 (TG_TABLE_NAME = 'author_request_tb') THEN

@@ -52,7 +52,7 @@ declare
     count_user_Like integer;
 begin
     select count(*) into count_user_Like
-    from react_tb where user_id = NEW.user_id;
+    from react_tb where user_id = NEW.user_id and article_id = NEW.article_id;
 
     if count_user_Like > 0 then
         raise exception 'one article, one user can like';
@@ -65,8 +65,13 @@ $$ language plpgsql;
 -- must execute
 create trigger trg_check_exist_only_one_like_in_a_record_per_user
     before insert or update on react_tb for each row execute function check_exist_only_one_like_in_a_record_per_user();
+drop trigger trg_check_exist_only_one_like_in_a_record_per_user on react_tb;
 
 
 -- Test
 -- get count user_react_like_article
-select count(*) from react_tb where article_id = '8256a9af-da04-4c25-837f-3b9ccebd443a'
+select count(*) from react_tb where article_id = '8256a9af-da04-4c25-837f-3b9ccebd443a';
+
+
+
+SELECT EXISTS(SELECT 1 FROM react_tb WHERE react_tb.article_id = '2ab802da-c99b-4582-a9de-50e714f058d6' AND react_tb.user_id = '1a816fc1-90cb-480a-93ed-6b5e21322bd0');

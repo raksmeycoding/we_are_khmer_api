@@ -25,6 +25,7 @@ public class ReactServiceImpl implements IReactService{
 
     @Override
     public boolean isLikeExist(String articleId, String userId) {
+        boolean is = reactRepository.isLikeExist(articleId, userId);
         return reactRepository.isLikeExist(articleId,userId);
     }
 }

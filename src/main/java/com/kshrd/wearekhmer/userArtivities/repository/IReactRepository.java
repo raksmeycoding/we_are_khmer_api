@@ -30,7 +30,7 @@ public interface IReactRepository {
     React deleteUserReactForCurrentUser(React react);
 
     @Select("""
-    SELECT EXISTS(SELECT 1 FROM react_tb WHERE article_id = #{articleId} AND user_id = #{userId});
-            """)
+            SELECT EXISTS(SELECT 1 FROM react_tb WHERE react_tb.article_id = #{articleId} AND react_tb.user_id = #{userId})
+                    """)
     boolean isLikeExist(String articleId, String userId);
 }
