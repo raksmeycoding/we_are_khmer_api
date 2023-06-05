@@ -75,7 +75,7 @@ public class OrderNavbarController {
     ResponseEntity<?> getOrderNavbar() {
         List<NavbarResponse> navbarList = navbarService.getNavbarAsNavbarResponse();
         GenericResponse genericResponse = GenericResponse.builder()
-                .message("Get data s uccessfully.")
+                .message("Get data successfully.")
                 .title("success")
                 .status("200")
                 .payload(navbarList)
