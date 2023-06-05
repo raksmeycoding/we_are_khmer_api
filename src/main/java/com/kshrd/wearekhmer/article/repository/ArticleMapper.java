@@ -271,9 +271,9 @@ public interface ArticleMapper {
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
             from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
             WHERE  publish_date :: date = current_date -1 AND isban = false
-            ORDER BY publish_date DESC LIMIT 20 OFFSET 0
+            ORDER BY publish_date DESC limit #{pageNumber} offset #{nextPage}
             """)
-    List<ArticleResponse> getAllArticlesByYesterday();
+    List<ArticleResponse> getAllArticlesByYesterday(Integer pageNumber, Integer nextPage);
 
     @Select("""
             select ab.article_id,
@@ -293,12 +293,11 @@ public interface ArticleMapper {
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
             from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
-            WHERE publish_date >= current_date - interval '6 days'
-            AND publish_date < current_date + interval '1 day' 
+            WHERE DATE_TRUNC('week', publish_date) = DATE_TRUNC('week', current_date)
             AND isban = false
-            ORDER BY publish_date DESC LIMIT 20 OFFSET 0
+            ORDER BY publish_date DESC limit #{pageNumber} offset #{nextPage}
             """)
-    List<ArticleResponse> getAllArticlesByLastWeek();
+    List<ArticleResponse> getAllArticlesPerWeek(Integer pageNumber, Integer nextPage);
 
     @Select("""
             select ab.article_id,
@@ -318,12 +317,12 @@ public interface ArticleMapper {
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
             from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
-            WHERE date_trunc('month', publish_date)=
-            date_trunc('month', current_date - interval '1 month')
+            WHERE EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
+            AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date)
             AND isban = false 
-            ORDER BY publish_date DESC LIMIT 20 OFFSET 0
+            ORDER BY publish_date DESC limit #{pageNumber} offset #{nextPage}
             """)
-    List<ArticleResponse> getAllArticlesByLastMonth();
+    List<ArticleResponse> getAllArticlesPerMonth(Integer pageNumber, Integer nextPage);
 
     @Select("""
             select ab.article_id,
@@ -343,11 +342,12 @@ public interface ArticleMapper {
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
             from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
-            WHERE publish_date BETWEEN DATE_TRUNC('year', CURRENT_DATE - INTERVAL '1 year') AND DATE_TRUNC('year', CURRENT_DATE) - INTERVAL '1 day'
+            WHERE date_trunc('year', publish_date) = date_trunc('year', current_date)
+            AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date)
             AND isban = false 
-            ORDER BY publish_date DESC LIMIT 20 OFFSET 0
+            ORDER BY publish_date DESC limit #{pageNumber} offset #{nextPage}
             """)
-    List<ArticleResponse> getAllArticlesByLastYear();
+    List<ArticleResponse> getAllArticlesPerYear(Integer pageNumber, Integer nextPage);
 
     @Select("""
             select ab.article_id,
@@ -369,7 +369,7 @@ public interface ArticleMapper {
             from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
             WHERE publish_date >= #{startDate} AND publish_date <= #{endDate}
             AND isban = false 
-            ORDER BY publish_date DESC LIMIT 20 OFFSET 0
+            ORDER BY publish_date DESC 
             """)
     List<ArticleResponse> getAllArticlesByDateRange(Date startDate, java.sql.Date endDate);
 
@@ -553,4 +553,52 @@ public interface ArticleMapper {
                     AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
     List<ArticleResponse> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage);
+
+
+    @Select("""
+            SELECT COALESCE(SUM(count_view),0) AS total_views
+            FROM article_tb
+            WHERE DATE_TRUNC('week', publish_date) = DATE_TRUNC('week', current_date) AND user_id = #{userId}
+            """)
+    Integer getTotalViewCurrentAuthorPerWeek(String userId);
+
+    @Select("""
+            SELECT COALESCE(SUM(count_view),0) AS total_views
+            FROM article_tb
+            WHERE EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
+              AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND user_id = #{userId}
+            """)
+    Integer getTotalViewCurrentAuthorPerMonth(String userId);
+
+    @Select("""
+            SELECT COALESCE(SUM(count_view),0) AS total_views
+            FROM article_tb
+            WHERE date_trunc('year', publish_date) = date_trunc('year', current_date)
+                    AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND user_id = #{userId}
+            """)
+    Integer getTotalViewCurrentAuthorPerYear(String userId);
+
+    @Select("""
+            SELECT COALESCE(SUM(count_view),0) AS total_views
+            FROM article_tb
+            WHERE DATE_TRUNC('week', publish_date) = DATE_TRUNC('week', current_date)
+            """)
+    Integer getTotalViewAdminPerWeek();
+
+    @Select("""
+            SELECT COALESCE(SUM(count_view),0) AS total_views
+            FROM article_tb
+            WHERE EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
+              AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date);
+            """)
+    Integer getTotalViewAdminPerMonth();
+
+    @Select("""
+            SELECT COALESCE(SUM(count_view),0) AS total_views FROM article_tb
+            WHERE date_trunc('year', publish_date) = date_trunc('year', current_date)
+            AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date)
+            """)
+    Integer getTotalViewAdminPerYear();
+
+
 }

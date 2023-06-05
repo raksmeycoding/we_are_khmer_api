@@ -34,13 +34,13 @@ public interface ArticleService {
 
     String increaseArticleViewCount(String articleId);
 
-    List<ArticleResponse> getAllArticlesByYesterday();
+    List<ArticleResponse> getAllArticlesByYesterday(Integer pageNumber, Integer nextPage);
 
-    List<ArticleResponse> getAllArticlesByLastWeek();
+    List<ArticleResponse> getAllArticlesPerWeek(Integer pageNumber, Integer nextPage);
 
-    List<ArticleResponse> getAllArticlesByLastMonth();
+    List<ArticleResponse> getAllArticlesPerMonth(Integer pageNumber, Integer nextPage);
 
-    List<ArticleResponse> getAllArticlesByLastYear();
+    List<ArticleResponse> getAllArticlesPerYear(Integer pageNumber, Integer nextPage);
 
     List<ArticleResponse> getAllArticlesByDateRange(Date startDate, Date endDate);
 
@@ -51,4 +51,15 @@ public interface ArticleService {
     List<ArticleResponse> getAllArticleCurrentUserPerWeek(String userId, Integer pageNumber, Integer nextPage);
     List<ArticleResponse> getAllArticleCurrentUserPerMonth(String userId, Integer pageNumber, Integer nextPage);
     List<ArticleResponse> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage);
+
+    Integer getTotalViewCurrentAuthorPerWeek(String userId);
+    Integer getTotalViewCurrentAuthorPerMonth(String userId);
+    Integer getTotalViewCurrentAuthorPerYear(String userId);
+
+    Integer getTotalViewAdminPerWeek();
+    Integer getTotalViewAdminPerMonth();
+
+    Integer getTotalViewAdminPerYear();
+
+
 }

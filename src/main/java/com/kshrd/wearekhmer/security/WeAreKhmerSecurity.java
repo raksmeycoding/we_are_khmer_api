@@ -52,6 +52,7 @@ public class WeAreKhmerSecurity {
             "/api/v1/files/file/filename",
             "/api/v1/comment/article/{articleId}",
             "/api/v1/article/category/**",
+            "/api/v1/article/increase/{articleId}",
             //            "/api/v1/notification"
             "/api/v1/order-navbar",
     };
@@ -154,17 +155,19 @@ public class WeAreKhmerSecurity {
                 .hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/category")
                 .hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/v1/article/user")
+                .requestMatchers(HttpMethod.POST, "/api/v1/article/author")
                 .hasRole("AUTHOR")
-                .requestMatchers(HttpMethod.PUT, "/api/v1/article/user")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/article/author")
                 .hasRole("AUTHOR")
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/article/user")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/article/author")
                 .hasRole("AUTHOR")
-                .requestMatchers(HttpMethod.GET, "/api/v1/article/user/**")
+                .requestMatchers(HttpMethod.GET, "/api/v1/article/author/**")
                 .hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.GET, "/api/v1/notification")
                 .hasAnyRole("ADMIN", "AUTHOR")
                 .requestMatchers(HttpMethod.POST, "/api/v1/order-navbar")
+                .hasRole("ADMIN")
+                .requestMatchers("/api/v1/article/admin/**")
                 .hasRole("ADMIN")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()
