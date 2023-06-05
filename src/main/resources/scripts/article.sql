@@ -188,6 +188,8 @@ from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join c
 
 select count(*) as record_count from article_tb;
 
-select * from article_tb;
+
+
+
 
 

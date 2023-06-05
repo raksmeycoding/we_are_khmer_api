@@ -500,10 +500,9 @@ public interface ArticleMapper {
             from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
-            where publish_date >= (current_date - interval '6 days')
-                                AND (publish_date < current_date + interval '1 day') AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
+            where date_trunc('week', publish_date) = date_trunc('week', current_date) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
-    List<ArticleResponse> getAllArticleCurrentUserByLastWeek(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse> getAllArticleCurrentUserPerWeek(String userId, Integer pageNumber, Integer nextPage);
 
     @Select("""
             select ab.article_id,
@@ -525,9 +524,33 @@ public interface ArticleMapper {
             from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
-            where date_trunc('month', publish_date)=
-                        date_trunc('month', current_date - interval '1 month') AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
+            where EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
+                    AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
-    List<ArticleResponse> getAllArticleCurrentUserByLastMonth(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse> getAllArticleCurrentUserPerMonth(String userId, Integer pageNumber, Integer nextPage);
 
+    @Select("""
+            select ab.article_id,
+                   ab.user_id,
+                   ab.category_id,
+                   ab.title,
+                   ab.sub_title,
+                   ab.publish_date,
+                   ab.description,
+                   ab.updatedat,
+                   coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
+                   ab.count_view,
+                   ab.isban,
+                   ab.hero_card_in,
+                   ub.photo_url,
+                   ub.username                                                                as author_name,
+                   c.category_name,
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
+            from article_tb ab
+                     inner join user_tb ub on ab.user_id = ub.user_id
+                     inner join category c on c.category_id = ab.category_id
+            where date_trunc('year', publish_date) = date_trunc('year', current_date)
+                    AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
+                        """)
+    List<ArticleResponse> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage);
 }
