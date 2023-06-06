@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,6 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     private WeAreKhmerValidation weAreKhmerValidation;
-
 
 
     @GetMapping
@@ -88,12 +88,13 @@ public class CategoryController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "(Only administrator can create this category.)")
-    public ResponseEntity<?> insertCategory(@RequestBody CategoryRequestDTO category) {
+    public ResponseEntity<?> insertCategory(@RequestBody @Validated CategoryRequestDTO category) {
         if (!weAreKhmerValidation.isAdmin()) {
             throw new CustomRuntimeException("You are not administrator.");
         }
 
         Category category1 = Category.builder()
+                .categoryImage(category.getCategoryImage())
                 .categoryName(category.getCategoryName())
                 .build();
         GenericResponse genericResponse;
@@ -123,7 +124,7 @@ public class CategoryController {
     @PutMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "(Only administrator can update this category.)")
-    public ResponseEntity<?> updateCategory(Category category) {
+    public ResponseEntity<?> updateCategory(@RequestBody @Validated Category category) {
         if (!weAreKhmerValidation.isAdmin()) {
             throw new CustomRuntimeException("You are not administrator.");
         }

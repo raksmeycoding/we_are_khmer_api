@@ -30,7 +30,7 @@ public interface CategoryMapper {
     Category getCategoryById(@Param("categoryId") String categoryId);
 
     @Select("""
-            INSERT INTO category (category_name) VALUES (#{category.categoryName}) returning *
+            INSERT INTO category (category_name, category_image) VALUES (#{category.categoryName}, #{category.categoryImage}) returning *
             """)
     @ResultMap("categoryMap")
     Category insertCategory(@Param("category") Category category);
