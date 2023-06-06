@@ -39,6 +39,6 @@ select exists(select 1 from report_tb where report_tb.report_id = '773066fb-bd6c
 
 
 -- delete report by id
-delete from report_tb where report_id = '' returning *
+delete from user_report_author_tb where user_report_author_id = '48082806-9b09-41af-9a6b-769abd9a3e42' returning *;
 
 

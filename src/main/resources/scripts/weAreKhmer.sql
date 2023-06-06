@@ -10,7 +10,7 @@ WHERE extname = 'uuid-ossp';
 
 
 CREATE TYPE gender as ENUM ('male', 'female', 'other');
-drop type if exists gender cascade;
+-- drop type if exists gender cascade;
 
 CREATE TABLE IF NOT EXISTS user_tb
 (

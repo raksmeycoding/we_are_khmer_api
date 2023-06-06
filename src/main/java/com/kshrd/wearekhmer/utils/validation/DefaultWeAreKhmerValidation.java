@@ -20,13 +20,18 @@ import com.kshrd.wearekhmer.userReviewAuthor.repository.UserReviewAuthorMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.stereotype.Service;
+import org.springframework.web.ErrorResponseException;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.net.URI;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -244,6 +249,12 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
         return articleMapper.isCategoryNameExists(categoryName);
 
     }
+
+
+
+
+
+
 }
 
 

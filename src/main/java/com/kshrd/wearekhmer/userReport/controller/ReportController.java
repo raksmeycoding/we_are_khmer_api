@@ -1,12 +1,11 @@
 package com.kshrd.wearekhmer.userReport.controller;
 
 
-import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
-import com.kshrd.wearekhmer.userReport.model.Report;
-import com.kshrd.wearekhmer.userReport.model.dto.ReportDto;
-import com.kshrd.wearekhmer.userReport.request.ReportRequest;
-import com.kshrd.wearekhmer.userReport.service.ReportService;
+import com.kshrd.wearekhmer.userReport.model.reportArticle.Report;
+import com.kshrd.wearekhmer.userReport.model.reportArticle.dto.ReportDto;
+import com.kshrd.wearekhmer.userReport.request.reportArticle.ReportRequest;
+import com.kshrd.wearekhmer.userReport.service.reportArticle.ReportService;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,4 +1,4 @@
-package com.kshrd.wearekhmer.userReport.request;
+package com.kshrd.wearekhmer.userReport.request.reportArticle;
 
 
 import jakarta.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.kshrd.wearekhmer.userReport.model;
+package com.kshrd.wearekhmer.userReport.model.reportArticle;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -123,6 +123,12 @@ public class WeAreKhmerSecurity {
                 //                .authorizeHttpRequests()
                 //                .requestMatchers("/", "/user", "/swagger-ui/index.html").permitAll()
                 .authorizeHttpRequests()
+//                ⚠️ Smey
+//                feature user report author
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/report/author/{reportId}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/v1/report/author").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/v1/report/author/{reportId}").hasRole("USER")
+//                end feature report author
                 .requestMatchers("/api/v1/author/{authorId}").hasAnyRole("AUTHOR", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/files/file/**")
                 .hasAnyRole("ADMIN", "AUTHOR")

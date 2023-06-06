@@ -1,10 +1,9 @@
-package com.kshrd.wearekhmer.userReport.service;
+package com.kshrd.wearekhmer.userReport.service.reportArticle;
 
 
-import com.kshrd.wearekhmer.userReport.model.Report;
-import com.kshrd.wearekhmer.userReport.model.dto.ReportDto;
+import com.kshrd.wearekhmer.userReport.model.reportArticle.Report;
+import com.kshrd.wearekhmer.userReport.model.reportArticle.dto.ReportDto;
 import com.kshrd.wearekhmer.userReport.repository.ReportMapper;
-import com.kshrd.wearekhmer.userReport.request.ReportRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

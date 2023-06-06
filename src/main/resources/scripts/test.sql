@@ -29,3 +29,8 @@ from article_tb ab inner join react_tb rb on ab.article_id = 'e8912fd9-9673-46a3
 select article_tb.user_id from article_tb where article_tb.article_id = 'e8912fd9-9673-46a3-9c50-5be67aadd137';
 
 select max(ub.user_id) from user_tb ub inner join article_tb a on ub.user_id = a.user_id where ub.user_id = 'd0e1bd19-d4bc-45d5-9beb-32538d16b769';
+
+
+
+
+

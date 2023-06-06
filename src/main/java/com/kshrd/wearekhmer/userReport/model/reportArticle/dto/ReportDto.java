@@ -1,4 +1,4 @@
-package com.kshrd.wearekhmer.userReport.model.dto;
+package com.kshrd.wearekhmer.userReport.model.reportArticle.dto;
 
 
 import lombok.AllArgsConstructor;

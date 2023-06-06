@@ -12,18 +12,24 @@ import com.kshrd.wearekhmer.user.repository.QuoteMapper;
 import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.stereotype.Service;
+import org.springframework.web.ErrorResponseException;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.List;
 
 @Data
@@ -150,7 +156,36 @@ public class ServiceHelperImpl implements ServiceClassHelper {
         public static FileDeletion getInstance() {
             return new FileDeletion();
         }
+    }
 
 
+//    public void validatePSQLException(HttpServletRequest httpServletRequest, Exception  ex){
+//        if (ex.getCause() instanceof SQLException) {
+//            String message = ex.getCause().getMessage();
+//            System.out.println(message);
+//            int startIndex = message.indexOf("ERROR:");
+//            int endIndex = message.indexOf("\n");
+//            String returnMessage = message.substring(startIndex, endIndex);
+//            System.out.println(returnMessage);            ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, returnMessage);
+//            URI uri = URI.create(httpServletRequest.getRequestURL().toString());
+//            problemDetail.setType(uri);
+//            throw new ErrorResponseException(HttpStatus.FORBIDDEN, problemDetail, ex.getCause());
+//        }
+//    }
+
+
+    @Override
+    public void helpThrowPSQLException(HttpServletRequest httpServletRequest, Exception ex) {
+        if (ex.getCause() instanceof SQLException) {
+            String message = ex.getCause().getMessage();
+            System.out.println(message);
+            int startIndex = message.indexOf("ERROR:");
+            int endIndex = message.indexOf("\n");
+            String returnMessage = message.substring(startIndex, endIndex);
+            System.out.println(returnMessage);            ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, returnMessage);
+            URI uri = URI.create(httpServletRequest.getRequestURL().toString());
+            problemDetail.setType(uri);
+            throw new ErrorResponseException(HttpStatus.FORBIDDEN, problemDetail, ex.getCause());
+        }
     }
 }

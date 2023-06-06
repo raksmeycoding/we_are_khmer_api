@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -45,6 +46,9 @@ public interface WeAreKhmerValidation {
     boolean checkAuthorExist(String authorId);
 
     boolean checkCategoryNameExist(String categoryName);
+
+
+
 
 
 
