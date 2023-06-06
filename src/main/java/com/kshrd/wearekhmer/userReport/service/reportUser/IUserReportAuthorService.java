@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.userReport.service.reportUser;
 
 import com.kshrd.wearekhmer.userReport.model.reportUser.UserReportAuthorDatabaseReponse;
+import com.kshrd.wearekhmer.userReport.request.userReportAuthor.AdminIsApproveMapperRequest;
 import com.kshrd.wearekhmer.userReport.request.userReportAuthor.UserReportAuthorRequest;
 
 import java.util.List;
@@ -10,5 +11,7 @@ public interface IUserReportAuthorService {
 
     List<UserReportAuthorDatabaseReponse> getAllUserReportAuthor();
     UserReportAuthorDatabaseReponse deleteUserReportAuthorById(String report_id);
+
+    List<String> adminWillApproveOrNot(AdminIsApproveMapperRequest adminIsApproveMapperRequest);
 }
 

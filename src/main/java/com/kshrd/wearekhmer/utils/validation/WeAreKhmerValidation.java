@@ -47,8 +47,7 @@ public interface WeAreKhmerValidation {
 
     boolean checkCategoryNameExist(String categoryName);
 
-
-
+    void validateAdminIsRejectOrApprove(String status);
 
 
 

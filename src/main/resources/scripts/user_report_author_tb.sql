@@ -76,19 +76,18 @@ $$
 begin
     if NEW.status = 'APPROVED' then
         update user_tb set is_enable = false where user_tb.user_id = NEW.author_id;
-    elseif NEW.status = 'REJECTED' then
-        update user_report_author_tb set status = NEW.status where user_report_author_tb.author_id = NEW.author_id;
     end if;
     return NEW;
 end;
 $$
     language plpgsql;
 
-
 DROP function check_status_on_table_user_report_author cascade;
-update user_report_author_tb
+
+
+update user_report_author_tb urab
 set status = 'APPROVED'
-where user_report_author_tb.author_id = '90fe14d8-49c8-4f52-bfc6-5a8de8a73f75';
+where urab.author_id = '3ec5231c-f6e6-4a03-aa8f-9b99b1c5a6b9' returning urab.author_id;
 
 
 create trigger trigger_check_status_on_table_user_report_author

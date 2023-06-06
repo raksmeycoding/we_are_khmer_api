@@ -7,14 +7,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class UserReportAuthorRequestBody {
+public class AdminIsApproveRequestBody {
 
-    @NotNull(message = "reason must be not null.")
-    @NotBlank(message = "reason must not be blank.")
-    private String reason;
+
+    @NotNull(message = "status must be not null.")
+    @NotBlank(message = "status must not be blank.")
+    private String status;
 }

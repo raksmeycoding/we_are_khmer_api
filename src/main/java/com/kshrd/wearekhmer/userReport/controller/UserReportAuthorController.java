@@ -3,6 +3,8 @@ package com.kshrd.wearekhmer.userReport.controller;
 
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.userReport.model.reportUser.UserReportAuthorDatabaseReponse;
+import com.kshrd.wearekhmer.userReport.request.userReportAuthor.AdminIsApproveMapperRequest;
+import com.kshrd.wearekhmer.userReport.request.userReportAuthor.AdminIsApproveRequestBody;
 import com.kshrd.wearekhmer.userReport.request.userReportAuthor.UserReportAuthorRequest;
 import com.kshrd.wearekhmer.userReport.request.userReportAuthor.UserReportAuthorRequestBody;
 import com.kshrd.wearekhmer.userReport.service.reportUser.IUserReportAuthorService;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +41,7 @@ public class UserReportAuthorController {
 
     @PostMapping("/{authorId}")
     @Operation(summary = "(User can report author)")
-    public ResponseEntity<?> insertUserReportAuthor(HttpServletRequest httpServletRequest, @PathVariable String authorId, @RequestBody UserReportAuthorRequestBody userReportAuthorRequestBody) {
+    public ResponseEntity<?> insertUserReportAuthor(HttpServletRequest httpServletRequest, @PathVariable String authorId, @RequestBody @Validated UserReportAuthorRequestBody userReportAuthorRequestBody) {
         try {
             UserReportAuthorRequest userReportAuthorRequest = UserReportAuthorRequest.builder()
                     .user_id(weAreKhmerCurrentUser.getUserId())
@@ -84,5 +87,31 @@ public class UserReportAuthorController {
                 .status("200")
                 .title("Delete successfully!")
                 .build());
+    }
+
+
+    @PostMapping("/isAdminAccept/{authorId}")
+    public ResponseEntity<?> adminApproveOrRejectToBandAuthor(HttpServletRequest httpServletRequest, @PathVariable String authorId, @RequestBody @Validated AdminIsApproveRequestBody adminIsApproveRequestBody) {
+        try {
+            weAreKhmerValidation.validateAdminIsRejectOrApprove(adminIsApproveRequestBody.getStatus());
+            AdminIsApproveMapperRequest adminIsApproveMapperRequest = AdminIsApproveMapperRequest.builder()
+                    .author_id(authorId)
+                    .status(adminIsApproveRequestBody.getStatus())
+                    .build();
+            List<String> effectedRowAuthorId = userReportAuthorService.adminWillApproveOrNot(adminIsApproveMapperRequest);
+            if (effectedRowAuthorId.size() == 0) {
+                throw new IllegalArgumentException("No author with #id=" + authorId + " had been found!");
+            }
+            return ResponseEntity.ok().body(GenericResponse.builder()
+                    .title("success")
+                    .status("200")
+                    .message("Administrator updated author permission with #id= + " + authorId + " accessing DOMRRA platform.")
+                    .build());
+        } catch (Exception ex) {
+            serviceClassHelper.helpThrowPSQLException(httpServletRequest, ex);
+            ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
+            problemDetail.setType(URI.create(httpServletRequest.getRequestURL().toString()));
+            throw new ErrorResponseException(HttpStatus.BAD_REQUEST, problemDetail, null);
+        }
     }
 }

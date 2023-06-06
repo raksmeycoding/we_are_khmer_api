@@ -1,10 +1,7 @@
 package com.kshrd.wearekhmer.utils.validation;
 
 
-import com.kshrd.wearekhmer.Category.model.Category;
 import com.kshrd.wearekhmer.Category.repository.CategoryMapper;
-import com.kshrd.wearekhmer.article.model.entity.Article;
-import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
@@ -16,24 +13,20 @@ import com.kshrd.wearekhmer.user.repository.UserAppRepository;
 import com.kshrd.wearekhmer.userArtivities.repository.IReactRepository;
 import com.kshrd.wearekhmer.userRating.RatingRepository;
 import com.kshrd.wearekhmer.userReport.repository.ReportMapper;
-import com.kshrd.wearekhmer.userReviewAuthor.repository.UserReviewAuthorMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.stereotype.Service;
-import org.springframework.web.ErrorResponseException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.net.URI;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 @Service
@@ -59,9 +52,9 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     private final UserAppRepository userAppRepository;
 
-   private final RatingRepository ratingRepository;
+    private final RatingRepository ratingRepository;
 
-   private final IReactRepository reactRepository;
+    private final IReactRepository reactRepository;
 
     @Override
     public void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize) {
@@ -135,8 +128,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     @Override
     public boolean validateArticleId(String articleId) {
-        if(!articleService.isArticleExist(articleId)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Article ID : "+articleId+ " does not exists");
+        if (!articleService.isArticleExist(articleId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Article ID : " + articleId + " does not exists");
         }
         return articleService.isArticleExist(articleId);
 
@@ -144,15 +137,15 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     @Override
     public boolean validateReportId(String reportId) {
-        if(!reportMapper.isReportExistByIs(reportId))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Report ID : "+reportId+" does not exists");
+        if (!reportMapper.isReportExistByIs(reportId))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Report ID : " + reportId + " does not exists");
         return reportMapper.isReportExistByIs(reportId);
     }
 
     @Override
     public boolean validateHistoryId(String historyId, String userId) {
-        if(!historyMapper.validateHistoryId(historyId,userId)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User have no History ID : "+ historyId );
+        if (!historyMapper.validateHistoryId(historyId, userId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User have no History ID : " + historyId);
         }
         return historyMapper.validateHistoryId(historyId, userId);
     }
@@ -164,8 +157,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     @Override
     public boolean validateBookmarkId(String bookmarkId, String userId) {
-        if(!bookmarkMapper.validateBookmarkId(bookmarkId,userId)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User have no Bookmark ID : "+ bookmarkId);
+        if (!bookmarkMapper.validateBookmarkId(bookmarkId, userId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User have no Bookmark ID : " + bookmarkId);
         }
         return bookmarkMapper.validateBookmarkId(bookmarkId, userId);
     }
@@ -218,8 +211,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     @Override
     public boolean validateCategoryId(String categoryId) {
 
-        if(!categoryMapper.isCategoryExist(categoryId)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"categoryId "+ categoryId + " does not exists");
+        if (!categoryMapper.isCategoryExist(categoryId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "categoryId " + categoryId + " does not exists");
         }
         return categoryMapper.isCategoryExist(categoryId);
     }
@@ -227,34 +220,46 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     @Override
     public boolean validateArticleIdByCurrentUser(String articleId, String userId) {
 
-        if(!articleMapper.validateArticleIdByCurrentUser(articleId,userId))
+        if (!articleMapper.validateArticleIdByCurrentUser(articleId, userId))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You are not own this article or this article is not exist.");
 
-        return articleMapper.validateArticleIdByCurrentUser(articleId,userId);
+        return articleMapper.validateArticleIdByCurrentUser(articleId, userId);
 
     }
 
     @Override
     public boolean checkAuthorExist(String authorId) {
-        if(!(ratingRepository.isExistAuthor(authorId)))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"author does not exists");
+        if (!(ratingRepository.isExistAuthor(authorId)))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "author does not exists");
         else
             return ratingRepository.isExistAuthor(authorId);
     }
 
     @Override
     public boolean checkCategoryNameExist(String categoryName) {
-        if(!articleMapper.isCategoryNameExists(categoryName))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"categoryName : "+categoryName+ "does not exists");
+        if (!articleMapper.isCategoryNameExists(categoryName))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "categoryName : " + categoryName + "does not exists");
         return articleMapper.isCategoryNameExists(categoryName);
 
     }
 
+    @Override
+    public void validateAdminIsRejectOrApprove(String status) {
+        List<String> requestStatus = new ArrayList<>();
+        boolean matchOne = false;
+        requestStatus.add("APPROVED");
+        requestStatus.add("REJECTED");
+        for (String r : requestStatus) {
+            if (status.equals(r)) {
+                matchOne = true;
+                break;
+            }
+        }
+        if (!matchOne) {
+            throw new IllegalArgumentException("Required value status must be either [APPROVED, REJECTED]");
+        }
 
-
-
-
-
+    }
 }
 
 
