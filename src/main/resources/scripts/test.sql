@@ -34,3 +34,4 @@ select max(ub.user_id) from user_tb ub inner join article_tb a on ub.user_id = a
 
 
 
+update article_tb set user_id = '1a816fc1-90cb-480a-93ed-6b5e21322bd0' where article_id = '786fde51-57b3-4764-acdc-ce8e329a90aa';

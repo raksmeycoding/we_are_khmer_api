@@ -306,6 +306,7 @@ public class ArticleController {
                     .title(article.getTitle())
                     .subTitle(article.getSubTitle())
                     .description(article.getDescription())
+                    .image(article.getArticleImage())
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .categoryId(article.getCategoryId())
                     .build();

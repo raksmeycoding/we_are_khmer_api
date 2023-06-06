@@ -194,7 +194,7 @@ public interface ArticleMapper {
     Article insertArticle(Article article);
 
     @Select("""
-            UPDATE article_tb SET title = #{title}, sub_title = #{subTitle}, description = #{description}, category_id = #{categoryId} WHERE article_id = #{articleId} and user_id = #{userId} returning *
+            UPDATE article_tb SET title = #{title}, sub_title = #{subTitle}, description = #{description}, image = #{image}, category_id = #{categoryId} WHERE article_id = #{articleId} and user_id = #{userId} returning *
             """)
     @ResultMap("articleResultMap")
     Article updateArticle(Article article);

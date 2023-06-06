@@ -27,6 +27,8 @@ public class ArticleUpdateRequest {
     @NotBlank(message = "Description must be not blank.")
     @NotNull(message = "Description must be not Null.")
     private String description;
+
+    private String articleImage;
     @NotBlank(message = "Category Id must be not blank.")
     @NotNull(message = "Category Id must be not null.")
     private String categoryId;
