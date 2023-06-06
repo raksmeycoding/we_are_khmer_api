@@ -1,4 +1,4 @@
-CREATE TYPE notification_type as ENUM ('COMMENT_ON_ARTICLE', 'LIKE_ON_ARTICLE', 'REPORT_ON_ARTICLE', 'USER_REQUEST_AS_AUTHOR');
+CREATE TYPE notification_type as ENUM ('COMMENT_ON_ARTICLE', 'LIKE_ON_ARTICLE', 'REPORT_ON_ARTICLE', 'USER_REQUEST_AS_AUTHOR', 'USER_REPORT_AUTHOR');
 drop type if exists notification_type cascade;
 
 create table notification_tb
@@ -162,17 +162,35 @@ BEGIN
                         notification_type_value, notification_type_id);
 
                 RETURN NEW;
+            ELSEIF
+                (tg_table_name = 'user_report_author_tb') THEN
+                notification_type_value := 'USER_REPORT_AUTHOR';
+                select user_tb.user_id into notification_type_id from user_tb where user_tb.user_id = NEW.author_id;
+
+
+                --      to specific table
+                -- Insert the notification record
+                INSERT INTO notification_tb (createAt, sender_id, sender_image_url, sender_name, receiver_id,
+                                             notification_type, notification_type_id)
+                VALUES (current_timestamp, NEW.user_id,
+                        (select ub.photo_url from user_tb ub where ub.user_id = NEW.user_id),
+                        (select ub.username from user_tb ub where ub.user_id = NEW.user_id), (select user_tb.user_id
+                                                                                              from user_tb
+                                                                                                       inner join user_role_tb on user_tb.user_id = user_role_tb.user_id
+                                                                                                       inner join role_tb on role_tb.role_id = user_role_tb.role_id
+                                                                                              where role_tb.name = 'ROLE_ADMIN'),
+                        notification_type_value, notification_type_id);
+
+                RETURN NEW;
             ELSE
                 -- Invalid table name, do nothing
                 RETURN NULL;
             END IF;
         END;
     END IF;
-
     RETURN NULL;
 END;
-$$
-    LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 
 
@@ -208,4 +226,11 @@ CREATE TRIGGER author_request_tb_trigger
     FOR EACH ROW
 EXECUTE FUNCTION insert_notification();
 -- drop trigger author_request_tb_trigger on author_request_tb;
+
+
+create trigger user_report_author_trigger
+    after insert
+    on user_report_author_tb
+    for each row
+execute function insert_notification();
 
