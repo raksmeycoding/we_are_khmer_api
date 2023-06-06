@@ -8,8 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArticleRequest {
@@ -26,6 +26,9 @@ public class ArticleRequest {
     @NotBlank(message = "Subtitle must be not blank.")
     @NotNull(message = "Subtitle must be not Null.")
     private String description;
+
+
+    private String articleImage;
 
 
     @NotBlank(message = "Category Id must be not blank.")

@@ -175,8 +175,8 @@ public interface ArticleMapper {
             """)
     ArticleResponse getArticleByIdForCurrentUser(String articleId, String currentUserId);
 
-    @Select("INSERT INTO article_tb (title, sub_title, description, user_id, category_id) " +
-            "VALUES (#{title}, #{subTitle}, #{description}, #{userId}, #{categoryId}) returning *")
+    @Select("INSERT INTO article_tb (title, sub_title, description, image, user_id, category_id) " +
+            "VALUES (#{title}, #{subTitle}, #{description}, #{image}, #{userId}, #{categoryId}) returning *")
     @Results(id = "articleResultMap", value = {
             @Result(property = "articleId", column = "article_id"),
             @Result(property = "title", column = "title"),
