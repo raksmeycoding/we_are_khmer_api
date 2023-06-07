@@ -24,8 +24,8 @@ public class ArticleServiceImp implements ArticleService {
 
 
     @Override
-    public List<ArticleResponse> getAllArticles() {
-        return articleMapper.getAllArticles();
+    public List<ArticleResponse> getAllArticlesByLatest(Integer pageSize, Integer nextPage) {
+        return articleMapper.getAllArticlesByLatest(pageSize, nextPage);
 
     }
 
