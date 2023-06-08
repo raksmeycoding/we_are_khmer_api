@@ -15,17 +15,16 @@ import com.kshrd.wearekhmer.userRating.RatingRepository;
 import com.kshrd.wearekhmer.userReport.repository.ReportMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.enumUtil.EGender;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -81,13 +80,14 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     @Override
     public void genderValidation(String gender) {
+
         for (String g : weAreKhmerConstant.GENDER) {
             if (gender.equals(g)) {
                 return;
             }
-            throw new CustomRuntimeException("Gender must be lowercase and be formatted in (male, female, other).");
-
         }
+        throw new CustomRuntimeException("Gender must be lowercase and be formatted in (male, female, other).");
+
     }
 
 

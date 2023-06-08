@@ -234,3 +234,10 @@ create trigger user_report_author_trigger
     for each row
 execute function insert_notification();
 
+
+
+
+
+-- get all notification for admin
+select * from notification_tb nb inner join  user_tb ub on nb.receiver_id = nb.receiver_id = ub.user_id;
+

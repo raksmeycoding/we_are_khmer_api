@@ -107,6 +107,12 @@ public interface AuthorRepository {
             """)
     String userAlreadyAuthor(String userId);
 
+    @Select("""
+            select * from user_tb where is_author = true and user_id = #{authorId}
+            """)
+
+    @ResultMap("authorDTO")
+    AuthorDTO getCurrentAuthorById(String authorId);
 
 }
 

@@ -8,6 +8,7 @@ import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.service.AuthorRequestTableService;
 import com.kshrd.wearekhmer.user.service.AuthorService;
+import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -37,6 +38,8 @@ public class AuthorController {
 
     private final WeAreKhmerValidation weAreKhmerValidation;
 
+    private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
+
 
     @GetMapping("authorRequest")
     @Operation(summary = "(Get all authors request either accept as author or not.)")
@@ -65,6 +68,7 @@ public class AuthorController {
 
 
     @GetMapping("/{authorId}")
+    @Operation(summary = "(User view author profile)")
     public ResponseEntity<?> getAllAuthorById(HttpServletRequest httpServletRequest, @PathVariable String authorId) {
         AuthorDTO authorDTO = authorService.getAllAuthorById(authorId);
         if ( authorDTO == null) {
@@ -107,6 +111,20 @@ public class AuthorController {
                 .build();
         return ResponseEntity.ok(res);
 
+    }
+
+    @GetMapping("/profile")
+    @Operation(summary = "(Author view own profile ( only Author) )")
+    public ResponseEntity<?> getCurrentAuthor() {
+        weAreKhmerValidation.checkAuthorExist(weAreKhmerCurrentUser.getUserId());
+        AuthorDTO authorDTO = authorService.getCurrentAuthorById(weAreKhmerCurrentUser.getUserId());
+
+        return ResponseEntity.ok().body(GenericResponse.builder()
+                .status("200")
+                .title("success")
+                .message("Get author profile successfully.")
+                .payload(authorDTO)
+                .build());
     }
 
 }
