@@ -54,14 +54,14 @@ public class FileController {
     }
 
 
-    @PostMapping(value = "/upload -file-v2", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/upload-file-v2", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "(You can upload file to get url)")
-    public ResponseEntity<?> uploadFileVersion2(HttpServletRequest httpServletRequest, @RequestBody MultipartFile multipartFile) {
-        if (multipartFile.isEmpty()) {
+    public ResponseEntity<?> uploadFileVersion2(HttpServletRequest httpServletRequest, @RequestBody MultipartFile file) {
+        if (file.isEmpty()) {
             throw new CustomRuntimeException("File is empty");
         }
         try {
-            String returnUrl = IFileService.uploadFile(multipartFile);
+            String returnUrl = IFileService.uploadFile(file);
             return ResponseEntity.ok().body(GenericResponse.builder()
                     .title("success")
                     .message("File upload successfully!")
