@@ -56,7 +56,7 @@ public class FileController {
 
     @PostMapping(value = "/upload-file-v2", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "(You can upload file to get url)")
-    public ResponseEntity<?> uploadFileVersion2(HttpServletRequest httpServletRequest, @RequestParam MultipartFile multipartFile) {
+    public ResponseEntity<?> uploadFileVersion2(HttpServletRequest httpServletRequest, @RequestBody MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
             throw new CustomRuntimeException("File is empty");
         }
