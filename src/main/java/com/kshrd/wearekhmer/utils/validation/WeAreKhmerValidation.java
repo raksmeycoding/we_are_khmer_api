@@ -1,15 +1,9 @@
 package com.kshrd.wearekhmer.utils.validation;
 
-import com.kshrd.wearekhmer.Category.model.Category;
-import com.kshrd.wearekhmer.article.model.entity.Article;
-import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface WeAreKhmerValidation {
     void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize);

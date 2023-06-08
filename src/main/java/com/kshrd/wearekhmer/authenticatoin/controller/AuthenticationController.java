@@ -89,7 +89,7 @@ public class AuthenticationController {
             NormalUserRequest n = NormalUserRequest.builder()
                     .email(normalUserRequest.getEmail())
                     .password(passwordEncoder.encode(normalUserRequest.getPassword()))
-                    .gender(normalUserRequest.getGender())
+                    .gender(normalUserRequest.getGender().toLowerCase())
                     .build();
 
 
