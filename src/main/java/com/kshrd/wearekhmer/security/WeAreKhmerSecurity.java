@@ -55,6 +55,7 @@ public class WeAreKhmerSecurity {
             "/api/v1/article/increase/{articleId}",
             //            "/api/v1/notification"
             "/api/v1/order-navbar",
+            "/api/v1/author/{authorId}"
     };
 
     @Bean
@@ -130,9 +131,9 @@ public class WeAreKhmerSecurity {
                 .requestMatchers(HttpMethod.POST, "/api/v1/report/author/{reportId}").hasRole("USER")
                 .requestMatchers(HttpMethod.POST, "/api/v1/report/author/isAdminAccept/{authorId}").hasRole("ADMIN")
 //                end feature report author
-                .requestMatchers("/api/v1/author/{authorId}").hasAnyRole("AUTHOR", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/v1/files/file/**")
-                .hasAnyRole("ADMIN", "AUTHOR")
+//                .requestMatchers("/api/v1/author/{authorId}").hasAnyRole("AUTHOR", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/v1/files/**")
+                .hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers("/api/v1/article/react/**")
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers("/api/v1/comment/article")
@@ -176,6 +177,7 @@ public class WeAreKhmerSecurity {
                 .hasRole("ADMIN")
                 .requestMatchers("/api/v1/article/admin/**")
                 .hasRole("ADMIN")
+                .requestMatchers("/api/v1/author/profile").hasRole("AUTHOR")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()
                 .anyRequest()
