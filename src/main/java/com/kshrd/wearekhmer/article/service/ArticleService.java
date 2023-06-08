@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface ArticleService {
-    List<ArticleResponse> getAllArticles();
+    List<ArticleResponse> getAllArticlesByLatest(Integer pageSize, Integer nextPage);
 
     List<ArticleResponse> getArticlesForCurrentUser(String userId);
 

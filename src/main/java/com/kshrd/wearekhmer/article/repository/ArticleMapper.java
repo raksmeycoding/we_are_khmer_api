@@ -28,9 +28,11 @@ public interface ArticleMapper {
                    ub.username as author_name,
                    c.category_name,
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
-            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id;
+            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
+            ORDER BY publish_date DESC limit #{pageSize} offset #{nextPage};
+        
             """)
-    List<ArticleResponse> getAllArticles();
+    List<ArticleResponse> getAllArticlesByLatest(Integer pageSize, Integer nextPage );
 
 
     @Select("""
@@ -52,7 +54,7 @@ public interface ArticleMapper {
                    (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
             from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id limit #{pageSize} offset #{offsetValue};
             """)
-    List<ArticleResponse> getAllArticlesWithPaginate(Integer pageSize, Integer offsetValue);
+    List<ArticleResponse> getAllArticlesWithPaginate(Integer pageSize, Integer nextPage);
 
 
     @Select("""
