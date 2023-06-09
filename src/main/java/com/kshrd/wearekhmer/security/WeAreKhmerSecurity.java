@@ -56,7 +56,7 @@ public class WeAreKhmerSecurity {
             //            "/api/v1/notification"
             "/api/v1/order-navbar",
             "/api/v1/author/{authorId}",
-            "/api/v1/heroCard/**"
+
     };
 
     @Bean
@@ -179,6 +179,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers("/api/v1/article/admin/**")
                 .hasRole("ADMIN")
                 .requestMatchers("/api/v1/author/profile").hasRole("AUTHOR")
+                .requestMatchers( "/api/v1/heroCard/**").hasRole("ADMIN")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()
                 .anyRequest()
