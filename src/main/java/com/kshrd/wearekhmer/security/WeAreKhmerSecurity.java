@@ -55,7 +55,8 @@ public class WeAreKhmerSecurity {
             "/api/v1/article/increase/{articleId}",
             //            "/api/v1/notification"
             "/api/v1/order-navbar",
-            "/api/v1/author/{authorId}"
+            "/api/v1/author/{authorId}",
+            "/api/v1/heroCard/**"
     };
 
     @Bean

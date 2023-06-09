@@ -7,6 +7,7 @@ import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.bookmark.repository.BookmarkMapper;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
+import com.kshrd.wearekhmer.heroCard.repository.HeroCardRepository;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import com.kshrd.wearekhmer.history.repository.HistoryMapper;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
@@ -54,6 +55,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     private final RatingRepository ratingRepository;
 
     private final IReactRepository reactRepository;
+
+    private final HeroCardRepository heroCardRepository;
 
     @Override
     public void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize) {
@@ -260,6 +263,44 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
         }
 
     }
+
+    @Override
+    public boolean checkArticleByCategoryId(String categoryId, String articleId) {
+        if(!heroCardRepository.checkArticleIsExistInCategory(categoryId,articleId))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "article does not exists in category");
+        return heroCardRepository.checkArticleIsExistInCategory(categoryId,articleId);
+    }
+
+    @Override
+    public boolean checkIndexIsExist(Integer index) {
+        if(!heroCardRepository.checkIsIndexExist(index))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Index : "+index + "is already existed");
+        return heroCardRepository.checkIsIndexExist(index);
+    }
+
+    @Override
+    public boolean checkHeroCard(String categoryId, Integer index, String articleId) {
+        if(heroCardRepository.checkHeroCardIsExist(categoryId,index,articleId))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This article already exists in index : "+index);
+        return true;
+    }
+
+    @Override
+    public boolean validate3ArticleInCategoryId(String categoryId) {
+        if(heroCardRepository.articleInHeroCard(categoryId))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "There's no index space, please delete one to insert");
+        return true;
+    }
+
+    @Override
+    public boolean checkIsCategoryIdOutOfIndex(String categoryId, Integer index) {
+        return heroCardRepository.checkIsIndexOfCategoryIdFull(categoryId,index);
+    }
+
+//    @Override
+//    public boolean checkHeroCardId(String heroCardId) {
+//        return heroCardRepository.checkHeroCardIsExist(heroCardId);
+//    }
 }
 
 

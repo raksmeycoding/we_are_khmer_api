@@ -43,6 +43,18 @@ public interface WeAreKhmerValidation {
 
     void validateAdminIsRejectOrApprove(String status);
 
+    boolean checkArticleByCategoryId(String categoryId, String articleId);
+
+    boolean checkIndexIsExist(Integer index);
+
+    boolean checkHeroCard(String categoryId, Integer index, String articleId);
+
+    boolean validate3ArticleInCategoryId(String categoryId);
+
+    boolean checkIsCategoryIdOutOfIndex(String categoryId, Integer index);
+
+//    boolean checkHeroCardId(String heroCardId);
+
 
 
 
