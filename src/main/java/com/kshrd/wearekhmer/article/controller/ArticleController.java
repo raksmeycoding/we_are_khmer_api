@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
 import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
+import com.kshrd.wearekhmer.article.repository.FilterArticleCriteria;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
@@ -84,8 +85,12 @@ public class ArticleController {
 //        List<ArticleResponse2> filteredArticles = articleMapper.filterArticles(title, date, categoryId );
 
 //        List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter(title, date, categoryId);
+        FilterArticleCriteria filterArticleCriteria = new FilterArticleCriteria();
+        filterArticleCriteria.setTitle(title);
+        filterArticleCriteria.setPublishDate(date);
+        filterArticleCriteria.setCategoryId(categoryId);
 
-        List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter2(title, date, categoryId);
+        List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter2(filterArticleCriteria);
 
         // Return the response using ResponseEntity
         return ResponseEntity.ok().body(filteredArticles);

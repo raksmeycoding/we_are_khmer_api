@@ -37,7 +37,12 @@ public class ArticleMapperProvider {
         return sql.toString();
     }
 
-    public static String filterArticles2(@Param("title") String title, @Param("publishDate") Date publishDate, @Param("categoryId") String categoryId) {
+    public static String filterArticles2(FilterArticleCriteria filter) {
+        String title = (String) filter.getTitle();
+        Date publishDate = (Date) filter.getPublishDate();
+        Date startDate = (Date) filter.getStartDate();
+        Date endDate = (Date) filter.getEndDate();
+        String categoryId = (String) filter.getCategoryId();
         return new SQL() {{
             SELECT("a.article_id, a.user_id, a.category_id, a.title, a.sub_title, a.description, publish_date");
             FROM("article_tb a");
@@ -53,6 +58,7 @@ public class ArticleMapperProvider {
             if (categoryId != null && !categoryId.isEmpty()) {
                 WHERE("a.category_id = #{categoryId}");
             }
+
         }}.toString();
     }
 }

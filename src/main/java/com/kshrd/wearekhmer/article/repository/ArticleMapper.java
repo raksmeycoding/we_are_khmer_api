@@ -642,7 +642,7 @@ public interface ArticleMapper {
 
 
     @SelectProvider(type = ArticleMapperProvider.class, method = "filterArticles2")
-    List<ArticleResponse2> getArticlesByFilter2(@Param("title") String title, @Param("publishDate") Date publishDate, @Param("categoryId") String categoryId);
+    List<ArticleResponse2> getArticlesByFilter2(FilterArticleCriteria filter);
 
 
 }
