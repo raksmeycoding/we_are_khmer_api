@@ -10,6 +10,7 @@ import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.heroCard.repository.HeroCardRepository;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import com.kshrd.wearekhmer.history.repository.HistoryMapper;
+import com.kshrd.wearekhmer.notification.INotificationMapper;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
 import com.kshrd.wearekhmer.userArtivities.repository.IReactRepository;
 import com.kshrd.wearekhmer.userRating.RatingRepository;
@@ -57,6 +58,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     private final IReactRepository reactRepository;
 
     private final HeroCardRepository heroCardRepository;
+
+    private final INotificationMapper notificationMapper;
 
     @Override
     public void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize) {
@@ -301,6 +304,14 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 //    public boolean checkHeroCardId(String heroCardId) {
 //        return heroCardRepository.checkHeroCardIsExist(heroCardId);
 //    }
+
+
+    @Override
+    public boolean validateNotificationId(String userId, String notificationId) {
+        if(!notificationMapper.checkAuthorHasNotificationId(userId,notificationId))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You don't have this notification");
+        return true;
+    }
 }
 
 

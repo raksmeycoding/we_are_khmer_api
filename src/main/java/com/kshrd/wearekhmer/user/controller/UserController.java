@@ -41,7 +41,6 @@ public class UserController {
                 .build());
     }
 
-
     @GetMapping("/hello")
     @Hidden
     public String userApps() {
@@ -49,7 +48,6 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
-    @Hidden
     public ResponseEntity<?> userApps(@PathVariable String email) {
         UserApp userApp = userAppService.findUserByEmail(email);
         UserAppDTO userAppDTO = userUtil.toUserAppDTO(userApp);
