@@ -57,11 +57,11 @@ public class CategoryController {
                 Integer nextPage = getNextPageCategory(page);
                 Map<String, Object> response = new LinkedHashMap<>();
                 List<Category> paginateCategory = categoryService.getAllCategoryWithPaginate(PAGE_SIZE, nextPage);
-                response.put("total records : ", categoryMapper.getTotalCategoryRecord());
-                response.put("message: ", "Get category successfully." );
-                response.put("title: ", "success");
+                response.put("totalRecords", categoryMapper.getTotalCategoryRecord());
+                response.put("message", "Get category successfully." );
+                response.put("title", "success");
                 response.put("status", "200");
-                response.put("payload: ", paginateCategory);
+                response.put("payload", paginateCategory);
                 return ResponseEntity.ok().body(response);
             }
             List<Category> categories = categoryService.getAllCategories();
