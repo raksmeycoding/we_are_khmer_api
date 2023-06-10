@@ -3,6 +3,7 @@ package com.kshrd.wearekhmer.Category.controller;
 
 import com.kshrd.wearekhmer.Category.model.Category;
 import com.kshrd.wearekhmer.Category.model.CategoryRequestDTO;
+import com.kshrd.wearekhmer.Category.repository.CategoryMapper;
 import com.kshrd.wearekhmer.Category.service.CategoryService;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
@@ -16,7 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/category")
@@ -29,12 +30,40 @@ public class CategoryController {
     private WeAreKhmerValidation weAreKhmerValidation;
 
 
+    private final CategoryMapper categoryMapper;
+
+
+    private static final Integer PAGE_SIZE = 10;
+
+
+    private Integer getNextPageCategory(Integer page) {
+        int numberOfRecord = categoryMapper.getTotalCategoryRecord();
+        int totalPage = (int) Math.ceil((double) numberOfRecord / PAGE_SIZE);
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        weAreKhmerValidation.validatePageNumber(page);
+        return (page - 1) * PAGE_SIZE;
+    }
+
+
     @GetMapping
-    public ResponseEntity<?> getAllCategories() throws Exception {
+    public ResponseEntity<?> getAllCategories(@RequestParam(value = "page", required = false) Integer page) throws Exception {
         System.out.println(SecurityContextHolder.getContext().getAuthentication());
 
         GenericResponse genericResponse;
         try {
+            if (page != null) {
+                Integer nextPage = getNextPageCategory(page);
+                Map<String, Object> response = new LinkedHashMap<>();
+                List<Category> paginateCategory = categoryService.getAllCategoryWithPaginate(PAGE_SIZE, nextPage);
+                response.put("total records : ", categoryMapper.getTotalCategoryRecord());
+                response.put("message: ", "Get category successfully." );
+                response.put("title: ", "success");
+                response.put("status", "200");
+                response.put("payload: ", paginateCategory);
+                return ResponseEntity.ok().body(response);
+            }
             List<Category> categories = categoryService.getAllCategories();
             genericResponse =
                     GenericResponse.builder()

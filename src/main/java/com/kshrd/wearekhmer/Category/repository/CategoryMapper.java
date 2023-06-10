@@ -18,6 +18,15 @@ public interface CategoryMapper {
     })
     List<Category> getAllCategories();
 
+
+    @Select("SELECT * FROM category limit #{pageSize} offset #{nextPage}")
+    @Results({
+            @Result(property = "categoryId", column = "category_id"),
+            @Result(property = "categoryName", column = "category_name"),
+            @Result(property = "categoryImage", column = "category_image")
+    })
+    List<Category> getAllCategoryWithPaginate( Integer pageSize, Integer nextPage);
+
     @Select("SELECT * FROM category WHERE category_id = #{categoryId}")
     @Results(
             id = "categoryMap",
@@ -51,5 +60,13 @@ public interface CategoryMapper {
             select exists(select 1 from category where category.category_id = #{categoryId})
             """)
     boolean isCategoryExist(String categoryId);
+
+
+
+
+    @Select("""
+            select count(*) from category;
+            """)
+    Integer getTotalCategoryRecord ();
 }
 

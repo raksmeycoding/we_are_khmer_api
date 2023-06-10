@@ -143,6 +143,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     private ResponseEntity<?> userLogin(@RequestBody UserLoginRequest userLoginRequest) {
+        System.out.println(userLoginRequest);
         GenericResponse genericResponse;
         try {
 

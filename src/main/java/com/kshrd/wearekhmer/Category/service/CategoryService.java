@@ -8,6 +8,8 @@ import java.util.List;
 public interface CategoryService {
 
     List<Category> getAllCategories();
+
+    List<Category> getAllCategoryWithPaginate( Integer pageSize, Integer nextPage);
     Category getCategoryById( String categoryId);
 
     Category insertCategory( Category category);

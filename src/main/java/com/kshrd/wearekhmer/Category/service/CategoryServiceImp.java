@@ -19,6 +19,12 @@ public class CategoryServiceImp implements CategoryService{
         return categoryMapper.getAllCategories();
     }
 
+
+    @Override
+    public List<Category> getAllCategoryWithPaginate(Integer pageSize, Integer nextPage) {
+        return categoryMapper.getAllCategoryWithPaginate(pageSize, nextPage);
+    }
+
     @Override
     public Category getCategoryById(String categoryId) {
         return categoryMapper.getCategoryById(categoryId);
