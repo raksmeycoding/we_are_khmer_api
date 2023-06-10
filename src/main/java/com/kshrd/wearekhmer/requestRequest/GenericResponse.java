@@ -14,6 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GenericResponse {
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    Integer totalRecords;
     String status;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -27,4 +30,6 @@ public class GenericResponse {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     List<String> details;
+
+
 }

@@ -54,6 +54,7 @@ public interface WeAreKhmerValidation {
     boolean checkIsCategoryIdOutOfIndex(String categoryId, Integer index);
 
 //    boolean checkHeroCardId(String heroCardId);
+    boolean validateNotificationId(String userId, String notificationId);
 
 
 
