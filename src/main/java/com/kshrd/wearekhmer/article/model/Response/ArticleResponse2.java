@@ -6,16 +6,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ArticleResponse {
+public class ArticleResponse2 {
 
+    private String article_id;
     private String title;
-    private String subTitle;
-    private String description;
-    private String image;
-    private String categoryId;
-    private String photoUrl;
+    private String sub_title;
+
+    private Timestamp publish_date;
+
 }

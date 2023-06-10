@@ -1,8 +1,10 @@
 package com.kshrd.wearekhmer.article.controller;
 
+import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
 import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
+import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
@@ -22,7 +24,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/article")
@@ -42,6 +46,9 @@ public class ArticleController {
     private final ServiceClassHelper serviceClassHelper;
 
     private final IFileService fileService;
+
+
+    private final ArticleMapper articleMapper;
 
     private Integer getNextPage(Integer page) {
         int numberOfRecord = serviceClassHelper.getTotalOfRecordInArticleTb();
@@ -65,6 +72,23 @@ public class ArticleController {
         }
         weAreKhmerValidation.validatePageNumber(page);
         return (page - 1) * PAGE_SIZE;
+    }
+
+
+    @GetMapping("/filter")
+    public ResponseEntity<?> filterArticles(@RequestParam(required = false) String title,
+                                            @RequestParam(required = false) Date date,
+                                            @RequestParam(required = false) String categoryId) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("title", title);
+//        List<ArticleResponse2> filteredArticles = articleMapper.filterArticles(title, date, categoryId );
+
+//        List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter(title, date, categoryId);
+
+        List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter2(title, date, categoryId);
+
+        // Return the response using ResponseEntity
+        return ResponseEntity.ok().body(filteredArticles);
     }
 
     @GetMapping
@@ -708,14 +732,13 @@ public class ArticleController {
                 PAGE_SIZE,
                 nextPage
         );
-         genericResponse = GenericResponse.builder()
+        genericResponse = GenericResponse.builder()
                 .status("200")
                 .title("success")
                 .payload(articleResponseList)
                 .message("You have successfully get all latest articles.")
                 .build();
         return ResponseEntity.ok(genericResponse);
-
 
 
     }
@@ -783,17 +806,16 @@ public class ArticleController {
                 PAGE_SIZE,
                 nextPage
         );
-            GenericResponse genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .title("success")
-                    .payload(articleResponseList)
-                    .message("You have successfully get all articles per month.")
-                    .build();
-            return ResponseEntity.ok(genericResponse);
+        GenericResponse genericResponse = GenericResponse.builder()
+                .status("200")
+                .title("success")
+                .payload(articleResponseList)
+                .message("You have successfully get all articles per month.")
+                .build();
+        return ResponseEntity.ok(genericResponse);
 
 
     }
-
 
 
     @Operation(summary = "(Get articles per year for current author )")
@@ -803,20 +825,20 @@ public class ArticleController {
     ) {
         Integer nextPage = getNextPage(page);
 
-            List<ArticleResponse> articles = articleService.getAllArticleCurrentUserPerYear(
-                    weAreKhmerCurrentUser.getUserId(),
-                    PAGE_SIZE,
-                    nextPage
-            );
-            GenericResponse genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .title("success")
-                    .payload(articles)
-                    .message("You have successfully get all articles per year.")
-                    .build();
-            return ResponseEntity.ok(genericResponse);
+        List<ArticleResponse> articles = articleService.getAllArticleCurrentUserPerYear(
+                weAreKhmerCurrentUser.getUserId(),
+                PAGE_SIZE,
+                nextPage
+        );
+        GenericResponse genericResponse = GenericResponse.builder()
+                .status("200")
+                .title("success")
+                .payload(articles)
+                .message("You have successfully get all articles per year.")
+                .build();
+        return ResponseEntity.ok(genericResponse);
 
-        }
+    }
 
 
     @Operation(summary = "(Get total views per week for current author )")
