@@ -11,7 +11,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -192,4 +195,14 @@ public class ArticleServiceImp implements ArticleService {
     public Integer getTotalViewAdminPerYear() {
         return articleMapper.getTotalViewAdminPerYear();
     }
+
+
+
+
+//    public List<ArticleResponse> filterArticles(String title, String categoryId) {
+//        Map<String, Object> parameters = new HashMap<>();
+//        parameters.put("title", title);
+//        parameters.put("categoryId", categoryId);
+//        return articleMapper.filterArticles(parameters);
+//    }
 }

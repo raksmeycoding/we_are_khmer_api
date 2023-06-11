@@ -2,6 +2,7 @@ package com.kshrd.wearekhmer.exception;
 
 
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -21,6 +24,24 @@ import java.util.Map;
 @RestController
 @ControllerAdvice
 public class DomrraCustomExceptionHandler {
+
+
+
+    @ExceptionHandler(ValidateException.class)
+    public ResponseEntity<?> validateException(ValidateException ex , WebRequest request) {
+        HttpServletRequest httpServletRequest = ((ServletWebRequest) request).getRequest();
+        String instance = httpServletRequest.getRequestURI();
+        String type = httpServletRequest.getRequestURL().toString();
+        GenericResponse genericResponse = GenericResponse.builder()
+                .type(type)
+                .instance(instance)
+                .statusName(ex.getHttpStatusName().name())
+                .statusCode(ex.getHttpStatusNumber())
+                .message(ex.getMessage())
+                .title("error")
+                .build();
+        return ResponseEntity.status(ex.getHttpStatusNumber()).body(genericResponse);
+    }
 
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<?> handleDuplicateKeyException(DuplicateKeyException ex) {

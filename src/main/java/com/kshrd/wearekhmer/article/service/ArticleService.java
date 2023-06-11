@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.article.response.ArticleResponse;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ArticleService {
@@ -62,4 +63,5 @@ public interface ArticleService {
     Integer getTotalViewAdminPerYear();
 
 
+//    List<ArticleResponse> filterArticles(String title, String categoryId);
 }

@@ -55,7 +55,8 @@ public class WeAreKhmerSecurity {
             "/api/v1/article/increase/{articleId}",
             //            "/api/v1/notification"
             "/api/v1/order-navbar",
-            "/api/v1/author/{authorId}"
+            "/api/v1/author/{authorId}",
+
     };
 
     @Bean
@@ -171,20 +172,22 @@ public class WeAreKhmerSecurity {
                 .hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.GET, "/api/v1/article/author/**")
                 .hasRole("AUTHOR")
-                .requestMatchers(HttpMethod.GET, "/api/v1/notification")
-                .hasAnyRole("ADMIN", "AUTHOR")
+                .requestMatchers( "/api/v1/notification/admin/**")
+                .hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/order-navbar")
                 .hasRole("ADMIN")
                 .requestMatchers("/api/v1/article/admin/**")
                 .hasRole("ADMIN")
                 .requestMatchers("/api/v1/author/profile").hasRole("AUTHOR")
+                .requestMatchers( "/api/v1/heroCard/**").hasRole("ADMIN")
+                .requestMatchers("/api/v1/notification/author/**").hasRole("AUTHOR")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(this.authenticationEntryPoint)
+//                .authenticationEntryPoint(this.authenticationEntryPoint)
                 .and()
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(

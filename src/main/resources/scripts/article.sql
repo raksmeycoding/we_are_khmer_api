@@ -13,8 +13,12 @@ create table article_tb
     isBan        boolean             default false,
     hero_card_in varchar,
     user_id      varchar references user_tb (user_id)      not null,
-    category_id  varchar references category (category_id) not null
+    category_id  varchar references category (category_id)  not null
 );
+
+
+alter table article_tb add constraint fk_article_category foreign key (category_id) references category (category_id) on delete cascade;
+
 
 alter table article_tb
     add constraint fk_user_author

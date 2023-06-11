@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.repository;
 
 
+import com.kshrd.wearekhmer.user.model.dto.UserAppDTO;
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
 import org.apache.ibatis.annotations.*;
 
@@ -66,6 +67,12 @@ public interface WeAreKhmerRepositorySupport {
             """)
     @ResultMap("userMapper")
     UserApp getUserAppById(@Param("userId") String userId);
+
+    @Select("""
+            select * from user_tb where user_id = #{userId}
+            """)
+    @ResultMap("userMapper")
+    UserAppDTO getUserAppDTOById(@Param("userId") String userId);
 
     default UserApp registerAsAuthorAndReturnUserApp(String userId) {
         String userId1 = registerAsAuthorAndReturnUserId(userId);

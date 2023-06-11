@@ -1,11 +1,14 @@
 package com.kshrd.wearekhmer.article.repository;
 
+import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import org.apache.ibatis.annotations.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 
 @Mapper
@@ -601,6 +604,45 @@ public interface ArticleMapper {
             AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date)
             """)
     Integer getTotalViewAdminPerYear();
+
+
+
+
+    @Select({
+            """
+            <script>
+                SELECT article_id, title, sub_title
+                FROM article_tb
+                WHERE 1=1
+                <if test='title != null'>
+                    AND title LIKE CONCAT('%', #{title}, '%')
+                </if>
+                <if test='publishDate != null'>
+                    AND publish_date = #{publishDate}
+                </if>
+                <if test='categoryId != null'>
+                    AND category_id = #{categoryId}
+                </if>
+            </script>
+            """
+    })
+
+    List<ArticleResponse2> filterArticles(@Param("title") String title, @Param("publishDate") Date publishDate, @Param("categoryId") String categoryId);
+
+
+    @SelectProvider(type = ArticleMapperProvider.class, method = "getArticleByTitle")
+    List<ArticleResponse2> getArticleByIdTest();
+
+
+
+    @SelectProvider(type = ArticleMapperProvider.class, method = "filterArticles")
+    List<ArticleResponse2> getArticlesByFilter(@Param("title") String title, @Param("publishDate") Date publishDate, @Param("categoryId") String categoryId);
+
+
+
+
+    @SelectProvider(type = ArticleMapperProvider.class, method = "filterArticles2")
+    List<ArticleResponse2> getArticlesByFilter2(FilterArticleCriteria filter);
 
 
 }
