@@ -27,6 +27,8 @@ public interface INotificationService {
 
     Integer totalReportArticleRecords();
 
+    Notification deleteNotificationByTypeAndId( String notificationId, String notificationType);
+
 
 
 }

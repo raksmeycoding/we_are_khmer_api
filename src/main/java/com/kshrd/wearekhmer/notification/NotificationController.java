@@ -8,12 +8,14 @@ import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
+import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsPassword
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.Path;
 import java.net.Inet4Address;
 import java.net.URI;
 import java.util.List;
@@ -32,11 +35,14 @@ import java.util.List;
 public class NotificationController {
     private final INotificationService notificationService;
     private final WeAreKhmerCurrentUser weAreKhmerCurrentUser;
+    private final DefaultWeAreKhmerValidation defaultWeAreKhmerValidation;
+
+    private final WeAreKhmerValidation weAreKhmerValidation;
 
     private static final Integer PAGE_SIZE = 10;
     private final ServiceClassHelper serviceClassHelper;
 
-    private WeAreKhmerValidation weAreKhmerValidation;
+
 
     private Integer getNextPage(Integer page) {
         int numberOfRecord = serviceClassHelper.getTotalOfRecordInArticleTb();
@@ -202,6 +208,22 @@ public class NotificationController {
                 .title("success")
                 .message("You have deleted this notification successfully")
                 .payload(authorNotificationList)
+                .build();
+        return ResponseEntity.ok(genericResponse);
+    }
+    @DeleteMapping("/admin")
+    @Operation(summary = "Delete notification by type and id for admin")
+    public ResponseEntity<?> deleteNotificationByTypeAndId(
+            @RequestParam("notificationId") String notificationId,
+            @RequestParam("notificationType") String notificationType
+
+    ){
+        defaultWeAreKhmerValidation.validateNotificationTypeAdmin(notificationType);
+        Notification notification = notificationService.deleteNotificationByTypeAndId(notificationType,notificationId);
+        GenericResponse genericResponse = GenericResponse.builder()
+                .status("200")
+                .title("success")
+                .message("You have delete a notification successfully")
                 .build();
         return ResponseEntity.ok(genericResponse);
     }

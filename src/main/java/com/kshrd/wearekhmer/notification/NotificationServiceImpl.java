@@ -4,7 +4,9 @@ import com.kshrd.wearekhmer.notification.entity.response.AuthorNotificationList;
 import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
 import com.kshrd.wearekhmer.notification.entity.response.ReportArticleList;
 import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
+import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ public class NotificationServiceImpl implements INotificationService {
     private final INotificationMapper notificationMapper;
 
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
+
+    private DefaultWeAreKhmerValidation defaultWeAreKhmerValidation;
+
     @Override
     public List<Notification> getAllNotification() {
         return notificationMapper.getAllNotification();
@@ -68,5 +73,12 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public Integer totalReportArticleRecords() {
         return notificationMapper.totalReportArticleRecords();
+    }
+
+    @Override
+    public Notification deleteNotificationByTypeAndId( String notificationId,String notificationType) {
+        if(notificationMapper.validateNotificationId(notificationId))
+            return notificationMapper.deleteNotificationByTypeAndId(notificationType,notificationId);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NotificationId does not exist");
     }
 }

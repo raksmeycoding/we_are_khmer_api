@@ -6,6 +6,7 @@ import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
 import com.kshrd.wearekhmer.notification.entity.response.ReportArticleList;
 import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
 import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.ws.rs.DELETE;
 import java.util.List;
@@ -123,6 +124,20 @@ public interface INotificationMapper {
             """)
     Integer totalReportArticleRecords();
 
+    @Select("""
+            DELETE FROM notification_tb WHERE notification_id = #{notificationId} AND notification_type = cast(#{notificationType} AS notification_type)
+            """)
+    Notification deleteNotificationByTypeAndId(String notificationId , String notificationType);
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM notification_tb WHERE notification_id = #{notificationId} AND notification_type = cast(#{notificationType} AS notification_type) 
+            """)
+    boolean validateNotificationIdExistInNotificationType( String notificationId, String notificationType);
+
+   @Select("""
+            SELECT EXISTS(SELECT 1 FROM notification_tb WHERE notification_id = #{notificationId})
+           """)
+    boolean validateNotificationId(String notificationId);
 
 
 

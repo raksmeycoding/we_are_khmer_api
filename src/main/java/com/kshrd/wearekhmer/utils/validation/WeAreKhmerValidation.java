@@ -56,6 +56,10 @@ public interface WeAreKhmerValidation {
 //    boolean checkHeroCardId(String heroCardId);
     boolean validateNotificationId(String userId, String notificationId);
 
+    void validateNotificationTypeAdmin(String notificationType);
+
+    boolean validateNotificationExistInType(String notificationId,String notificationType);
+
 
 
 
