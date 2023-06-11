@@ -78,22 +78,33 @@ public class ArticleController {
 
     @GetMapping("/filter")
     public ResponseEntity<?> filterArticles(@RequestParam(required = false) String title,
-                                            @RequestParam(required = false) Date date,
-                                            @RequestParam(required = false) String categoryId) {
-        Map<String, Object> param = new HashMap<>();
-        param.put("title", title);
+                                            @RequestParam(required = false) Date publishDate,
+                                            @RequestParam(required = false) String categoryId,
+                                            @RequestParam(required = false) Date startDate,
+                                            @RequestParam(required = false) Date endDate,
+                                            @RequestParam(value = "view", required = false) String view) {
+        try {
+            Map<String, Object> param = new HashMap<>();
+            param.put("title", title);
 //        List<ArticleResponse2> filteredArticles = articleMapper.filterArticles(title, date, categoryId );
 
 //        List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter(title, date, categoryId);
-        FilterArticleCriteria filterArticleCriteria = new FilterArticleCriteria();
-        filterArticleCriteria.setTitle(title);
-        filterArticleCriteria.setPublishDate(date);
-        filterArticleCriteria.setCategoryId(categoryId);
+            FilterArticleCriteria filterArticleCriteria = new FilterArticleCriteria();
+            filterArticleCriteria.setTitle(title);
+            filterArticleCriteria.setPublishDate(publishDate);
+            filterArticleCriteria.setCategoryId(categoryId);
+            filterArticleCriteria.setStartDate(startDate);
+            filterArticleCriteria.setEndDate(endDate);
+            filterArticleCriteria.setView(view);
+            List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter2(filterArticleCriteria);
 
-        List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter2(filterArticleCriteria);
-
-        // Return the response using ResponseEntity
-        return ResponseEntity.ok().body(filteredArticles);
+            // Return the response using ResponseEntity
+            return ResponseEntity.ok().body(filteredArticles);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+            throw new RuntimeException(ex.getCause());
+        }
     }
 
     @GetMapping

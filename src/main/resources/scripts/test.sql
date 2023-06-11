@@ -42,4 +42,11 @@ update article_tb set user_id = '1a816fc1-90cb-480a-93ed-6b5e21322bd0' where art
 
 SELECT a.article_id, a.user_id, a.category_id, a.title FROM article_tb a WHERE 1=1 AND a.title =  'Oral Mountain';
 
-SELECT a.article_id, a.user_id, a.category_id, a.title, a.publish_date FROM article_tb a WHERE 1=1 AND DATE(a.publish_date) = '2023-05-31';
+SELECT a.article_id, a.user_id, a.category_id, a.title, a.sub_title, a.description, publish_date
+FROM article_tb a
+ORDER BY a.count_view desc;
+
+
+SELECT a.article_id, a.user_id, a.category_id, a.title, a.sub_title, a.description, a.publish_date, a.count_view
+FROM article_tb a
+WHERE ( DATE(a.publish_date) = '2023-06-06');

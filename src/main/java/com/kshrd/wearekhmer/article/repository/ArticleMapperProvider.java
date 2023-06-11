@@ -1,11 +1,10 @@
 package com.kshrd.wearekhmer.article.repository;
 
-import org.apache.ibatis.annotations.Param;
+import com.kshrd.wearekhmer.exception.ValidateException;
 import org.apache.ibatis.jdbc.SQL;
+import org.springframework.http.HttpStatus;
 
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.Map;
 
 public class ArticleMapperProvider {
 
@@ -26,7 +25,7 @@ public class ArticleMapperProvider {
         }
 
         if (publishDate != null) {
-            sql.append("AND a.publish_date >= \'" + publishDate +   "\' ");
+            sql.append("AND a.publish_date >= \'" + publishDate + "\' ");
         }
 
         if (categoryId != null && !categoryId.isEmpty()) {
@@ -38,14 +37,24 @@ public class ArticleMapperProvider {
     }
 
     public static String filterArticles2(FilterArticleCriteria filter) {
+        if(!filter.getView().equals("most-view")) {
+            throw new ValidateException("Your query by view, the value of view must be (most-view), not (" + filter.getView() + ").", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+        }
         String title = (String) filter.getTitle();
-        Date publishDate = (Date) filter.getPublishDate();
+        java.sql.Date publishDate = (java.sql.Date) filter.getPublishDate();
         Date startDate = (Date) filter.getStartDate();
         Date endDate = (Date) filter.getEndDate();
         String categoryId = (String) filter.getCategoryId();
-        return new SQL() {{
-            SELECT("a.article_id, a.user_id, a.category_id, a.title, a.sub_title, a.description, publish_date");
+        String view = (String) filter.getView();
+
+        SQL scriptSql = null;
+        scriptSql = new SQL() {{
+            SELECT("a.article_id, a.title, a.sub_title, a.publish_date, a.description, a.updatedat as updateat, a.image, a.count_view, a.isban, a.hero_card_in, a.user_id, a.category_id, ub.photo_url, ub.username as author_name, c.category_name, (select count(*) from react_tb r where r.article_id = a.article_id) as react_count");
             FROM("article_tb a");
+            INNER_JOIN("user_tb ub on ub.user_id = a.user_id");
+            INNER_JOIN("category c on c.category_id = a.category_id");
+            WHERE(" 1=1");
+            WHERE("a.isban = false");
 
             if (title != null && !title.isEmpty()) {
                 WHERE("a.title LIKE CONCAT('%', #{title}, '%')");
@@ -59,13 +68,28 @@ public class ArticleMapperProvider {
                 WHERE("a.category_id = #{categoryId}");
             }
 
-        }}.toString();
+            if (startDate != null) {
+                if (endDate == null) {
+                    throw new ValidateException("endDate must be provided", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+                }
+                WHERE("DATE(a.publish_date) >= #{startDate} AND DATE(a.publish_date) <= #{endDate}");
+            } else {
+                if (endDate != null) {
+                    throw new ValidateException("startDate haven't provided yet.", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+                }
+            }
+
+
+            if (view != null && !view.isEmpty() && view.equals("most-view")) {
+                System.out.println("most-view: " + view);
+                ORDER_BY("a.count_view desc");
+            }
+
+        }};
+        System.out.println(scriptSql);
+        return scriptSql.toString();
     }
 }
-
-
-
-
 
 
 //public class ArticleMapperProvider {

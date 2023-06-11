@@ -17,13 +17,27 @@ public class GenericResponse {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     Integer totalRecords;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    String type;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     String status;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    String statusName;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    Integer statusCode;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     String title;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     String message;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    String instance;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     Object payload;

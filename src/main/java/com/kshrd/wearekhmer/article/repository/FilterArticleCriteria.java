@@ -20,5 +20,6 @@ public class FilterArticleCriteria {
     private Date endDate;
     private String categoryId;
 
+    private String view;
 
 }
