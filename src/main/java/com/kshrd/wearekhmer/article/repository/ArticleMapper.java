@@ -4,6 +4,7 @@ import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.session.SqlSession;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -247,9 +248,15 @@ public interface ArticleMapper {
 
 
     @Select("""
-            select count(*) from article_tb as article_count
+            select count(*) from article_tb a inner join category c on a.category_id = c.category_id inner join user_tb u on u.user_id = a.user_id and a.isban = false;
             """)
     Integer getTotalRecordOfArticleTb();
+
+
+
+    static Integer getTotalRecord() {
+        return getTotalRecord();
+    }
 
 
     @Select("""

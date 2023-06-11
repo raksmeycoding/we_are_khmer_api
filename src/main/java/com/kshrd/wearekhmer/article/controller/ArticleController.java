@@ -18,6 +18,7 @@ import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
+import org.apache.ibatis.annotations.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -78,11 +79,14 @@ public class ArticleController {
 
     @GetMapping("/filter")
     public ResponseEntity<?> filterArticles(@RequestParam(required = false) String title,
-                                            @RequestParam(required = false) Date publishDate,
+                                            @RequestParam(required = false) String publishDate,
                                             @RequestParam(required = false) String categoryId,
-                                            @RequestParam(required = false) Date startDate,
-                                            @RequestParam(required = false) Date endDate,
-                                            @RequestParam(value = "view", required = false) String view) {
+                                            @RequestParam(required = false) String startDate,
+                                            @RequestParam(required = false) String endDate,
+                                            @RequestParam(value = "view", required = false) String view,
+                                            @RequestParam(value = "day", required = false) String day,
+                                            @RequestParam(value = "userId", required = false) String userId,
+                                            @RequestParam (value = "page", required = false) Integer page) {
         try {
             Map<String, Object> param = new HashMap<>();
             param.put("title", title);
@@ -96,6 +100,9 @@ public class ArticleController {
             filterArticleCriteria.setStartDate(startDate);
             filterArticleCriteria.setEndDate(endDate);
             filterArticleCriteria.setView(view);
+            filterArticleCriteria.setDay(day);
+            filterArticleCriteria.setUserId(userId);
+            filterArticleCriteria.setPage(page);
             List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter2(filterArticleCriteria);
 
             // Return the response using ResponseEntity
