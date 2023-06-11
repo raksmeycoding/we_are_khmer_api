@@ -6,6 +6,7 @@ import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
 import com.kshrd.wearekhmer.notification.entity.response.ReportArticleList;
 import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
 import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.ws.rs.DELETE;
 import java.util.List;
@@ -46,23 +47,23 @@ public interface INotificationMapper {
 
 
     @Select("""
-            SELECT art.author_request_name,ut.email,  art.user_id, art.createat, art.reason, q_name, e_name, wet.w_name
+            SELECT art.author_request_name,ut.email, ut.photo_url, art.user_id, art.createat, art.reason, q_name, e_name, wet.w_name
             FROM author_request_tb as art INNER JOIN quote_tb qt on art.user_id = qt.user_id
             INNER JOIN education e on art.user_id = e.user_id
             INNER JOIN working_experience_tb wet on art.user_id = wet.user_id
             INNER JOIN user_tb ut on art.user_id = ut.user_id
-            WHERE art.user_id =  #{userId}
+            WHERE art.user_id =  #{userId} AND is_author_accepted = false
             """)
 
 
     @Result(property = "authorId", column = "user_id")
     @Result(property = "authorName", column = "author_request_name")
     @Result(property = "photoUrl", column = "photo_url")
-    @Result(property = "reason", column = "reason")
     @Result(property = "email", column = "email")
     @Result(property = "workingExperience", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper.getByUserId"))
     @Result(property = "education", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.EducationMapper.getEducationByUserIdObject"))
     @Result(property = "quote", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.QuoteMapper.getQuoteByUserIdAsObject"))
+    @Result(property = "reason", column = "reason")
     ViewAuthorRequest getUserRequestDetail(String userId);
 
 
@@ -123,7 +124,32 @@ public interface INotificationMapper {
             """)
     Integer totalReportArticleRecords();
 
+    @Select("""
+            DELETE FROM notification_tb WHERE notification_id = #{notificationId} AND notification_type = cast(#{notificationType} AS notification_type);
+            """)
+    Notification deleteNotificationByTypeAndId(String notificationId , String notificationType);
 
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM notification_tb WHERE notification_id = #{notificationId} AND notification_type = cast(#{notificationType} AS notification_type));
+            """)
+    boolean validateNotificationIdExistInNotificationType( String notificationId, String notificationType);
+
+   @Select("""
+            SELECT EXISTS(SELECT 1 FROM notification_tb WHERE notification_id = #{notificationId})
+           """)
+    boolean validateNotificationId(String notificationId);
+
+
+   @Select("""
+           SELECT EXISTS(SELECT 1 FROM author_request_tb WHERE user_id = #{userId} AND is_author_accepted = false);
+           """)
+    boolean validateAuthorPendingExist(String userId);
+
+
+   @Select("""
+           SELECT EXISTS(SELECT 1 FROM author_request_tb WHERE user_id = #{userId})
+           """)
+    boolean validateUserIdExistInUserRequestToBeAuthor(String userId);
 
 
 
