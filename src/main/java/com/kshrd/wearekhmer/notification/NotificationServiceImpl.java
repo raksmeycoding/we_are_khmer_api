@@ -42,7 +42,15 @@ public class NotificationServiceImpl implements INotificationService {
 
     @Override
     public ViewAuthorRequest ViewUserRequestDetail(String userId) {
-        return notificationMapper.getUserRequestDetail(userId);
+        if(notificationMapper.validateUserIdExistInUserRequestToBeAuthor(userId)){
+            if(notificationMapper.validateAuthorPendingExist(userId)){
+                return notificationMapper.getUserRequestDetail(userId);
+            }else {
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User has already been author");
+            }
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "userId not found");
+        }
     }
 
     @Override
@@ -77,8 +85,8 @@ public class NotificationServiceImpl implements INotificationService {
 
     @Override
     public Notification deleteNotificationByTypeAndId( String notificationId,String notificationType) {
-        if(notificationMapper.validateNotificationId(notificationId))
-            return notificationMapper.deleteNotificationByTypeAndId(notificationType,notificationId);
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NotificationId does not exist");
+        if(notificationMapper.validateNotificationIdExistInNotificationType(notificationType,notificationId))
+            return notificationMapper.deleteNotificationByTypeAndId( notificationType,notificationId);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NotificationId not match NotificationType or NotificationId does not exist");
     }
 }

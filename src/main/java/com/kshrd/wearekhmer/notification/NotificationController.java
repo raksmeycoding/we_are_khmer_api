@@ -138,7 +138,7 @@ public class NotificationController {
 
 
 
-    @GetMapping("/author/{userId}")
+    @GetMapping("/admin/{userId}")
     @Operation(summary = "View user request detail to be author (only for admin)")
     public ResponseEntity<?> ViewUserRequestAuthorDetail(
             @PathVariable("userId") String userId
@@ -214,8 +214,9 @@ public class NotificationController {
     @DeleteMapping("/admin")
     @Operation(summary = "Delete notification by type and id for admin")
     public ResponseEntity<?> deleteNotificationByTypeAndId(
-            @RequestParam("notificationId") String notificationId,
-            @RequestParam("notificationType") String notificationType
+            @RequestParam("notificationType") String notificationType,
+            @RequestParam("notificationId") String notificationId
+
 
     ){
         defaultWeAreKhmerValidation.validateNotificationTypeAdmin(notificationType);
