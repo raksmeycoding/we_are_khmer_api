@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -15,28 +16,53 @@ import java.util.Map;
 @Mapper
 public interface ArticleMapper {
 
-    @Select("""
-            select ab.article_id,
-                   ab.user_id,
-                   ab.category_id,
-                   ab.title,
-                   ab.sub_title,
-                   ab.publish_date,
-                   ab.description,
-                   ab.updatedat,
-                   coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
-                   ab.count_view,
-                   ab.isban,
-                   ab.hero_card_in,
-                   ub.photo_url,
-                   ub.username as author_name,
-                   c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
-            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
-            ORDER BY publish_date DESC limit #{pageSize} offset #{nextPage};
-        
-            """)
-    List<ArticleResponse> getAllArticlesByLatest(Integer pageSize, Integer nextPage );
+//    @Select("""
+//            select ab.article_id,
+//                   ab.user_id,
+//                   ab.category_id,
+//                   ab.title,
+//                   ab.sub_title,
+//                   ab.publish_date,
+//                   ab.description,
+//                   ab.updatedat,
+//                   coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
+//                   ab.count_view,
+//                   ab.isban,
+//                   ab.hero_card_in,
+//                   ub.photo_url,
+//                   ub.username as author_name,
+//                   c.category_name,
+//                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
+//            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
+//            ORDER BY publish_date DESC limit #{pageSize} offset #{nextPage};
+//
+//            """)
+
+        @Select("""
+
+                            select ab.article_id,
+                           ab.user_id,
+                           ab.category_id,
+                           ab.title,
+                           ab.sub_title,
+                           ab.publish_date,
+                           ab.description,
+                           ab.updatedat,
+                           coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
+                           ab.count_view,
+                           ab.isban,
+                           ab.hero_card_in,
+                           ub.photo_url,
+                           ub.username as author_name,
+                           c.category_name,
+                           (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
+                            inner join user_tb ub on ab.user_id = ub.user_id
+                            inner join category c on c.category_id = ab.category_id
+                            left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                            left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
+                            ORDER BY publish_date DESC limit #{pageSize} offset #{nextPage};
+                """)
+    List<ArticleResponse2> getAllArticlesByLatest(Integer pageSize, Integer nextPage, @Param("userId") String userId);
 
 
     @Select("""
@@ -651,5 +677,10 @@ public interface ArticleMapper {
     @SelectProvider(type = ArticleMapperProvider.class, method = "filterArticles2")
     List<ArticleResponse2> getArticlesByFilter2(FilterArticleCriteria filter);
 
+
+    @Select("""
+            SELECT count(article_id) as totalRecords from article_tb;
+            """)
+    Integer totalArticles();
 
 }

@@ -18,8 +18,10 @@ import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
+import org.modelmapper.internal.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -130,19 +132,26 @@ public class ArticleController {
     @GetMapping
     @Operation(summary = "(Get all articles)")
     public ResponseEntity<?> getAllArticles(
-            @RequestParam(defaultValue = "1", required = false) Integer page
+            @RequestParam(defaultValue = "1", required = false) Integer page,
+            @RequestParam(value = "userId", required = false) String userId
+
     ) {
         GenericResponse genericResponse;
 
+        Integer totalRecords = articleMapper.totalArticles();
+
+
         try {
             Integer nextPage = getNextPage(page);
-            List<ArticleResponse> articleResponses = articleService.getAllArticlesByLatest(
+            List<ArticleResponse2> articleResponses = articleService.getAllArticlesByLatest(
                     PAGE_SIZE,
-                    nextPage
+                    nextPage,
+                    userId
             );
             genericResponse =
                     GenericResponse
                             .builder()
+                            .totalRecords(totalRecords)
                             .status("200")
                             .title("success")
                             .message("You have successfully get all articles")

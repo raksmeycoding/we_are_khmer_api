@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer.article.service;
 
+import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
@@ -27,8 +28,8 @@ public class ArticleServiceImp implements ArticleService {
 
 
     @Override
-    public List<ArticleResponse> getAllArticlesByLatest(Integer pageSize, Integer nextPage) {
-        return articleMapper.getAllArticlesByLatest(pageSize, nextPage);
+    public List<ArticleResponse2> getAllArticlesByLatest(Integer pageSize, Integer nextPage, String userId) {
+        return articleMapper.getAllArticlesByLatest(pageSize, nextPage, userId);
 
     }
 
