@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer.article.service;
 
+import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ArticleService {
-    List<ArticleResponse> getAllArticlesByLatest(Integer pageSize, Integer nextPage);
+    List<ArticleResponse2> getAllArticlesByLatest(Integer pageSize, Integer nextPage, String userId);
 
     List<ArticleResponse> getArticlesForCurrentUser(String userId);
 
