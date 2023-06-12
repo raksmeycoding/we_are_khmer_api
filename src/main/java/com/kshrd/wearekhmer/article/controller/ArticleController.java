@@ -79,6 +79,7 @@ public class ArticleController {
 
 
     @GetMapping("/filter")
+    @Operation(summary = "(Filter all articles)")
     public ResponseEntity<?> filterArticles(@RequestParam(required = false) String title,
                                             @RequestParam(required = false) String publishDate,
                                             @RequestParam(required = false) String categoryId,

@@ -99,4 +99,13 @@ FROM
     article_tb a
         INNER JOIN user_tb ub ON ub.user_id = a.user_id
         INNER JOIN category c ON c.category_id = a.category_id
-        LEFT OUTER JOIN bookmark_tb b ON b.article_id = a.article_id
+        LEFT OUTER JOIN bookmark_tb b ON b.article_id = a.article_id;
+
+
+
+
+
+
+update user_tb set data_of_birth = '2023-06-06' where user_id = 'c7c13f75-feae-4fd6-99b2-cd59c85306b5';
+
+

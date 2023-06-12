@@ -47,6 +47,12 @@ public interface EducationMapper {
     @Select("DELETE FROM education WHERE e_id = #{educationId} RETURNING *")
     @ResultMap("educationMapperId")
     Education delete(String educationId);
+
+
+    @Delete("""
+            delete from education where user_id = #{userId}
+            """)
+    void deleteAllEducationIfUserIdExist(String userId);
 }
 
 

@@ -5,8 +5,10 @@ import com.kshrd.wearekhmer.authenticatoin.AuthenticationService;
 import com.kshrd.wearekhmer.emailVerification.controller.TokenRequest;
 import com.kshrd.wearekhmer.emailVerification.service.EmailService;
 import com.kshrd.wearekhmer.exception.DuplicateKeyException;
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.opt.model.Otp;
 import com.kshrd.wearekhmer.opt.service.OtpService;
+import com.kshrd.wearekhmer.repository.WeAreKhmerRepositorySupport;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.requestRequest.NormalUserRequest;
 import com.kshrd.wearekhmer.requestRequest.UserLoginRequest;
@@ -23,6 +25,7 @@ import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
 import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
@@ -73,6 +76,8 @@ public class AuthenticationController {
     private final ServiceClassHelper serviceClassHelper;
 
     private final DefaultWeAreKhmerValidation defaultWeAreKhmerValidation;
+
+    private final WeAreKhmerRepositorySupport weAreKhmerRepositorySupport;
 
 
     @PostMapping("/register")
@@ -130,14 +135,32 @@ public class AuthenticationController {
 
 
     @PostMapping("/register/as-author")
+    @Operation(summary = "(This controller works both either post or update, ❤️ Validated)")
     public ResponseEntity<?> registerAsAuthor(@RequestBody AuthorRequest authorRequest) {
+        java.sql.Date dateOfBirth = defaultWeAreKhmerValidation.validateDateOfBirth(authorRequest.getDateOfBirth());
+        if (authorRequest.getWorkingExperience().size() > 3) {
+            throw new ValidateException("Working Experience has 3 maximum fields", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+        }
+        if (authorRequest.getEducation().size() > 3) {
+            throw new ValidateException("Education has 3 maximum fields", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+        }
+        if (authorRequest.getQuote().size() > 3) {
+            throw new ValidateException("Quote has 3 maximum fields", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+        }
+
         AuthorRequestTable authorRequestTable = serviceClassHelper.insertAndGetAuthorRequestFromDatabase(authorRequest);
+        if (authorRequestTable != null) {
+            weAreKhmerRepositorySupport.changeGenderAfterUserRequestAsAuthorSuccess(authorRequest.getGender(), authorRequest.getAuthorName(), authorRequestTable.getAuthorRequestId());
+            weAreKhmerRepositorySupport.updateDateOfBirthOfUserAfterRegisteredAsAuthor(authorRequestTable.getUserId(), new java.sql.Timestamp(dateOfBirth.getTime()));
+        }
         GenericResponse AUTHOR_REQUEST_RESULT = GenericResponse.builder()
-                .message("request successfully")
-                .status("200")
+                .message("You request as author successfully. ⚠️ Import noted: For this controller either works both for post and update.")
+                .title("success")
+                .statusCode(200)
                 .payload(authorRequestTable)
                 .build();
         return ResponseEntity.ok(AUTHOR_REQUEST_RESULT);
+
     }
 
 
@@ -158,18 +181,13 @@ public class AuthenticationController {
                         .build();
                 return ResponseEntity.badRequest().body(genericResponse);
             }
-            if(ex instanceof BadCredentialsException) {
+            if (ex instanceof BadCredentialsException) {
                 throw new BadCredentialsException("Incorrect username or password.");
             }
 //            return ResponseEntity.badRequest().body(ex.getMessage());
             throw new RuntimeException();
         }
     }
-
-
-
-
-
 
 
     @PostMapping("/verification/token")

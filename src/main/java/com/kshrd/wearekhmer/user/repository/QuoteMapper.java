@@ -50,5 +50,12 @@ public interface QuoteMapper {
     @Select("DELETE FROM quote_tb WHERE q_id = #{quoteId}")
     @ResultMap("quoteMapperId")
     Quote delete(String quoteId);
+
+
+//    validate when user register again and again
+    @Delete("""
+            delete from quote_tb where user_id = #{useId}
+            """)
+    void deleteAllQuoteIfUserIdIsExist(String useId);
 }
 

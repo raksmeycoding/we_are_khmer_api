@@ -85,11 +85,11 @@ public interface AuthorRepository {
                     RETURNING user_id
             )
             UPDATE user_tb
-            SET is_author = TRUE
+            SET is_author = 'true'
             WHERE user_id = (SELECT user_id FROM inserted_user_role);
                         
             UPDATE author_request_tb
-            SET is_author_accepted = TRUE
+            SET is_author_accepted = 'APPROVED'
             WHERE author_request_tb.user_id = #{userId}
             RETURNING user_id;
             """)
@@ -97,9 +97,9 @@ public interface AuthorRepository {
 
 
     @Select("""
-            select update_tables_author_request_tb_and_user_tb(false, #{userId})
+            update author_request_tb set is_author_accepted = 'REJECTED' WHERE  user_id = #{userId} RETURNING user_id;
             """)
-    boolean updateUserRequestToBeAsAuthorAsReject(String userId);
+    String updateUserRequestToBeAsAuthorAsReject(String userId);
 
 
 
@@ -111,7 +111,6 @@ public interface AuthorRepository {
     @Select("""
             select * from user_tb where is_author = true and user_id = #{authorId}
             """)
-
     @ResultMap("authorDTO")
     AuthorDTO getCurrentAuthorById(String authorId);
 

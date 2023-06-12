@@ -1,8 +1,13 @@
 package com.kshrd.wearekhmer.utils.validation;
 
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
+import org.springframework.http.HttpStatus;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public interface WeAreKhmerValidation {
@@ -59,6 +64,9 @@ public interface WeAreKhmerValidation {
     void validateNotificationTypeAdmin(String notificationType);
 
     boolean validateNotificationExistInType(String notificationId,String notificationType);
+
+
+    java.sql.Date validateDateOfBirth(String dateOfBirth);
 
 
 

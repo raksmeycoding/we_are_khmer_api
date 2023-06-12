@@ -113,6 +113,34 @@ public class AuthorController {
 
     }
 
+    @PostMapping("rejected/{userId}")
+    @Operation(summary = "(Accept user request as author.)")
+    public ResponseEntity<?> updateUserRequestToBeAsRejected(@PathVariable String userId) {
+        String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
+        System.out.println(hasRoleAuthor);
+        if (!weAreKhmerValidation.isAdmin()) {
+            throw new CustomRuntimeException("You are not admin.");
+        }
+        if (hasRoleAuthor != null && hasRoleAuthor.equalsIgnoreCase("ROLE_AUTHOR")) {
+            throw new CustomRuntimeException("User Already Exist.");
+        }
+        String userIdAccepted = authorService.updateUserRequestToBeAsAuthorAsReject(userId);
+        GenericResponse res;
+//        if (userIdAccepted == null) {
+//            res = GenericResponse.builder()
+//                    .status("500")
+//                    .message("is not accepted.")
+//                    .build();
+//            return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+        res = GenericResponse.builder()
+                .status("200")
+                .message("User is accepted as author.")
+                .build();
+        return ResponseEntity.ok(res);
+
+    }
+
     @GetMapping("/profile")
     @Operation(summary = "(Author view own profile ( only Author) )")
     public ResponseEntity<?> getCurrentAuthor() {

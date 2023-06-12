@@ -17,3 +17,10 @@ drop function limit_user_quote cascade;
 
 create trigger trg_limit_user_quote before insert or update on public.quote_tb for each row execute function limit_user_quote();
 drop trigger trg_limit_user_quote on quote_tb;
+
+
+
+
+-- validate when user trying to register again and again
+delete from quote_tb where user_id = '759fed9b-edd7-4b23-b019-5e6858ee8a34';
+delete from quote_tb where user_id = '759fed9b-edd7-4b23-b019-5e6858ee8a34';

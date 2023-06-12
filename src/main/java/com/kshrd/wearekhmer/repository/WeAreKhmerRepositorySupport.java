@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.user.model.dto.UserAppDTO;
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
 import org.apache.ibatis.annotations.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -117,6 +118,27 @@ public interface WeAreKhmerRepositorySupport {
             }
     )
     UserApp getAllUsers(@Param("email") String email);
+
+
+
+
+
+    @Select("""
+            update user_tb set gender = cast(#{gender} as gender), username = #{username} where user_id = #{userId}
+            """)
+    void changeGenderAfterUserRequestAsAuthorSuccess( String userId, String gender, String username);
+
+
+//    @Select("""
+//            update user_tb set data_of_birth = cast(#{dateOfBirth} as timestamp) where user_id = ${userId}
+//            """)
+//    void updateDateOfBirtOfUserAfterRegistedAsAuthor(String userId, Timestamp dateOfBirth);
+
+
+
+    @Update("UPDATE user_tb SET data_of_birth = #{dateOfBirth} WHERE user_id = #{userId}")
+    void updateDateOfBirthOfUserAfterRegisteredAsAuthor(@Param("userId") String userId, @Param("dateOfBirth") Timestamp dateOfBirth);
+
 
 
 }

@@ -48,5 +48,12 @@ public interface WorkingExperienceMapper {
     @Select("DELETE FROM working_experience_tb WHERE wId = #{workingExperienceId} RETURNING *")
     @ResultMap("workingExperienceMap")
     WorkingExperience delete(String workingExperienceId);
+
+
+
+    @Delete("""
+            delete from working_experience_tb where user_id = #{userId}
+            """)
+    void deleteAllWorkingExperienceIfUserIdExist(String userId);
 }
 
