@@ -29,9 +29,9 @@ public interface INotificationMapper {
 
 
     @Select("""
-            SELECT art.author_request_id, ut.photo_url, art.user_id, ut.email ,art.author_request_name, art.createat, art.reason
+            SELECT art.author_request_id, ut.photo_url, art.user_id, art.is_author_accepted,  ut.email ,art.author_request_name, art.createat, art.reason
             FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id
-            WHERE is_author_accepted = false
+            WHERE is_author_accepted = cast(#{status} AS status)
             ORDER BY createat DESC;       
             """)
     @Results(id = "NotificationResponse", value = {
@@ -41,21 +41,16 @@ public interface INotificationMapper {
             @Result(property = "createAt", column = "createat"),
             @Result(property = "reason", column = "reason"),
             @Result(property = "email", column = "email"),
-            @Result(property = "photoUrl", column = "photo_url")
+            @Result(property = "photoUrl", column = "photo_url"),
+            @Result(property = "isAccepted", column = "is_author_accepted")
     })
-    List<UserRequestAuthorList> TypeRequest();
+    List<UserRequestAuthorList> TypeRequest(String status);
 
 
     @Select("""
-            SELECT art.author_request_name,ut.email, ut.photo_url, art.user_id, art.createat, art.reason, q_name, e_name, wet.w_name
-            FROM author_request_tb as art INNER JOIN quote_tb qt on art.user_id = qt.user_id
-            INNER JOIN education e on art.user_id = e.user_id
-            INNER JOIN working_experience_tb wet on art.user_id = wet.user_id
-            INNER JOIN user_tb ut on art.user_id = ut.user_id
-            WHERE art.user_id =  #{userId} AND is_author_accepted = false
+SELECT art.*, ut.email, ut.photo_url
+FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id WHERE art.user_id = #{userId} AND is_author_accepted =  cast(#{status} AS status)
             """)
-
-
     @Result(property = "authorId", column = "user_id")
     @Result(property = "authorName", column = "author_request_name")
     @Result(property = "photoUrl", column = "photo_url")
@@ -64,9 +59,8 @@ public interface INotificationMapper {
     @Result(property = "education", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.EducationMapper.getEducationByUserIdObject"))
     @Result(property = "quote", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.QuoteMapper.getQuoteByUserIdAsObject"))
     @Result(property = "reason", column = "reason")
-    ViewAuthorRequest getUserRequestDetail(String userId);
-
-
+    @Result(property = "isAccepted", column = "is_author_accepted")
+    ViewAuthorRequest getUserRequestDetail(String userId, String status);
 
 
     @Select("""
@@ -115,9 +109,9 @@ public interface INotificationMapper {
     Integer totalNotificationRecordForCurrentAuthor(String userId);
 
     @Select("""
-            SELECT count(author_request_id) FROM author_request_tb WHERE is_author_accepted = false;
+            SELECT count(author_request_id) FROM author_request_tb WHERE is_author_accepted =  cast(#{status} AS status);
             """)
-    Integer totalRequestToBeAuthorRecords();
+    Integer totalRequestToBeAuthorRecords(String status);
 
     @Select("""
             SELECT count(notification_id) FROM notification_tb WHERE notification_type = 'REPORT_ON_ARTICLE';
@@ -141,9 +135,9 @@ public interface INotificationMapper {
 
 
    @Select("""
-           SELECT EXISTS(SELECT 1 FROM author_request_tb WHERE user_id = #{userId} AND is_author_accepted = false);
+           SELECT EXISTS(SELECT 1 FROM author_request_tb WHERE user_id = #{userId} AND is_author_accepted = cast(#{status} AS status));
            """)
-    boolean validateAuthorPendingExist(String userId);
+    boolean validateUserRequestExist(String userId, String status);
 
 
    @Select("""

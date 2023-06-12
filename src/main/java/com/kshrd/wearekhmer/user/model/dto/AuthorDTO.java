@@ -2,6 +2,7 @@ package com.kshrd.wearekhmer.user.model.dto;
 
 import com.kshrd.wearekhmer.user.model.entity.Education;
 import com.kshrd.wearekhmer.user.model.entity.Quote;
+import com.kshrd.wearekhmer.user.model.entity.QuoteResponse;
 import com.kshrd.wearekhmer.user.model.entity.WorkingExperience;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,6 @@ public class AuthorDTO {
     private List<WorkingExperience> workingExperience;
 
     private List<Education> education;
-    private List<Quote> quote;
+    private List<QuoteResponse> quote;
 
 }

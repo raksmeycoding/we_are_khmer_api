@@ -14,7 +14,7 @@ public interface AuthorService {
 
     String updateUserRequestToBeAsAuthor(String userId);
 
-    boolean updateUserRequestToBeAsAuthorAsReject(String userId);
+    String updateUserRequestToBeAsAuthorAsReject(String userId);
 
     AuthorDTO getCurrentAuthorById(String userId);
 }

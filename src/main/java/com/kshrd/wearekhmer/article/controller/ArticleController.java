@@ -79,6 +79,7 @@ public class ArticleController {
 
 
     @GetMapping("/filter")
+    @Operation(summary = "(Filter all articles)")
     public ResponseEntity<?> filterArticles(@RequestParam(required = false) String title,
                                             @RequestParam(required = false) String publishDate,
                                             @RequestParam(required = false) String categoryId,
@@ -772,7 +773,7 @@ public class ArticleController {
 
         Integer nextPage = getNextPage(page);
 
-        List<ArticleResponse> articleResponseList = articleService.getAllArticleCurrentUserByLatest(
+        List<ArticleResponse2> articleResponseList = articleService.getAllArticleCurrentUserByLatest(
                 weAreKhmerCurrentUser.getUserId(),
                 PAGE_SIZE,
                 nextPage
@@ -798,7 +799,7 @@ public class ArticleController {
 
         Integer nextPage = getNextPage(page);
 
-        List<ArticleResponse> articleResponseList = articleService.getAllArticleCurrentUserByYesterday(
+        List<ArticleResponse2> articleResponseList = articleService.getAllArticleCurrentUserByYesterday(
                 weAreKhmerCurrentUser.getUserId(),
                 PAGE_SIZE,
                 nextPage

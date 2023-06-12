@@ -12,6 +12,7 @@ import com.kshrd.wearekhmer.user.repository.QuoteMapper;
 import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
 import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -50,10 +51,20 @@ public class ServiceHelperImpl implements ServiceClassHelper {
 
     private final ArticleMapper articleMapper;
 
+    private final WeAreKhmerValidation weAreKhmerValidation;
+
 
     @Override
     public AuthorRequestTable insertAndGetAuthorRequestFromDatabase(AuthorRequest authorRequest) {
         String currentUserId = weAreKhmerCurrentUser.getUserId();
+
+//        validate gender
+        weAreKhmerValidation.genderValidation(authorRequest.getGender());
+//        validate delete all existing quote, education, and working experience if user request as author again
+        workingExperienceMapper.deleteAllWorkingExperienceIfUserIdExist(currentUserId);
+        quoteMapper.deleteAllQuoteIfUserIdIsExist(currentUserId);
+        educationMapper.deleteAllEducationIfUserIdExist(currentUserId);
+
 
         List<String> educations = authorRequest.getEducation();
         assert educations != null;

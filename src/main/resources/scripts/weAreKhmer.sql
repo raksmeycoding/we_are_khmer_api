@@ -266,12 +266,13 @@ where user_id = '046adf5f-4a53-4386-b746-28a05db5753b';
 
 
 -- author request feature
+CREATE TYPE status as ENUM ('PENDING', 'REJECTED', 'APPROVED');
 create table author_request_tb
 (
     author_request_id   varchar primary key default uuid_generate_v4(),
     user_id             varchar references user_tb (user_id),
     author_request_name varchar not null,
-    is_author_accepted  boolean             default false,
+    is_author_accepted  status             default 'PENDING',
     createAt            timestamp           default current_timestamp,
     reason              varchar not null
 );

@@ -116,13 +116,16 @@ public class NotificationController {
 
     @GetMapping("/admin/user_request_as_author")
     @Operation(summary = "Get request notifications to be author for admin ")
-    public ResponseEntity<?> getRequestNotification(){
+    public ResponseEntity<?> getRequestNotification(@RequestParam("status") String status){
+
  ;
             GenericResponse genericResponse;
 
-            Integer totalRecords = notificationService.totalRequestToBeAuthorRecords();
+            weAreKhmerValidation.validateStatus(status.toUpperCase());
 
-            List<UserRequestAuthorList> notifications = notificationService.getAllNotificationTypeRequest();
+            Integer totalRecords = notificationService.totalRequestToBeAuthorRecords(status.toUpperCase());
+
+            List<UserRequestAuthorList> notifications = notificationService.getAllNotificationTypeRequest(status.toUpperCase());
 
             genericResponse = GenericResponse.builder()
                     .totalRecords(totalRecords)
@@ -138,14 +141,16 @@ public class NotificationController {
 
 
 
-    @GetMapping("/admin/{userId}")
+    @GetMapping("/admin")
     @Operation(summary = "View user request detail to be author (only for admin)")
     public ResponseEntity<?> ViewUserRequestAuthorDetail(
-            @PathVariable("userId") String userId
-    ) {
+            @RequestParam("status") String status,
+            @RequestParam("userId") String userId
 
+    ) {
+        weAreKhmerValidation.validateStatus(status.toUpperCase());
         GenericResponse genericResponse;
-        ViewAuthorRequest viewAuthorRequest = notificationService.ViewUserRequestDetail(userId);
+        ViewAuthorRequest viewAuthorRequest = notificationService.ViewUserRequestDetail(userId,status.toUpperCase());
 
         genericResponse = GenericResponse.builder()
                 .status("200")

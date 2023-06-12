@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer.notification;
 
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.notification.entity.response.AuthorNotificationList;
 import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
 import com.kshrd.wearekhmer.notification.entity.response.ReportArticleList;
@@ -36,22 +37,22 @@ public class NotificationServiceImpl implements INotificationService {
     }
 
     @Override
-    public List<UserRequestAuthorList> getAllNotificationTypeRequest() {
-        return notificationMapper.TypeRequest();
+    public List<UserRequestAuthorList> getAllNotificationTypeRequest(String status) {
+        return notificationMapper.TypeRequest(status);
     }
 
-    @Override
-    public ViewAuthorRequest ViewUserRequestDetail(String userId) {
-        if(notificationMapper.validateUserIdExistInUserRequestToBeAuthor(userId)){
-            if(notificationMapper.validateAuthorPendingExist(userId)){
-                return notificationMapper.getUserRequestDetail(userId);
-            }else {
-                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User has already been author");
-            }
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "userId not found");
-        }
-    }
+//    @Override
+//    public ViewAuthorRequest ViewUserRequestDetail(String userId) {
+//        if(notificationMapper.validateUserIdExistInUserRequestToBeAuthor(userId)){
+//            if(notificationMapper.validateAuthorPendingExist(userId)){
+//                return notificationMapper.getUserRequestDetail(userId);
+//            }else {
+//                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User has already been author");
+//            }
+//        }else{
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "userId not found");
+//        }
+//    }
 
     @Override
     public List<ReportArticleList> getAllReportArticles() {
@@ -74,8 +75,8 @@ public class NotificationServiceImpl implements INotificationService {
     }
 
     @Override
-    public Integer totalRequestToBeAuthorRecords() {
-        return notificationMapper.totalRequestToBeAuthorRecords();
+    public Integer totalRequestToBeAuthorRecords(String status) {
+        return notificationMapper.totalRequestToBeAuthorRecords(status);
     }
 
     @Override
@@ -88,5 +89,16 @@ public class NotificationServiceImpl implements INotificationService {
         if(notificationMapper.validateNotificationIdExistInNotificationType(notificationType,notificationId))
             return notificationMapper.deleteNotificationByTypeAndId( notificationType,notificationId);
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NotificationId not match NotificationType or NotificationId does not exist");
+    }
+
+    @Override
+    public ViewAuthorRequest ViewUserRequestDetail(String userId, String status) {
+        if(notificationMapper.validateUserRequestExist(userId,status)){
+            return notificationMapper.getUserRequestDetail(userId, status);
+        }
+        else {
+            throw new ValidateException("userId : "+userId+" does not request to be author or userId : "+ userId+ " does not exist in status : "+status,HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+        }
+
     }
 }

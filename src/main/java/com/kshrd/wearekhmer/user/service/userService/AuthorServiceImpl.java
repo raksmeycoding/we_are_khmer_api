@@ -62,7 +62,7 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
     }
 
     @Override
-    public boolean updateUserRequestToBeAsAuthorAsReject(String userId) {
+    public String updateUserRequestToBeAsAuthorAsReject(String userId) {
         return authorRepository.updateUserRequestToBeAsAuthorAsReject(userId);
     }
 

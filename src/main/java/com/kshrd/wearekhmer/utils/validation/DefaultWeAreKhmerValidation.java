@@ -7,6 +7,7 @@ import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.bookmark.repository.BookmarkMapper;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.heroCard.repository.HeroCardRepository;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import com.kshrd.wearekhmer.history.repository.HistoryMapper;
@@ -25,6 +26,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -336,6 +339,39 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
         if(!notificationMapper.validateNotificationIdExistInNotificationType(notificationId,notificationType))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NotificationId does not exist in NotificationType");
         return notificationMapper.validateNotificationIdExistInNotificationType(notificationId,notificationType);
+    }
+
+
+    @Override
+    public java.sql.Date validateDateOfBirth(String dateOfBirth) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        simpleDateFormat.setLenient(false);
+        try {
+            java.util.Date javaDate = simpleDateFormat.parse(dateOfBirth);
+            java.sql.Date sqlDate = new java.sql.Date(javaDate.getTime());
+            return sqlDate;
+        } catch (ParseException e) {
+            throw new ValidateException("Invalid Date of birth format. It must be in the format 'yyyy-MM-dd'.", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+        }
+    }
+
+
+
+    @Override
+    public void validateStatus(String status) {
+        List<String> Status = new ArrayList<>();
+        boolean matchOne = false;
+        Status.add("PENDING");
+        Status.add("REJECTED");
+        for (String type : Status) {
+            if (status.equals(type)) {
+                matchOne = true;
+                break;
+            }
+        }
+        if (!matchOne) {
+            throw new ValidateException("Required value status must be either [PENDING, REJECTED]", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value() );
+        }
     }
 }
 

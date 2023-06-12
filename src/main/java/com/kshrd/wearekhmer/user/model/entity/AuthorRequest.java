@@ -27,7 +27,7 @@ public class AuthorRequest {
 
     @NotNull(message = "date of birth name can not be null.")
     @NotBlank(message = "Author name can not be blank.")
-    private Timestamp dateOfBirth;
+    private String dateOfBirth;
 
     @NotNull
     @NotBlank

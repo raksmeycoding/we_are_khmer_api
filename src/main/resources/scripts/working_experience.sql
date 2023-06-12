@@ -34,3 +34,8 @@ CREATE TRIGGER limit_user_id
 select count(*) from working_experience_tb where user_id = 'afec3af8-f178-4430-b33d-1022b3025f2c';
 
 drop function validate_user_working_experience cascade ;
+
+
+
+-- validate delete all records when user trying to register working experience again and agian
+delete from working_experience_tb where user_id = '465337d2-dbf7-4c38-9094-3166b7116fef';

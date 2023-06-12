@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.user.repository;
 
 import com.kshrd.wearekhmer.user.model.entity.WorkingExperience;
+import com.kshrd.wearekhmer.user.model.entity.WorkingExperienceResponse;
 import lombok.Builder;
 import org.apache.ibatis.annotations.*;
 
@@ -16,11 +17,11 @@ public interface WorkingExperienceMapper {
             value = {
                     @Result(property = "workingExperienceId", column = "wId"),
                     @Result(property = "workingExperienceName", column = "w_name"),
-                    @Result(property = "userId", column = "user_id")
+//                    @Result(property = "userId", column = "user_id")
             }
 
     )
-    List<WorkingExperience> getAll();
+    List<WorkingExperienceResponse> getAll();
 
     @Select("INSERT INTO working_experience_tb (w_name, user_id) VALUES (#{workingExperienceName}, #{userId}) returning *")
     @ResultMap("workingExperienceMap")
@@ -39,7 +40,7 @@ public interface WorkingExperienceMapper {
     @Select("""
             select cast(w_name as varchar) as w_name from working_experience_tb where user_id = #{userId}
             """)
-    String getWorkingByUserId(String userId);
+    WorkingExperienceResponse getWorkingByUserId(String userId);
 
     @Select("UPDATE working_experience_tb SET w_name = #{workingExperienceName} WHERE wId = #{workingExperienceId} RETURNING *")
     @ResultMap("workingExperienceMap")
@@ -48,5 +49,12 @@ public interface WorkingExperienceMapper {
     @Select("DELETE FROM working_experience_tb WHERE wId = #{workingExperienceId} RETURNING *")
     @ResultMap("workingExperienceMap")
     WorkingExperience delete(String workingExperienceId);
+
+
+
+    @Delete("""
+            delete from working_experience_tb where user_id = #{userId}
+            """)
+    void deleteAllWorkingExperienceIfUserIdExist(String userId);
 }
 
