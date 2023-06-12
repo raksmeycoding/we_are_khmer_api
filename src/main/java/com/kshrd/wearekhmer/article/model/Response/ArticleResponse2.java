@@ -42,6 +42,8 @@ public class ArticleResponse2 {
     private String photo_url;
     private String author_name;
     private String category_name;
-    private String react_count;
+    private Integer react_count;
+    private Boolean bookmarked;
+    private Boolean reacted;
 
 }

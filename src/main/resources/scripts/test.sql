@@ -47,6 +47,56 @@ FROM article_tb a
 ORDER BY a.count_view desc;
 
 
+
+
+
+
 SELECT a.article_id, a.user_id, a.category_id, a.title, a.sub_title, a.description, a.publish_date, a.count_view
 FROM article_tb a
 WHERE ( DATE(a.publish_date) = '2023-06-06');
+
+
+
+
+SELECT a.article_id, a.title, a.sub_title, a.publish_date, a.description, a.updatedat as updateat, a.image, a.count_view, a.isban, a.hero_card_in, a.user_id, a.category_id, ub.photo_url, ub.username as author_name, c.category_name, (select count(*) from react_tb r where r.article_id = a.article_id) as react_count
+FROM article_tb a
+         INNER JOIN user_tb ub on ub.user_id = a.user_id
+         INNER JOIN category c on c.category_id = a.category_id
+WHERE ( 1=1 AND a.isban = false AND DATE(a.publish_date) = '2023-06-10');
+
+
+select * from article_tb where date(article_tb.publish_date) = '2023-06-10';
+
+
+select a.article_id, a.title from article_tb a left join user_tb u on a.user_id = u.user_id
+    left join bookmark_tb bt on bt.user_id = u.user_id;
+
+
+
+select count(*) from article_tb a inner join category c on a.category_id = c.category_id inner join user_tb u on u.user_id = a.user_id and a.isban = false;
+
+
+SELECT
+    a.article_id,
+    a.title,
+    a.sub_title,
+    a.publish_date,
+    a.description,
+    a.updatedat AS updateat,
+    a.image,
+    a.count_view,
+    a.isban,
+    a.hero_card_in,
+    a.user_id,
+    a.category_id,
+    ub.photo_url,
+    ub.username AS author_name,
+    c.category_name,
+    (SELECT COUNT(*) FROM react_tb r WHERE r.article_id = a.article_id) AS react_count,
+    CASE WHEN b.user_id = 'f27491a7-346c-4a4d-9db7-882daab7284c' THEN true ELSE false END AS bookmarked,
+
+FROM
+    article_tb a
+        INNER JOIN user_tb ub ON ub.user_id = a.user_id
+        INNER JOIN category c ON c.category_id = a.category_id
+        LEFT OUTER JOIN bookmark_tb b ON b.article_id = a.article_id

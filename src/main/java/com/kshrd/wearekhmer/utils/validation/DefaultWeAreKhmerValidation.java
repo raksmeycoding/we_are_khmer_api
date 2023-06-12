@@ -312,6 +312,31 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You don't have this notification");
         return true;
     }
+
+    @Override
+    public void validateNotificationTypeAdmin(String notificationType) {
+        List<String> notification = new ArrayList<>();
+        boolean matchOne = false;
+        notification.add("REPORT_ON_ARTICLE");
+        notification.add("USER_REQUEST_AS_AUTHOR");
+        notification.add("USER_REPORT_AUTHOR");
+        for (String type : notification) {
+            if (notificationType.equals(type)) {
+                matchOne = true;
+                break;
+            }
+        }
+        if (!matchOne) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Required value type must be either [REPORT_ON_ARTICLE, USER_REQUEST_AS_AUTHOR, USER_REPORT_AUTHOR]");
+        }
+    }
+
+    @Override
+    public boolean validateNotificationExistInType( String notificationId,String notificationType) {
+        if(!notificationMapper.validateNotificationIdExistInNotificationType(notificationId,notificationType))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NotificationId does not exist in NotificationType");
+        return notificationMapper.validateNotificationIdExistInNotificationType(notificationId,notificationType);
+    }
 }
 
 

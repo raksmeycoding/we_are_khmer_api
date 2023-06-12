@@ -121,6 +121,8 @@ public class ServiceHelperImpl implements ServiceClassHelper {
     }
 
 
+
+
     @Override
     public Integer getTotalOfRecordInArticleTbForCurrentUser() {
         return articleMapper.getTotalRecordOfArticleForCurrentUser(weAreKhmerCurrentUser.getUserId());

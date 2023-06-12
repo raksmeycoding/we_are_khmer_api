@@ -78,12 +78,23 @@ public class ArticleController {
 
     @GetMapping("/filter")
     public ResponseEntity<?> filterArticles(@RequestParam(required = false) String title,
-                                            @RequestParam(required = false) Date publishDate,
+                                            @RequestParam(required = false) String publishDate,
                                             @RequestParam(required = false) String categoryId,
-                                            @RequestParam(required = false) Date startDate,
-                                            @RequestParam(required = false) Date endDate,
-                                            @RequestParam(value = "view", required = false) String view) {
+                                            @RequestParam(required = false) String startDate,
+                                            @RequestParam(required = false) String endDate,
+                                            @RequestParam(value = "view", required = false) String view,
+                                            @RequestParam(value = "day", required = false) String day,
+                                            @RequestParam(value = "userId", required = false) String userId,
+                                            @RequestParam(value = "page", required = false) Integer page) {
         try {
+
+            int totalRecords = articleMapper.getTotalRecordOfArticleTb();
+            if (page != null) {
+                int totalPages = (int) Math.ceil((double) totalRecords / 10);
+                if (page > totalPages)
+                    page = totalPages;
+            }
+
             Map<String, Object> param = new HashMap<>();
             param.put("title", title);
 //        List<ArticleResponse2> filteredArticles = articleMapper.filterArticles(title, date, categoryId );
@@ -96,10 +107,19 @@ public class ArticleController {
             filterArticleCriteria.setStartDate(startDate);
             filterArticleCriteria.setEndDate(endDate);
             filterArticleCriteria.setView(view);
+            filterArticleCriteria.setDay(day);
+            filterArticleCriteria.setUserId(userId);
+            filterArticleCriteria.setPage(page);
             List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter2(filterArticleCriteria);
 
             // Return the response using ResponseEntity
-            return ResponseEntity.ok().body(filteredArticles);
+            return ResponseEntity.ok().body(GenericResponse.builder()
+                            .message("Get data successfully.")
+                            .title("success")
+                            .statusCode(200)
+                            .totalRecords(totalRecords)
+                            .payload(filteredArticles)
+                    .build());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             ex.printStackTrace();

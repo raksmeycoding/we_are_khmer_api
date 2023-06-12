@@ -197,12 +197,4 @@ public class ArticleServiceImp implements ArticleService {
     }
 
 
-
-
-//    public List<ArticleResponse> filterArticles(String title, String categoryId) {
-//        Map<String, Object> parameters = new HashMap<>();
-//        parameters.put("title", title);
-//        parameters.put("categoryId", categoryId);
-//        return articleMapper.filterArticles(parameters);
-//    }
 }

@@ -8,18 +8,23 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class FilterArticleCriteria {
     private String title;
-    private Date publishDate;
+    private String publishDate;
 
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private String categoryId;
 
     private String view;
+    private String day;
+
+    private String userId;
+
+    private Integer page;
 
 }

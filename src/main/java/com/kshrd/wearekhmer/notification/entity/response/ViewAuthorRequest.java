@@ -18,16 +18,15 @@ import java.util.List;
 @AllArgsConstructor
 public class ViewAuthorRequest {
 
-//    private String authorId;
-//    private String authorName;
-//    private String photoUrl;
-//    private String email;
-//
-//    private List<WorkingExperience> workingExperience;
-//
-//    private List<Education> education;
-//    private List<Quote> quote;
-    private AuthorDTO authorDTO;
+    private String authorId;
+    private String authorName;
+    private String photoUrl;
+    private String email;
+
+    private List<WorkingExperience> workingExperience;
+
+    private List<Education> education;
+    private List<Quote> quote;
     private String reason;
 
 }
