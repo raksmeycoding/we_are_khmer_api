@@ -97,7 +97,7 @@ public class NotificationServiceImpl implements INotificationService {
             return notificationMapper.getUserRequestDetail(userId, status);
         }
         else {
-            throw new ValidateException("userId : "+userId+" does not exist or userId : "+ userId+ " does not exist in status : "+status,HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+            throw new ValidateException("userId : "+userId+" does not request to be author or userId : "+ userId+ " does not exist in status : "+status,HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         }
 
     }

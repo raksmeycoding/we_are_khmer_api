@@ -20,4 +20,6 @@ public class UserRequestAuthorList {
     private String email;
     private String photoUrl;
 
+    private String isAccepted;
+
 }

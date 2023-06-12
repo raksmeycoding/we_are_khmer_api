@@ -29,7 +29,7 @@ public interface INotificationMapper {
 
 
     @Select("""
-            SELECT art.author_request_id, ut.photo_url, art.user_id, ut.email ,art.author_request_name, art.createat, art.reason
+            SELECT art.author_request_id, ut.photo_url, art.user_id, art.is_author_accepted,  ut.email ,art.author_request_name, art.createat, art.reason
             FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id
             WHERE is_author_accepted = cast(#{status} AS status)
             ORDER BY createat DESC;       
@@ -41,7 +41,8 @@ public interface INotificationMapper {
             @Result(property = "createAt", column = "createat"),
             @Result(property = "reason", column = "reason"),
             @Result(property = "email", column = "email"),
-            @Result(property = "photoUrl", column = "photo_url")
+            @Result(property = "photoUrl", column = "photo_url"),
+            @Result(property = "isAccepted", column = "is_author_accepted")
     })
     List<UserRequestAuthorList> TypeRequest(String status);
 
@@ -58,6 +59,7 @@ FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id 
     @Result(property = "education", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.EducationMapper.getEducationByUserIdObject"))
     @Result(property = "quote", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.QuoteMapper.getQuoteByUserIdAsObject"))
     @Result(property = "reason", column = "reason")
+    @Result(property = "isAccepted", column = "is_author_accepted")
     ViewAuthorRequest getUserRequestDetail(String userId, String status);
 
 

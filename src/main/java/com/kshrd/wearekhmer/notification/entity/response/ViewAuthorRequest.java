@@ -19,11 +19,14 @@ public class ViewAuthorRequest {
     private String authorName;
     private String photoUrl;
     private String email;
+    private String reason;
+
+    private String isAccepted;
 
     private List<WorkingExperienceResponse> workingExperience;
 
     private List<EducationResponse> education;
     private List<QuoteResponse> quote;
-    private String reason;
+
 
 }

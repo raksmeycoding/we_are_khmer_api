@@ -121,11 +121,11 @@ public class NotificationController {
  ;
             GenericResponse genericResponse;
 
-            weAreKhmerValidation.validateStatus(status);
+            weAreKhmerValidation.validateStatus(status.toUpperCase());
 
-            Integer totalRecords = notificationService.totalRequestToBeAuthorRecords(status);
+            Integer totalRecords = notificationService.totalRequestToBeAuthorRecords(status.toUpperCase());
 
-            List<UserRequestAuthorList> notifications = notificationService.getAllNotificationTypeRequest(status);
+            List<UserRequestAuthorList> notifications = notificationService.getAllNotificationTypeRequest(status.toUpperCase());
 
             genericResponse = GenericResponse.builder()
                     .totalRecords(totalRecords)
@@ -148,9 +148,9 @@ public class NotificationController {
             @RequestParam("userId") String userId
 
     ) {
-        weAreKhmerValidation.validateStatus(status);
+        weAreKhmerValidation.validateStatus(status.toUpperCase());
         GenericResponse genericResponse;
-        ViewAuthorRequest viewAuthorRequest = notificationService.ViewUserRequestDetail(userId,status);
+        ViewAuthorRequest viewAuthorRequest = notificationService.ViewUserRequestDetail(userId,status.toUpperCase());
 
         genericResponse = GenericResponse.builder()
                 .status("200")
