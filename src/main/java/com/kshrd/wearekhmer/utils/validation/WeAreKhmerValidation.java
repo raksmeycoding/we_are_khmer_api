@@ -65,6 +65,8 @@ public interface WeAreKhmerValidation {
 
     boolean validateNotificationExistInType(String notificationId,String notificationType);
 
+    void validateStatus(String status);
+
 
     java.sql.Date validateDateOfBirth(String dateOfBirth);
 

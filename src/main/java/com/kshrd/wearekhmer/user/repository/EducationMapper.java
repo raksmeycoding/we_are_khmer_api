@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.user.repository;
 
 import com.kshrd.wearekhmer.user.model.entity.Education;
+import com.kshrd.wearekhmer.user.model.entity.EducationResponse;
 import com.kshrd.wearekhmer.user.model.entity.Quote;
 import org.apache.ibatis.annotations.*;
 
@@ -16,10 +17,10 @@ public interface EducationMapper {
             value = {
                     @Result(property = "educationId", column = "e_id"),
                     @Result(property = "educationName", column = "e_name"),
-                    @Result(property = "userId", column = "user_id")
+//                    @Result(property = "userId", column = "user_id")
             }
     )
-    List<Education> getAll();
+    List<EducationResponse> getAll();
 
     @Select("SELECT * FROM education WHERE e_id = #{educationId}")
     @ResultMap("educationMapperId")
@@ -34,7 +35,7 @@ public interface EducationMapper {
             select * from education where education.user_id = #{userId}
             """)
     @ResultMap("educationMapperId")
-    Education getEducationByUserIdObject(String userId);
+    EducationResponse getEducationByUserIdObject(String userId);
 
     @Select("INSERT INTO education (e_name, user_id) VALUES (#{educationName}, #{userId}) returning *")
     @ResultMap("educationMapperId")

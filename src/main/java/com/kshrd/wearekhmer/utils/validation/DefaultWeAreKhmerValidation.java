@@ -95,7 +95,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
                 return;
             }
         }
-        throw new ValidateException("Gender must be lowercase and be formatted in (male, female, other).", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+        throw new CustomRuntimeException("Gender must be lowercase and be formatted in (male, female, other).");
 
     }
 
@@ -355,6 +355,24 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
         }
     }
 
+
+
+    @Override
+    public void validateStatus(String status) {
+        List<String> Status = new ArrayList<>();
+        boolean matchOne = false;
+        Status.add("PENDING");
+        Status.add("REJECTED");
+        for (String type : Status) {
+            if (status.equals(type)) {
+                matchOne = true;
+                break;
+            }
+        }
+        if (!matchOne) {
+            throw new ValidateException("Required value status must be either [PENDING, REJECTED]", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value() );
+        }
+    }
 }
 
 

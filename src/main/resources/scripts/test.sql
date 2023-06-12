@@ -109,3 +109,23 @@ FROM
 update user_tb set data_of_birth = '2023-06-06' where user_id = 'c7c13f75-feae-4fd6-99b2-cd59c85306b5';
 
 
+        LEFT OUTER JOIN bookmark_tb b ON b.article_id = a.article_id;
+
+
+
+
+SELECT art.author_request_name,ut.email, ut.photo_url, art.user_id, art.createat, art.reason, q_name, e_name, wet.w_name
+FROM author_request_tb as art INNER JOIN quote_tb qt on art.user_id = qt.user_id
+                              INNER JOIN education e on art.user_id = e.user_id
+                              INNER JOIN working_experience_tb wet on art.user_id = wet.user_id
+                              INNER JOIN user_tb ut on art.user_id = ut.user_id
+WHERE art.user_id =  'c7c13f75-feae-4fd6-99b2-cd59c85306b5' AND is_author_accepted = 'PENDING';
+
+
+
+SELECT art.*
+FROM author_request_tb as art WHERE art.user_id =  'c7c13f75-feae-4fd6-99b2-cd59c85306b5';
+
+
+SELECT art.*, ut.email, ut.photo_url
+FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id WHERE art.user_id = 'c7c13f75-feae-4fd6-99b2-cd59c85306b5' AND is_author_accepted = 'PENDING'

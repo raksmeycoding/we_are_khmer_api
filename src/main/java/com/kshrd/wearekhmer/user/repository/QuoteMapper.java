@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.user.repository;
 
 import com.kshrd.wearekhmer.user.model.entity.Quote;
+import com.kshrd.wearekhmer.user.model.entity.QuoteResponse;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -16,11 +17,9 @@ public interface QuoteMapper {
 
                     @Result(property = "quoteId", column = "q_id"),
                     @Result(property = "quoteName", column = "q_name"),
-                    @Result(property = "userId", column = "user_id")
-
             }
     )
-    List<Quote> getAll();
+    List<QuoteResponse> getAll();
 
     @Select("SELECT * FROM quote_tb WHERE q_id = #{quoteId}")
     @ResultMap("quoteMapperId")
@@ -37,7 +36,7 @@ public interface QuoteMapper {
             select * from quote_tb where user_id = #{userId}
             """)
     @ResultMap("quoteMapperId")
-    Quote getQuoteByUserIdAsObject(String userId);
+    QuoteResponse getQuoteByUserIdAsObject(String userId);
 
     @Select("INSERT INTO quote_tb(q_name, user_id) VALUES (#{quoteName}, #{userId}) returning *")
     @ResultMap("quoteMapperId")

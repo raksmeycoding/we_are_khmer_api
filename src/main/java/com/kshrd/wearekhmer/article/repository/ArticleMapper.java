@@ -81,8 +81,12 @@ public interface ArticleMapper {
                    ub.photo_url,
                    ub.username as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
-            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id limit #{pageSize} offset #{offsetValue};
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
+                    from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id 
+                    left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                    left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
+                    
+            limit #{pageSize} offset #{offsetValue};
             """)
     List<ArticleResponse> getAllArticlesWithPaginate(Integer pageSize, Integer nextPage);
 
@@ -486,13 +490,14 @@ public interface ArticleMapper {
                    ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
-            from article_tb ab
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
+                     left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                     left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where ab.user_id = #{userId} AND isBan = false AND is_author = true ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
-    List<ArticleResponse> getAllArticleCurrentUserByLatest(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse2> getAllArticleCurrentUserByLatest(String userId, Integer pageNumber, Integer nextPage);
 
     @Select("""
             select ab.article_id,
@@ -510,13 +515,14 @@ public interface ArticleMapper {
                    ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
-            from article_tb ab
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
+                     left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                     left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where publish_date :: date = (current_date -1) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
-    List<ArticleResponse> getAllArticleCurrentUserByYesterday(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse2> getAllArticleCurrentUserByYesterday(String userId, Integer pageNumber, Integer nextPage);
 
     @Select("""
             select ab.article_id,
@@ -534,10 +540,11 @@ public interface ArticleMapper {
                    ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
-            from article_tb ab
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
+                     left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                     left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where date_trunc('week', publish_date) = date_trunc('week', current_date) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
     List<ArticleResponse> getAllArticleCurrentUserPerWeek(String userId, Integer pageNumber, Integer nextPage);
