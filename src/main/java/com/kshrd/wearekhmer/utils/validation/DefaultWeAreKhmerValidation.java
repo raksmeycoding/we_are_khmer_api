@@ -7,6 +7,7 @@ import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.bookmark.repository.BookmarkMapper;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.heroCard.repository.HeroCardRepository;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import com.kshrd.wearekhmer.history.repository.HistoryMapper;
@@ -336,6 +337,24 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
         if(!notificationMapper.validateNotificationIdExistInNotificationType(notificationId,notificationType))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NotificationId does not exist in NotificationType");
         return notificationMapper.validateNotificationIdExistInNotificationType(notificationId,notificationType);
+    }
+
+
+    @Override
+    public void validateStatus(String status) {
+        List<String> Status = new ArrayList<>();
+        boolean matchOne = false;
+        Status.add("PENDING");
+        Status.add("REJECTED");
+        for (String type : Status) {
+            if (status.equals(type)) {
+                matchOne = true;
+                break;
+            }
+        }
+        if (!matchOne) {
+            throw new ValidateException("Required value status must be either [PENDING, REJECTED]", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value() );
+        }
     }
 }
 

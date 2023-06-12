@@ -18,7 +18,7 @@ public class AuthorRequestTable {
 
     private String userId;
     private String authorRequestName;
-    private boolean isAuthorAccepted;
+    private String isAuthorAccepted;
     private Timestamp createdAt;
     private String reason;
 }
