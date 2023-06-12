@@ -18,7 +18,6 @@ import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
-import org.apache.ibatis.annotations.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -86,8 +85,16 @@ public class ArticleController {
                                             @RequestParam(value = "view", required = false) String view,
                                             @RequestParam(value = "day", required = false) String day,
                                             @RequestParam(value = "userId", required = false) String userId,
-                                            @RequestParam (value = "page", required = false) Integer page) {
+                                            @RequestParam(value = "page", required = false) Integer page) {
         try {
+
+            int totalRecords = articleMapper.getTotalRecordOfArticleTb();
+            if (page != null) {
+                int totalPages = (int) Math.ceil((double) totalRecords / 10);
+                if (page > totalPages)
+                    page = totalPages;
+            }
+
             Map<String, Object> param = new HashMap<>();
             param.put("title", title);
 //        List<ArticleResponse2> filteredArticles = articleMapper.filterArticles(title, date, categoryId );
@@ -106,7 +113,13 @@ public class ArticleController {
             List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter2(filterArticleCriteria);
 
             // Return the response using ResponseEntity
-            return ResponseEntity.ok().body(filteredArticles);
+            return ResponseEntity.ok().body(GenericResponse.builder()
+                            .message("Get data successfully.")
+                            .title("success")
+                            .statusCode(200)
+                            .totalRecords(totalRecords)
+                            .payload(filteredArticles)
+                    .build());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             ex.printStackTrace();

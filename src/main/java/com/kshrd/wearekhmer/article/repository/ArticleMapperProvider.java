@@ -1,8 +1,7 @@
 package com.kshrd.wearekhmer.article.repository;
 
 import com.kshrd.wearekhmer.exception.ValidateException;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -19,9 +18,8 @@ import java.util.Date;
 
 
 
-@RequiredArgsConstructor
+
 public class ArticleMapperProvider {
-    private ArticleMapper articleMapper;
 
     public static String getArticleByTitle(String title) {
         return """
@@ -79,12 +77,7 @@ public class ArticleMapperProvider {
             LEFT_OUTER_JOIN("react_tb r on r.article_id = a.article_id AND r.user_id = #{userId}");
             WHERE(" 1=1");
             WHERE("a.isban = false");
-
-
             if (page != null) {
-//                ArticleMapperProvider mapperProvider = new ArticleMapperProvider();
-//                int totalRecords = mapperProvider.articleMapper.getTotalRecordOfArticleTb();
-//                int totalPage = (int) Math.ceil((double) totalRecords / 10);
                 OFFSET((page - 1) * 10);
                 LIMIT(10);
             }
