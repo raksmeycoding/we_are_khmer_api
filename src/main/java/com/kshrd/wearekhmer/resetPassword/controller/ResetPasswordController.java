@@ -123,6 +123,7 @@ public class ResetPasswordController {
             @RequestParam("email") String email,
             @RequestBody NewPassword newPassword
     ){
+        weAreKhmerValidation.validateEmail(email);
         defaultWeAreKhmerValidation.passwordValidation(newPassword.getNewPassword());
 
         String rawPassword = passwordEncoder.encode(newPassword.getNewPassword());
