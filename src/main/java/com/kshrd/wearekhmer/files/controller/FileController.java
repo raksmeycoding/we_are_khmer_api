@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.files.model.response.FileResponse;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ public class FileController {
 
 
     @PostMapping(value = "/file/{type}/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Hidden
     @Operation(summary = "You can chose either id of category, user, or article. type = type of category, article, or user image")
     public ResponseEntity<?> uploadFile(@PathVariable String type, @PathVariable String id, @RequestParam MultipartFile multipartFile) {
         weAreKhmerValidation.validateTypeFileUpload(type);

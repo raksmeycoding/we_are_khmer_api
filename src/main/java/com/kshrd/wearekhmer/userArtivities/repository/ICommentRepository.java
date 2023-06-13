@@ -1,7 +1,10 @@
 package com.kshrd.wearekhmer.userArtivities.repository;
 
 import com.kshrd.wearekhmer.userArtivities.model.UserComment;
-import org.apache.ibatis.annotations.*;
+import com.kshrd.wearekhmer.userArtivities.model.dto.AuthorReplyCommentMapper;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -24,5 +27,24 @@ public interface ICommentRepository {
             """)
     @Result(property = "author_replay_name", column = "author_replay_name")
     UserComment creatArticleComment(String user_id, String article_id, String comment);
+
+
+    @Select("""
+            INSERT INTO comment_tb (user_id, article_id, parent_id, comment)
+            values ((select a.user_id
+                     from article_tb a
+                     where a.article_id =
+                           (select c.article_id from comment_tb c where c.comment_id = #{comment_id})),
+                    (select c.article_id from comment_tb c where c.comment_id = #{comment_id}),
+                    #{comment_id}, #{comment}) returning *;
+            """)
+    UserComment authorReplyCommentToHisArticle(AuthorReplyCommentMapper authorReplyCommentMapper);
+
+
+    @Select("""
+            select exists(select 1 from comment_tb where parent_id = #{parentId})
+            """)
+    boolean validateParentIdExist(String parentId);
+
 
 }
