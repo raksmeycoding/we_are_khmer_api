@@ -19,6 +19,13 @@ public class GenericResponse {
     Integer totalRecords;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    Integer totalViewPerWeek;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    Integer totalViewPerMonth;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    Integer totalViewPerYear;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     String type;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

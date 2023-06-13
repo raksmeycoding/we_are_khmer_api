@@ -95,7 +95,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
                 return;
             }
         }
-        throw new CustomRuntimeException("Gender must be lowercase and be formatted in (male, female, other).");
+        throw new ValidateException("Gender must be lowercase and be formatted in (male, female, other).", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
 
     }
 
@@ -108,7 +108,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
 
     public void passwordValidation(String password) {
         if (password.length() < 8) {
-            throw new CustomRuntimeException("Password must be at least 8 characters");
+            throw new ValidateException("Password must be at least 8 characters", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
         }
     }
 
@@ -239,7 +239,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     @Override
     public boolean checkAuthorExist(String authorId) {
         if (!(ratingRepository.isExistAuthor(authorId)))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "author does not exists");
+            throw new ValidateException("No author had been found with this #id=" + authorId , HttpStatus.NOT_FOUND, HttpStatus.BAD_REQUEST.value());
         else
             return ratingRepository.isExistAuthor(authorId);
     }
@@ -371,6 +371,15 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
         }
         if (!matchOne) {
             throw new ValidateException("Required value status must be either [PENDING, REJECTED]", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value() );
+        }
+    }
+
+
+    @Override
+    public void validateEmail(String email) {
+        boolean isMatched =  Pattern.compile("[a-z0-9]+@[a-z]+\\.[a-z]{2,3}").matcher(email).matches();
+        if (!isMatched) {
+            throw new ValidateException("Invalid email address", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         }
     }
 }

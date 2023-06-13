@@ -3,12 +3,10 @@ package com.kshrd.wearekhmer.notification;
 
 import com.kshrd.wearekhmer.notification.entity.response.AuthorNotificationList;
 import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
-import com.kshrd.wearekhmer.notification.entity.response.ReportArticleList;
+import com.kshrd.wearekhmer.notification.entity.response.NotificationResponse;
 import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
 import org.apache.ibatis.annotations.*;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.ws.rs.DELETE;
 import java.util.List;
 
 @Mapper
@@ -64,15 +62,15 @@ FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id 
 
 
     @Select("""
-            SELECT rt.report_id, rt.article_id, nt.createat, rt.reason,nt.notification_type FROM report_tb as rt INNER JOIN notification_tb nt on rt.reciever_id = nt.receiver_id
-            WHERE nt.notification_type = 'REPORT_ON_ARTICLE' ORDER BY nt.createat DESC  ;
+SELECT * FROM notification_tb WHERE notification_type = 'USER_REPORT_AUTHOR' OR notification_type = 'REPORT_ON_ARTICLE' OR  notification_type = 'USER_REQUEST_AS_AUTHOR';
             """)
-            @Result(property = "reportId", column = "report_id")
-            @Result(property = "articleId", column = "article_id")
+            @Result(property = "notificationId", column = "notification_id")
+            @Result(property = "notificationTypeId", column = "notification_type_id")
             @Result(property = "date", column = "createat")
-            @Result(property = "reason", column = "reason")
+            @Result(property = "profile", column = "sender_image_url")
+            @Result(property = "senderName", column = "sender_name")
             @Result(property = "notificationType", column = "notification_type")
-    List<ReportArticleList> getAllReportArticle();
+    List<NotificationResponse> getAllNotificationType();
 
 
     @Select("""
@@ -139,11 +137,18 @@ FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id 
            """)
     boolean validateUserRequestExist(String userId, String status);
 
+   @Select("""
+           SELECT count(*) FROM notification_tb WHERE notification_type = 'USER_REPORT_AUTHOR' OR notification_type = 'REPORT_ON_ARTICLE' OR  notification_type = 'USER_REQUEST_AS_AUTHOR';
+           """)
+   Integer totalNotificationOfAllType();
+
 
    @Select("""
            SELECT EXISTS(SELECT 1 FROM author_request_tb WHERE user_id = #{userId})
            """)
     boolean validateUserIdExistInUserRequestToBeAuthor(String userId);
+
+
 
 
 
