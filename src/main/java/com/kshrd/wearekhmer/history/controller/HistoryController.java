@@ -42,13 +42,25 @@ public class HistoryController {
                     .build();
 
             List<HistoryResponse> history2 = historyService.getAllHistoryByCurrentUser(weAreKhmerCurrentUser.getUserId());
-            genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .payload(history2)
-                    .title("success")
-                    .message("You have successfully got all history recorded")
-                    .build();
-            return ResponseEntity.ok(genericResponse);
+            if(history2.size()>0){
+                genericResponse = GenericResponse.builder()
+                        .statusCode(200)
+                        .payload(history2)
+                        .title("success")
+                        .message("You have successfully got all history recorded")
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }else {
+                genericResponse = GenericResponse.builder()
+                        .message("There's no history records in your list")
+                        .statusCode(200)
+                        .title("success")
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+
+            }
+
+
 
         } catch (Exception ex) {
             genericResponse =
