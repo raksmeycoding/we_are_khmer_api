@@ -19,9 +19,9 @@ public interface ArticleService {
 
     List<ArticleResponse> getArticlesForCurrentUserWithPaginate(String userId, Integer pageSize, Integer nextPage);
 
-    ArticleResponse getArticleById(String articleId);
+    ArticleResponse2 getArticleById(String articleId, String userId);
 
-    ArticleResponse getArticleByIdForCurrentUser(String articleId, String currentUserId);
+    ArticleResponse2 getArticleByIdForCurrentUser(String articleId, String currentUserId);
 
     List<ArticleResponse> getAllArticleByCategoryName(String categoryName, Integer pageNumber, Integer nextPage);
 
@@ -46,13 +46,13 @@ public interface ArticleService {
 
     List<ArticleResponse> getAllArticlesByDateRange(Date startDate, Date endDate);
 
-    List<ArticleResponse> getAllArticleByCategoryId(String categoryId, Integer pageNumber, Integer nextPage);
-    List<ArticleResponse> getAllArticleCurrentUserByMostView(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse2> getAllArticleByCategoryId(String categoryId, Integer pageNumber, Integer nextPage, String userId);
+    List<ArticleResponse2> getAllArticleCurrentUserByMostView(String userId, Integer pageNumber, Integer nextPage);
     List<ArticleResponse2> getAllArticleCurrentUserByLatest(String userId, Integer pageNumber, Integer nextPage);
     List<ArticleResponse2> getAllArticleCurrentUserByYesterday(String userId, Integer pageNumber, Integer nextPage);
-    List<ArticleResponse> getAllArticleCurrentUserPerWeek(String userId, Integer pageNumber, Integer nextPage);
-    List<ArticleResponse> getAllArticleCurrentUserPerMonth(String userId, Integer pageNumber, Integer nextPage);
-    List<ArticleResponse> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse2> getAllArticleCurrentUserPerWeek(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse2> getAllArticleCurrentUserPerMonth(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse2> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage);
 
     Integer getTotalViewCurrentAuthorPerWeek(String userId);
     Integer getTotalViewCurrentAuthorPerMonth(String userId);

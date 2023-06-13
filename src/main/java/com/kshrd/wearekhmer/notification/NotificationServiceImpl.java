@@ -3,9 +3,8 @@ package com.kshrd.wearekhmer.notification;
 import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.notification.entity.response.AuthorNotificationList;
 import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
-import com.kshrd.wearekhmer.notification.entity.response.ReportArticleList;
+import com.kshrd.wearekhmer.notification.entity.response.NotificationResponse;
 import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
-import com.kshrd.wearekhmer.utils.WeAreKhmerConstant;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import lombok.AllArgsConstructor;
@@ -55,8 +54,8 @@ public class NotificationServiceImpl implements INotificationService {
 //    }
 
     @Override
-    public List<ReportArticleList> getAllReportArticles() {
-        return notificationMapper.getAllReportArticle();
+    public List<NotificationResponse> getAllNotificationType() {
+        return notificationMapper.getAllNotificationType();
     }
 
     @Override
@@ -100,5 +99,10 @@ public class NotificationServiceImpl implements INotificationService {
             throw new ValidateException("userId : "+userId+" does not request to be author or userId : "+ userId+ " does not exist in status : "+status,HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         }
 
+    }
+
+    @Override
+    public Integer totalNotificationOfAllType() {
+        return notificationMapper.totalNotificationOfAllType();
     }
 }

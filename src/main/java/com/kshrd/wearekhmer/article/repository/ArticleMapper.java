@@ -180,13 +180,16 @@ public interface ArticleMapper {
                    ab.isban,
                    ab.hero_card_in,
                    ub.photo_url,
-                   ub.username as author_name,
+                   ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
-            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
+                     inner join user_tb ub on ab.user_id = ub.user_id
+                     inner join category c on c.category_id = ab.category_id
+                     left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                     left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where ab.article_id = #{articleId}
             """)
-    ArticleResponse getArticleById(String articleId);
+    ArticleResponse2 getArticleById(String articleId, String userId);
 
 
     @Select("""
@@ -203,13 +206,16 @@ public interface ArticleMapper {
                    ab.isban,
                    ab.hero_card_in,
                    ub.photo_url,
-                   ub.username as author_name,
+                   ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id) as react_count
-            from article_tb ab inner join user_tb ub on ab.user_id = ub.user_id inner join category c on c.category_id = ab.category_id
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{currentUserId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
+                     inner join user_tb ub on ab.user_id = ub.user_id
+                     inner join category c on c.category_id = ab.category_id
+                     left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{currentUserId}
+                     left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{currentUserId}
             where ab.article_id = #{articleId} and ub.user_id = #{currentUserId}
             """)
-    ArticleResponse getArticleByIdForCurrentUser(String articleId, String currentUserId);
+    ArticleResponse2 getArticleByIdForCurrentUser(String articleId, String currentUserId);
 
     @Select("INSERT INTO article_tb (title, sub_title, description, image, user_id, category_id) " +
             "VALUES (#{title}, #{subTitle}, #{description}, #{image}, #{userId}, #{categoryId}) returning *")
@@ -436,13 +442,14 @@ public interface ArticleMapper {
                    ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
-            from article_tb ab
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
+                     left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                     left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where c.category_id = #{categoryId} limit #{pageNumber} offset #{nextPage}
             """)
-    List<ArticleResponse> getAllArticleByCategoryId(String categoryId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse2> getAllArticleByCategoryId(String categoryId, Integer pageNumber, Integer nextPage, String userId);
 
 
     @Select("""
@@ -466,13 +473,14 @@ public interface ArticleMapper {
                    ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
-            from article_tb ab
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
+                     left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                     left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where ab.user_id = #{userId} AND isBan = false AND is_author = true order by count_view desc limit #{pageNumber} offset #{nextPage}
                         """)
-    List<ArticleResponse> getAllArticleCurrentUserByMostView(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse2> getAllArticleCurrentUserByMostView(String userId, Integer pageNumber, Integer nextPage);
 
     @Select("""
             select ab.article_id,
@@ -547,7 +555,7 @@ public interface ArticleMapper {
                      left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where date_trunc('week', publish_date) = date_trunc('week', current_date) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
-    List<ArticleResponse> getAllArticleCurrentUserPerWeek(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse2> getAllArticleCurrentUserPerWeek(String userId, Integer pageNumber, Integer nextPage);
 
     @Select("""
             select ab.article_id,
@@ -565,14 +573,15 @@ public interface ArticleMapper {
                    ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
-            from article_tb ab
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
+                     left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                     left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
                     AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
-    List<ArticleResponse> getAllArticleCurrentUserPerMonth(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse2> getAllArticleCurrentUserPerMonth(String userId, Integer pageNumber, Integer nextPage);
 
     @Select("""
             select ab.article_id,
@@ -590,14 +599,15 @@ public interface ArticleMapper {
                    ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count
-            from article_tb ab
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
+                     left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                     left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where date_trunc('year', publish_date) = date_trunc('year', current_date)
                     AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
-    List<ArticleResponse> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage);
+    List<ArticleResponse2> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage);
 
 
     @Select("""
@@ -690,4 +700,38 @@ public interface ArticleMapper {
             """)
     Integer totalArticles();
 
+    @Select("""
+            
+            """)
+    Integer totalArticleForCurrentAuthor(String userId);
+
+    @Select("""
+            SELECT count(*) FROM article_tb WHERE user_id = #{userId}
+            AND publish_date :: date = (current_date -1)
+            """)
+    Integer  totalArticleRecordByYesterdayForCurrentAuthor(String userId);
+
+    @Select("""
+            SELECT count(*) FROM article_tb WHERE user_id = #{userId}
+            AND DATE_TRUNC('week', publish_date) = DATE_TRUNC('week', current_date)
+            """)
+    Integer  totalArticleRecordByPerWeekForCurrentAuthor(String userId);
+
+
+    @Select("""
+            SELECT count(*) FROM article_tb WHERE user_id = #{userId}
+            AND EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
+              AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date);
+            """)
+    Integer  totalArticleRecordByPerMonthForCurrentAuthor(String userId);
+
+
+    @Select("""
+            SELECT count(*) FROM article_tb WHERE user_id = #{userId}
+            AND date_trunc('year', publish_date) = date_trunc('year', current_date)
+            AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) 
+                        
+           """)
+    Integer  totalArticleRecordByPerYearForCurrentAuthor(String userId);
+    
 }

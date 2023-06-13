@@ -2,7 +2,7 @@ package com.kshrd.wearekhmer.notification;
 
 import com.kshrd.wearekhmer.notification.entity.response.AuthorNotificationList;
 import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
-import com.kshrd.wearekhmer.notification.entity.response.ReportArticleList;
+import com.kshrd.wearekhmer.notification.entity.response.NotificationResponse;
 import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface INotificationService {
 
     ViewAuthorRequest ViewUserRequestDetail(String userId, String status);
 
-    List<ReportArticleList> getAllReportArticles();
+    List<NotificationResponse> getAllNotificationType();
 
     List<AuthorNotificationList> getAllNotificationForCurrentAuthor(String authorId);
 
@@ -28,6 +28,9 @@ public interface INotificationService {
     Integer totalRequestToBeAuthorRecords(String status);
 
     Integer totalReportArticleRecords();
+
+
+    Integer totalNotificationOfAllType();
 
     Notification deleteNotificationByTypeAndId( String notificationId, String notificationType);
 
