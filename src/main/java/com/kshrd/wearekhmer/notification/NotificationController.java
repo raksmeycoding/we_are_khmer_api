@@ -3,7 +3,7 @@ package com.kshrd.wearekhmer.notification;
 
 import com.kshrd.wearekhmer.notification.entity.response.AuthorNotificationList;
 import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
-import com.kshrd.wearekhmer.notification.entity.response.ReportArticleList;
+import com.kshrd.wearekhmer.notification.entity.response.NotificationResponse;
 import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
@@ -15,16 +15,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.ReactiveUserDetailsPasswordService;
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.Path;
-import java.net.Inet4Address;
 import java.net.URI;
 import java.util.List;
 
@@ -161,20 +157,20 @@ public class NotificationController {
         return ResponseEntity.ok(genericResponse);
     }
 
-    @GetMapping("/admin/report_artcle")
+    @GetMapping("/admin/all-notification-type")
     @Operation(summary = "Get report article notifications for admin")
     public ResponseEntity<?> getAllReportArticle(
     ){
         GenericResponse genericResponse;
 
-        Integer totalRecords = notificationService.totalReportArticleRecords();
+        Integer totalRecords = notificationService.totalNotificationOfAllType();
 
-            List<ReportArticleList> reportArticleLists = notificationService.getAllReportArticles();
+            List<NotificationResponse> reportArticleLists = notificationService.getAllNotificationType();
             System.out.println(reportArticleLists);
             genericResponse = GenericResponse.builder()
                     .status("200")
                     .title("success")
-                    .message("You have successfully get all article reports")
+                    .message("You have successfully get all notifications")
                     .payload(reportArticleLists)
                     .totalRecords(totalRecords)
                     .build();

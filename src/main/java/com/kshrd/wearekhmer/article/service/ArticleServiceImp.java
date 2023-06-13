@@ -56,12 +56,12 @@ public class ArticleServiceImp implements ArticleService {
     }
 
     @Override
-    public ArticleResponse getArticleById(String articleId) {
-        return articleMapper.getArticleById(articleId);
+    public ArticleResponse2 getArticleById(String articleId, String userId) {
+        return articleMapper.getArticleById(articleId,userId);
     }
 
     @Override
-    public ArticleResponse getArticleByIdForCurrentUser(String articleId, String currentUserId) {
+    public ArticleResponse2 getArticleByIdForCurrentUser(String articleId, String currentUserId) {
         return articleMapper.getArticleByIdForCurrentUser(articleId, currentUserId);
     }
 
@@ -132,12 +132,12 @@ public class ArticleServiceImp implements ArticleService {
     }
 
     @Override
-    public List<ArticleResponse> getAllArticleByCategoryId(String categoryId, Integer pageNumber, Integer nextPage) {
-        return articleMapper.getAllArticleByCategoryId(categoryId, pageNumber,nextPage);
+    public List<ArticleResponse2> getAllArticleByCategoryId(String categoryId, Integer pageNumber, Integer nextPage, String userId) {
+        return articleMapper.getAllArticleByCategoryId(categoryId, pageNumber,nextPage, userId);
     }
 
     @Override
-    public List<ArticleResponse> getAllArticleCurrentUserByMostView(String userId, Integer pageNumber, Integer nextPage) {
+    public List<ArticleResponse2> getAllArticleCurrentUserByMostView(String userId, Integer pageNumber, Integer nextPage) {
         return articleMapper.getAllArticleCurrentUserByMostView(userId, pageNumber, nextPage);
     }
 
@@ -152,18 +152,18 @@ public class ArticleServiceImp implements ArticleService {
     }
 
     @Override
-    public List<ArticleResponse> getAllArticleCurrentUserPerWeek(String userId, Integer pageNumber, Integer nextPage) {
+    public List<ArticleResponse2> getAllArticleCurrentUserPerWeek(String userId, Integer pageNumber, Integer nextPage) {
         return articleMapper.getAllArticleCurrentUserPerWeek(userId, pageNumber, nextPage);
     }
 
     @Override
-    public List<ArticleResponse> getAllArticleCurrentUserPerMonth(String userId, Integer pageNumber, Integer nextPage) {
+    public List<ArticleResponse2> getAllArticleCurrentUserPerMonth(String userId, Integer pageNumber, Integer nextPage) {
         return articleMapper.getAllArticleCurrentUserPerMonth(userId, pageNumber, nextPage);
 
     }
 
     @Override
-    public List<ArticleResponse> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage) {
+    public List<ArticleResponse2> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage) {
         return articleMapper.getAllArticleCurrentUserPerYear(userId,pageNumber,nextPage);
     }
 

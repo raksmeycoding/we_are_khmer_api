@@ -12,10 +12,13 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportArticleList {
-    private String reportId;
-    private String articleId;
+public class NotificationResponse {
+    private String notificationId;
+    private String notificationTypeId;
     private Date date;
-    private String reason;
+
+    private String profile;
+    private String senderName;
+
     private String notificationType;
 }

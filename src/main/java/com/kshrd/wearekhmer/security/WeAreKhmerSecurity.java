@@ -187,7 +187,7 @@ public class WeAreKhmerSecurity {
                 .authenticated()
                 .and()
                 .exceptionHandling()
-//                .authenticationEntryPoint(this.authenticationEntryPoint)
+                .authenticationEntryPoint(this.authenticationEntryPoint)
                 .and()
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(
