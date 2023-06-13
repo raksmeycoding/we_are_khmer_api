@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.service.AuthorRequestTableService;
 import com.kshrd.wearekhmer.user.service.AuthorService;
+import com.kshrd.wearekhmer.userRating.reponse.PersonalInformationResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -69,5 +70,11 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
     @Override
     public AuthorDTO getCurrentAuthorById(String userId) {
         return authorRepository.getCurrentAuthorById(userId);
+    }
+
+
+    @Override
+    public PersonalInformationResponse getAuthorPersonalInfoByAuthorId(String authorId) {
+        return authorRepository.getAuthorPersonalInfoByAuthorId(authorId);
     }
 }

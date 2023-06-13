@@ -128,4 +128,12 @@ FROM author_request_tb as art WHERE art.user_id =  'c7c13f75-feae-4fd6-99b2-cd59
 
 
 SELECT art.*, ut.email, ut.photo_url
-FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id WHERE art.user_id = 'c7c13f75-feae-4fd6-99b2-cd59c85306b5' AND is_author_accepted = 'PENDING'
+FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id WHERE art.user_id = 'c7c13f75-feae-4fd6-99b2-cd59c85306b5' AND is_author_accepted = 'PENDING';
+
+
+-- get total view all records for author by author_id
+select sum(count_view) as total_view from article_tb a where user_id = 'd0e1bd19-d4bc-45d5-9beb-32538d16b769';
+
+
+
+select * from article_tb where user_id = 'd0e1bd19-d4bc-45d5-9beb-32538d16b769';

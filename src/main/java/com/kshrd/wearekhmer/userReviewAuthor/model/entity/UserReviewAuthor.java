@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.userReviewAuthor.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class UserReviewAuthor {
     private Timestamp create_at;
     private Timestamp update_at;
     private String comment;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String parent_id;
 
 

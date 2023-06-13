@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class RatingResponse {
-    private Integer  sum_rating_number;
+    private Double  rating_average;
     private String username;
     private String photo_url;
 

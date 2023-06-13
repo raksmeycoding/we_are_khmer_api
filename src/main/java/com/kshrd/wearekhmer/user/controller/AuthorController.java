@@ -8,6 +8,7 @@ import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.service.AuthorRequestTableService;
 import com.kshrd.wearekhmer.user.service.AuthorService;
+import com.kshrd.wearekhmer.userRating.reponse.PersonalInformationResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -71,7 +72,7 @@ public class AuthorController {
     @Operation(summary = "(User view author profile)")
     public ResponseEntity<?> getAllAuthorById(HttpServletRequest httpServletRequest, @PathVariable String authorId) {
         AuthorDTO authorDTO = authorService.getAllAuthorById(authorId);
-        if ( authorDTO == null) {
+        if (authorDTO == null) {
             ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Author had been not found!");
             problemDetail.setType(URI.create(httpServletRequest.getRequestURL().toString()));
             throw new ErrorResponseException(HttpStatus.NOT_FOUND, problemDetail, null);
@@ -152,6 +153,19 @@ public class AuthorController {
                 .title("success")
                 .message("Get author profile successfully.")
                 .payload(authorDTO)
+                .build());
+    }
+
+
+    @GetMapping("/personal-info")
+    public ResponseEntity<?> getAuthorPeronalInfoByAuthorId(@PathVariable String authorId) {
+        weAreKhmerValidation.checkAuthorExist(authorId);
+        PersonalInformationResponse personalInformationResponse = authorRepository.getAuthorPersonalInfoByAuthorId(authorId);
+        return ResponseEntity.ok().body(GenericResponse.builder()
+                .title("success")
+                .message("Get author profile successfully")
+                .statusCode(200)
+                .payload(personalInformationResponse)
                 .build());
     }
 

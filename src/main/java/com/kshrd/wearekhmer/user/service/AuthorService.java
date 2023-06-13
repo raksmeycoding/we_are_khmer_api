@@ -2,6 +2,8 @@ package com.kshrd.wearekhmer.user.service;
 
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
+import com.kshrd.wearekhmer.userRating.reponse.PersonalInformationResponse;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -17,4 +19,8 @@ public interface AuthorService {
     String updateUserRequestToBeAsAuthorAsReject(String userId);
 
     AuthorDTO getCurrentAuthorById(String userId);
+
+
+
+    PersonalInformationResponse getAuthorPersonalInfoByAuthorId(String authorId);
 }
