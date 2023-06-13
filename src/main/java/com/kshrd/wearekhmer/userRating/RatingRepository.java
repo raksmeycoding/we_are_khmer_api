@@ -36,7 +36,7 @@ public interface RatingRepository {
     RatingResponse getRatingByAuthorId(String authorId);
 
     @Select("""
-            select exists(select 1 from user_tb where user_id = #{authorId} and is_author = true );
+            select exists(select  1 from user_tb u inner join user_role_tb urt on u.user_id = urt.user_id inner join role_tb rt on urt.role_id = rt.role_id where u.user_id = #{authorId} and rt.name = 'ROLE_AUTHOR')
             """)
     boolean isExistAuthor(String authorId);
 

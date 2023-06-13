@@ -137,3 +137,7 @@ select sum(count_view) as total_view from article_tb a where user_id = 'd0e1bd19
 
 
 select * from article_tb where user_id = 'd0e1bd19-d4bc-45d5-9beb-32538d16b769';
+
+
+
+-- check author role

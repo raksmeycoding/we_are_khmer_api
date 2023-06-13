@@ -157,7 +157,7 @@ public class AuthorController {
     }
 
 
-    @GetMapping("/personal-info")
+    @GetMapping("/personal-info/{authorId}")
     public ResponseEntity<?> getAuthorPeronalInfoByAuthorId(@PathVariable String authorId) {
         weAreKhmerValidation.checkAuthorExist(authorId);
         PersonalInformationResponse personalInformationResponse = authorRepository.getAuthorPersonalInfoByAuthorId(authorId);
