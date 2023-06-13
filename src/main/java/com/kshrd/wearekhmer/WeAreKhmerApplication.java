@@ -17,6 +17,7 @@ import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceHelperImpl;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
+import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -91,6 +92,8 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 
     private final ServiceClassHelper serviceClassHelper;
 
+    private final WeAreKhmerValidation weAreKhmerValidation;
+
 
     public static void main(String[] args) {
         SpringApplication.run(WeAreKhmerApplication.class, args);
@@ -98,99 +101,28 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        UserAppDTO userAppDTO = userUtil.toUserAppDTO(userAppService.findUserByEmail("victoria@gmail.com"));
-//        System.out.println(userAppDTO);
-
-//        UserApp userApp = userAppService.findUserByEmail("victoria@gmail.com");
-//        System.out.println(userApp);
 
 
-//        List<String> roles = userAppRepository.getUserRolesById("bcc760e8-f85d-43c7-8b41-ecc8748b027d");
-//        System.out.println(roles);
 
-//        System.out.println(EGender.FEMALE.name());
-
-
-//        Date now = new Date(System.currentTimeMillis());
-//        Date now2 = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24);
-//        System.out.println(now);
-//        System.out.println(now2);
-
-
-//        System.out.println(otpUtil.getGeneratedUUid());
-//        System.out.println(otpUtil.getCurrentDate());
-//        Thread.sleep(5000);
-//        System.out.println(otpUtil.getExpiredAt());
-
-
-//        System.out.println(otpService.createVerificationToken("mtoken34",  new Timestamp(System.currentTimeMillis()), "ecab1f9a-c195-4adf-9b71-7e524e8aef12"));
-
-
-//        log.info("finding token token: {}", otpService.findByToken("mtoken3"));
-
-//        log.info("remove token: {}", otpService.removeByToken("mtoken2"));
-
-
-//        WorkingExperience workingExperience = WorkingExperience.builder()
-//                .workingExperienceName("Apple")
-//                .workingExperienceId("64561088-6da3-45a9-ab16-cfc3f32377da")
-//                .userId("e5058c06-b40a-41a8-98fd-46f1c7768268")
+//
+//        OkHttpClient client = new OkHttpClient();
+//        MediaType mediaType = MediaType.parse("application/json");
+//        RequestBody body = RequestBody.create(mediaType, """
+//                {"app_id":"afc89b92-a380-4797-9c77-d9829ccb8f98","included_segments":["Subscribed Users"],"contents":{"en":"English or Any Language Message","es":"Spanish Message"},"name":"INTERNAL_CAMPAIGN_NAME"}
+//                """);
+//        Request request = new Request.Builder()
+//                .url("https://onesignal.com/api/v1/notifications")
+//                .post(body)
+//                .addHeader("accept", "application/json")
+//                .addHeader("Authorization", "Basic NjM0ZTAzY2YtMmIzYS00MTQxLTkwMjAtYzg0YjQzNmI5NGE5")
+//                .addHeader("Content-type", "application/json; charset=utf-8")
 //                .build();
-
-
-//        WorkingExperience workingExperienceMapper1
-//                = workingExperienceMapper.insert(workingExperience);
-//        System.out.println(workingExperienceMapper1);
-
-
-//        WorkingExperience workingExperience1 = workingExperienceMapper.getById("4f341aeb-b77c-47db-beb3-2e8db058181d");
-//        List<WorkingExperience> workingExperienceList =
-//                workingExperienceMapper.getAll();
-//        System.out.println(workingExperienceList);
-
-
-//        WorkingExperience workingExperience2 = workingExperienceMapper.update(workingExperience);
-//        System.out.println("update: "+ workingExperience2);
-
-
-//        List<WorkingExperience> workingExperienceList = workingExperienceMapper.getAll();
-//        System.out.println(workingExperienceList);
-
-
-//        List<UserComment> userComment = ICommentRepository.getUserCommentByArticleId("8256a9af-da04-4c25-837f-3b9ccebd443a");
-//        System.out.println(userComment);
-
-
-        Random random = new Random();
-        int min = 100_000; // Minimum 6-digit number
-        int max = 999_999; // Maximum 6-digit number
-        int randomNumber = random.nextInt(max - min + 1) + min;
-
-        System.out.println(randomNumber);
-
-//        List<History> historyList = iHistoryService.getAllHistoryByCurrentUser();
-
-
-        System.out.println(articleService.isArticleExist("773066fb-bd6c-4a75-94d6-9c8b3c24e31c"));
-
-        OkHttpClient client = new OkHttpClient();
-        MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, """
-                {"app_id":"afc89b92-a380-4797-9c77-d9829ccb8f98","included_segments":["Subscribed Users"],"contents":{"en":"English or Any Language Message","es":"Spanish Message"},"name":"INTERNAL_CAMPAIGN_NAME"}
-                """);
-        Request request = new Request.Builder()
-                .url("https://onesignal.com/api/v1/notifications")
-                .post(body)
-                .addHeader("accept", "application/json")
-                .addHeader("Authorization", "Basic NjM0ZTAzY2YtMmIzYS00MTQxLTkwMjAtYzg0YjQzNmI5NGE5")
-                .addHeader("Content-type", "application/json; charset=utf-8")
-                .build();
-        Response response = client.newCall(request).execute();
-        System.out.println(response.body());
-        System.out.println(response.message());
-        System.out.println(response.cacheResponse());
-        response.close();
-        System.out.println(response);
+//        Response response = client.newCall(request).execute();
+//        System.out.println(response.body());
+//        System.out.println(response.message());
+//        System.out.println(response.cacheResponse());
+//        response.close();
+//        System.out.println(response);
 
 
 //        String apiUrl = "https://onesignal.com/api/v1/players?app_id=" + Onesignal.builder().build().getAppId();

@@ -25,6 +25,7 @@ import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
 import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
+import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.mail.MessagingException;
@@ -79,13 +80,18 @@ public class AuthenticationController {
 
     private final WeAreKhmerRepositorySupport weAreKhmerRepositorySupport;
 
+    private final WeAreKhmerValidation weAreKhmerValidation;
+
 
     @PostMapping("/register")
+    @Operation(summary = "(User can register our application here.)")
     public ResponseEntity<?> userRegister(@RequestBody @Validated NormalUserRequest normalUserRequest) {
 
 
         GenericResponse genericResponse = null;
         try {
+//            validate email
+            defaultWeAreKhmerValidation.validateEmail(normalUserRequest.getEmail());
 //            gender validation
             defaultWeAreKhmerValidation.genderValidation(normalUserRequest.getGender());
 //            password validation
@@ -119,23 +125,22 @@ public class AuthenticationController {
                     """);
 
             genericResponse = GenericResponse.builder()
-                    .title("register succeed!")
-                    .message("get verification from your email and verify.")
-                    .status(String.valueOf(HttpStatus.OK.value()))
+                    .title("success")
+                    .message("Register successfully, please get verification code from your email and verify.")
+                    .statusCode(200)
                     .build();
             return ResponseEntity.ok(genericResponse);
         } catch (DataIntegrityViolationException | MessagingException ex) {
             if (ex instanceof DataIntegrityViolationException) {
-                throw new DuplicateKeyException("Email is already login.");
+                throw new ValidateException("This email is already registered!", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
             }
-
-            throw new RuntimeException();
+            throw new RuntimeException(((MessagingException) ex).getCause());
         }
     }
 
 
     @PostMapping("/register/as-author")
-    @Operation(summary = "(This controller works both either post or update, ❤️ Validated)")
+    @Operation(summary = "(This controller works both either post or update)")
     public ResponseEntity<?> registerAsAuthor(@RequestBody AuthorRequest authorRequest) {
         java.sql.Date dateOfBirth = defaultWeAreKhmerValidation.validateDateOfBirth(authorRequest.getDateOfBirth());
         if (authorRequest.getWorkingExperience().size() > 3) {
@@ -165,40 +170,42 @@ public class AuthenticationController {
 
 
     @PostMapping("/login")
+    @Operation(summary = "(Dommra user can register here)")
     private ResponseEntity<?> userLogin(@RequestBody UserLoginRequest userLoginRequest) {
         System.out.println(userLoginRequest);
+        defaultWeAreKhmerValidation.validateEmail(userLoginRequest.getEmail());
+        defaultWeAreKhmerValidation.passwordValidation(userLoginRequest.getPassword());
         GenericResponse genericResponse;
         try {
-
-
             return ResponseEntity.ok(authenticationService.authenticate(userLoginRequest));
         } catch (Exception ex) {
             if (ex instanceof DisabledException) {
                 genericResponse = GenericResponse.builder()
-                        .title("User not allowed.")
-                        .status("400")
+                        .title("error")
+                        .statusCode(HttpStatus.UNAUTHORIZED.value())
                         .message("You need to do code verification. please checkout your email and verify it. (" + ex.getMessage() + ")")
                         .build();
                 return ResponseEntity.badRequest().body(genericResponse);
             }
             if (ex instanceof BadCredentialsException) {
-                throw new BadCredentialsException("Incorrect username or password.");
+                throw new BadCredentialsException(null, new ValidateException("Invalid user name or password.", HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.value()));
             }
-//            return ResponseEntity.badRequest().body(ex.getMessage());
-            throw new RuntimeException();
+            throw new RuntimeException(ex.getCause());
         }
     }
 
 
     @PostMapping("/verification/token")
+    @Operation(summary = "(Domrra user can verify email verification token here)")
     public ResponseEntity<?> emailVerificatoin(@RequestBody TokenRequest tokenRequest) {
 
-        System.out.println(tokenRequest.getToken());
+        Otp findOtp = otpService.findByToken(tokenRequest.getToken());
+        if(findOtp == null) {
+            throw new ValidateException("No verification token had been found!", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+        }
         GenericResponse genericResponse;
         try {
-            log.info("sending email");
             Otp otp = otpService.enableUserByToken(tokenRequest.getToken());
-            System.out.println(otp);
 
 //            after verification, then login
             UserLoginRequest userLoginRequest =
@@ -210,15 +217,7 @@ public class AuthenticationController {
             otpService.removeByToken(otp.getToken());
             return ResponseEntity.ok(response.getBody());
         } catch (Exception exception) {
-            genericResponse = GenericResponse.builder()
-                    .status("500")
-                    .message(exception.getMessage())
-                    .title("internal server error!")
-                    .build();
-
-            return ResponseEntity.internalServerError().body(genericResponse);
-
-
+            throw new RuntimeException(exception.getCause());
         }
 
 

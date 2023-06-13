@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public interface WeAreKhmerValidation {
     void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize);
@@ -69,6 +70,9 @@ public interface WeAreKhmerValidation {
 
 
     java.sql.Date validateDateOfBirth(String dateOfBirth);
+
+
+    void validateEmail(String email);
 
 
 
