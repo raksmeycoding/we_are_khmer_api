@@ -194,6 +194,11 @@ select count(*) as record_count from article_tb;
 
 
 
+-- admin validate article
+update article_tb set isban = true where article_id = '3f88bac1-42c9-465a-9cf5-691e2248b30b';
+
+
+
 
 
 
