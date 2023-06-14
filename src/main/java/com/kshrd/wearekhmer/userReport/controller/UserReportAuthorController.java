@@ -90,7 +90,7 @@ public class UserReportAuthorController {
     }
 
 
-    @PostMapping("/author/approveOrReject/{authorId}")
+    @PostMapping("/admin/approveOrReject/{authorId}")
     public ResponseEntity<?> adminApproveOrRejectToBandAuthor(HttpServletRequest httpServletRequest, @PathVariable String authorId, @RequestBody @Validated AdminIsApproveRequestBody adminIsApproveRequestBody) {
         try {
             weAreKhmerValidation.validateAdminIsRejectOrApprove(adminIsApproveRequestBody.getStatus());
