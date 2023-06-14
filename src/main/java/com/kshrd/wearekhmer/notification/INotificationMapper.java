@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.notification.entity.response.AuthorNotificationList;
 import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
 import com.kshrd.wearekhmer.notification.entity.response.NotificationResponse;
 import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public interface INotificationMapper {
             SELECT art.author_request_id, ut.photo_url, art.user_id, art.is_author_accepted,  ut.email ,art.author_request_name, art.createat, art.reason
             FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id
             WHERE is_author_accepted = cast(#{status} AS status)
-            ORDER BY createat DESC;       
+            ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage};       
             """)
     @Results(id = "NotificationResponse", value = {
             @Result(property = "authorRequestId", column = "author_request_id"),
@@ -42,7 +43,7 @@ public interface INotificationMapper {
             @Result(property = "photoUrl", column = "photo_url"),
             @Result(property = "isAccepted", column = "is_author_accepted")
     })
-    List<UserRequestAuthorList> TypeRequest(String status);
+    List<UserRequestAuthorList> TypeRequest(String status, Integer pageNumber, Integer nextPage);
 
 
     @Select("""
@@ -62,7 +63,9 @@ FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id 
 
 
     @Select("""
-SELECT * FROM notification_tb WHERE notification_type = 'USER_REPORT_AUTHOR' OR notification_type = 'REPORT_ON_ARTICLE' OR  notification_type = 'USER_REQUEST_AS_AUTHOR';
+SELECT * FROM notification_tb WHERE notification_type = 'USER_REPORT_AUTHOR' OR notification_type = 'REPORT_ON_ARTICLE' OR  notification_type = 'USER_REQUEST_AS_AUTHOR'
+ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage};
+;
             """)
             @Result(property = "notificationId", column = "notification_id")
             @Result(property = "notificationTypeId", column = "notification_type_id")
@@ -70,7 +73,7 @@ SELECT * FROM notification_tb WHERE notification_type = 'USER_REPORT_AUTHOR' OR 
             @Result(property = "profile", column = "sender_image_url")
             @Result(property = "senderName", column = "sender_name")
             @Result(property = "notificationType", column = "notification_type")
-    List<NotificationResponse> getAllNotificationType();
+    List<NotificationResponse> getAllNotificationType(Integer pageNumber, Integer nextPage);
 
 
     @Select("""
@@ -148,6 +151,23 @@ SELECT * FROM notification_tb WHERE notification_type = 'USER_REPORT_AUTHOR' OR 
            """)
     boolean validateUserIdExistInUserRequestToBeAuthor(String userId);
 
+
+   @Select("""
+           SELECT * FROM notification_tb WHERE notification_type = cast(#{status} AS notification_type)
+           ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage}
+           """)
+   @Result(property = "notificationId", column = "notification_id")
+   @Result(property = "notificationTypeId", column = "notification_type_id")
+   @Result(property = "date", column = "createat")
+   @Result(property = "profile", column = "sender_image_url")
+   @Result(property = "senderName", column = "sender_name")
+   @Result(property = "notificationType", column = "notification_type")
+    List<NotificationResponse> getNotificationTypeReport(Integer pageNumber, Integer nextPage, String status);
+
+   @Select("""
+           SELECT count(notification_id) FROM notification_tb WHERE notification_type = cast(#{status} AS notification_type)
+           """)
+    Integer totalRecordNotificationTypeReport(String status);
 
 
 

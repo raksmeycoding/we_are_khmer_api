@@ -394,6 +394,59 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
             throw new ValidateException("This author has no authorities to reply this comment, he is not own of this article", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         }
     }
+
+    @Override
+    public void validateReportType(String status) {
+        List<String> input = new ArrayList<>();
+        boolean matchOne = false;
+        input.add("REPORT_ON_ARTICLE");
+        input.add("USER_REPORT_AUTHOR");
+
+        for(String check : input){
+            if(status.equals(check)){
+                matchOne = true;
+                break;
+            }
+        }
+        if(!matchOne){
+            throw new ValidateException("Required value status must be either [REPORT_ON_ARTICLE, USER_REPORT_AUTHOR]", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value() );
+        }
+    }
+
+    @Override
+    public void validateHeroType(String type) {
+        boolean isMatch = false;
+        List<String> input = new ArrayList<>();
+        input.add("category");
+        input.add("home");
+
+        for(String check : input){
+            if(type.equals(check)){
+                isMatch = true;
+                break;
+            }
+
+        }
+        if(!isMatch)
+            throw new ValidateException("Required value status must be either [home, category]", HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value());
+
+    }
+
+    @Override
+    public boolean validateHeroCardIndexExist(Integer index, String type, String categoryId) {
+        if(heroCardRepository.validateHeroCardIndexExist(index,type,categoryId))
+            throw new ValidateException("This index is not available", HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value());
+        else
+             return true;
+    }
+
+    @Override
+    public boolean checkArticleAlreadyExistInHeroCard(String categoryId, String articleId, String type) {
+        if(heroCardRepository.checkArticleAlreadyExistInHeroCard(categoryId,articleId,type))
+            throw new ValidateException("This article already used to be hero card in "+type+ " of categoryId : "+categoryId, HttpStatus.FORBIDDEN,HttpStatus.FORBIDDEN.value());
+        else
+            return true;
+    }
 }
 
 

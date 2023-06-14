@@ -11,13 +11,16 @@ import java.util.List;
 public interface HeroCardService {
     HeroCard insertHeroCard(HeroCard heroCard);
 
-    List<HeroCardResponse> getAllHeroCardByCategoryId(String categoryId);
+    List<HeroCardResponse> getAllHeroCardByCategoryIdAndType(String categoryId, String type);
 
     HeroCard deleteHeroCardByCategoryIdAndIndex(String categoryId, Integer index);
 
-    List<HeroCardResponse> getAllHeroCardByHome();
+    List<HeroCardResponse> getAllHeroCardByTypeHome();
 
     HeroCard deleteHeroCardByIndexAndTypeHome(Integer index);
 
-    HeroCardResponse updateHeroCardById(String heroCardId, String articleId);
+//    HeroCardResponse updateHeroCardById(String heroCardId, String articleId);
+
+    HeroCardResponse deleteHeroCardById(String HeroCardId);
+    HeroCardResponse updateHeroCardById(String HeroCardId, String articleId);
 }
