@@ -35,7 +35,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/v1/reset")
+@RequestMapping("/api/reset")
 @SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
 public class ResetPasswordController {
