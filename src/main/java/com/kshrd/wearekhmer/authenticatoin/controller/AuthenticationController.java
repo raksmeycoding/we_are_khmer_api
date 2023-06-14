@@ -179,13 +179,9 @@ public class AuthenticationController {
         try {
             return ResponseEntity.ok(authenticationService.authenticate(userLoginRequest));
         } catch (Exception ex) {
+            ex.printStackTrace();
             if (ex instanceof DisabledException) {
-                genericResponse = GenericResponse.builder()
-                        .title("error")
-                        .statusCode(HttpStatus.UNAUTHORIZED.value())
-                        .message("You need to do code verification. please checkout your email and verify it. (" + ex.getMessage() + ")")
-                        .build();
-                return ResponseEntity.badRequest().body(genericResponse);
+                throw new ValidateException("This user had banned. " + "["  + (ex.getMessage()) + "]", HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.value());
             }
             if (ex instanceof BadCredentialsException) {
                 throw new BadCredentialsException(null, new ValidateException("Invalid user name or password.", HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.value()));

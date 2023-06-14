@@ -13,6 +13,7 @@ import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import com.kshrd.wearekhmer.history.repository.HistoryMapper;
 import com.kshrd.wearekhmer.notification.INotificationMapper;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
+import com.kshrd.wearekhmer.userArtivities.repository.ICommentRepository;
 import com.kshrd.wearekhmer.userArtivities.repository.IReactRepository;
 import com.kshrd.wearekhmer.userRating.RatingRepository;
 import com.kshrd.wearekhmer.userReport.repository.ReportMapper;
@@ -63,6 +64,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     private final HeroCardRepository heroCardRepository;
 
     private final INotificationMapper notificationMapper;
+
+    private final ICommentRepository commentRepository;
 
     @Override
     public void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize) {
@@ -380,6 +383,15 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
         boolean isMatched =  Pattern.compile("[a-z0-9]+@[a-z]+\\.[a-z]{2,3}").matcher(email).matches();
         if (!isMatched) {
             throw new ValidateException("Invalid email address", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+        }
+    }
+
+
+    @Override
+    public void validateAuthorHasAuthorityToReplyComment(String commentId, String userId) {
+        boolean isMathch = commentRepository.validateAuthorHasAuthorityToReplyComment(commentId, userId);
+        if(!isMathch) {
+            throw new ValidateException("This author has no authorities to reply this comment, he is not own of this article", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         }
     }
 }

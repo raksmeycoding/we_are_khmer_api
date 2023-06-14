@@ -73,7 +73,7 @@ public class UserReportAuthorController {
     }
 
 
-    @DeleteMapping("/{reportId}")
+    @DeleteMapping("/admin/{reportId}")
     @Operation(summary = "(Admin can delete user report author)")
     public ResponseEntity<?> deleteUserReportAuthorById(HttpServletRequest httpServletRequest, @PathVariable String reportId) {
         UserReportAuthorDatabaseReponse databaseReponse = userReportAuthorService.deleteUserReportAuthorById(reportId);
@@ -90,7 +90,7 @@ public class UserReportAuthorController {
     }
 
 
-    @PostMapping("/isAdminAccept/{authorId}")
+    @PostMapping("/admin/approveOrReject/{authorId}")
     public ResponseEntity<?> adminApproveOrRejectToBandAuthor(HttpServletRequest httpServletRequest, @PathVariable String authorId, @RequestBody @Validated AdminIsApproveRequestBody adminIsApproveRequestBody) {
         try {
             weAreKhmerValidation.validateAdminIsRejectOrApprove(adminIsApproveRequestBody.getStatus());
@@ -104,7 +104,7 @@ public class UserReportAuthorController {
             }
             return ResponseEntity.ok().body(GenericResponse.builder()
                     .title("success")
-                    .status("200")
+                    .statusCode(200)
                     .message("Administrator updated author permission with #id= + " + authorId + " accessing DOMRRA platform.")
                     .build());
         } catch (Exception ex) {

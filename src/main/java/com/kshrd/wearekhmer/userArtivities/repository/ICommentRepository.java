@@ -1,6 +1,8 @@
 package com.kshrd.wearekhmer.userArtivities.repository;
 
+import com.kshrd.wearekhmer.userArtivities.model.AuthorReplyCommentMapperResponse;
 import com.kshrd.wearekhmer.userArtivities.model.UserComment;
+import com.kshrd.wearekhmer.userArtivities.model.dto.AuthorReplyCommentMapper;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -9,12 +11,13 @@ import java.util.List;
 public interface ICommentRepository {
 
     @Select("""
-            select cb.*,
-                   (select user_tb.username  from comment_tb inner join user_tb on comment_tb.user_id = user_tb.user_id where comment_tb.parent_id is not null and comment_tb.parent_id = cb.comment_id ) as author_replay_name,
-                   (select comment from comment_tb where comment_tb.parent_id is not null and comment_tb.parent_id = cb.comment_id) as author_replay_comment
-            from comment_tb cb where cb.parent_id is null and article_id = #{articleId}
+            select cb.*, ut.photo_url, ut.username
+            from comment_tb cb inner join article_tb a on a.article_id = cb.article_id inner join user_tb ut on cb.user_id = ut.user_id
+            where cb.parent_id is null
+              and cb.article_id = #{articleId}
             """)
-    @Result(property = "author_replay_name", column = "author_replay_name")
+    @Result(property = "comment_id", column = "comment_id")
+    @Result(property = "author_reply", column = "comment_id", many = @Many(select = "getAuthorReplyCommentByCommentId"))
     List<UserComment> getUserCommentByArticleId(String articleId);
 
 
@@ -24,5 +27,38 @@ public interface ICommentRepository {
             """)
     @Result(property = "author_replay_name", column = "author_replay_name")
     UserComment creatArticleComment(String user_id, String article_id, String comment);
+
+
+    @Select("""
+            INSERT INTO comment_tb (user_id, article_id, parent_id, comment)
+            values ((select a.user_id
+                     from article_tb a
+                     where a.article_id =
+                           (select c.article_id from comment_tb c where c.comment_id = #{comment_id})),
+                    (select c.article_id from comment_tb c where c.comment_id = #{comment_id}),
+                    #{comment_id}, #{comment}) returning *;
+            """)
+    UserComment authorReplyCommentToHisArticle(AuthorReplyCommentMapper authorReplyCommentMapper);
+
+
+    @Select("""
+            select exists(select 1 from comment_tb where parent_id = #{parentId})
+            """)
+    boolean validateParentIdExist(String parentId);
+
+
+    @Select("""
+            select c.*, u.username, u.photo_url from comment_tb c inner join article_tb a on a.article_id = c.article_id inner join user_tb u on a.user_id = u.user_id where parent_id = #{comment_id}
+            """)
+    AuthorReplyCommentMapperResponse getAuthorReplyCommentByCommentId(@Param("comment_id") String comment_id);
+
+
+
+
+    @Select("""
+            select exists(select a.user_id  from comment_tb c inner join article_tb a on a.article_id = c.article_id where comment_id = #{commentId} and a.user_id = #{userId});
+            """)
+    boolean validateAuthorHasAuthorityToReplyComment(String commentId, String userId);
+
 
 }

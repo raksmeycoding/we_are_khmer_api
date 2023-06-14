@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer.history.model.response;
 
+import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class HistoryResponse {
 
     private String historyId;
     private String userId;
-    private ArticleResponse article;
+    private ArticleResponse2 article;
 
     private Timestamp createdAt;
 }

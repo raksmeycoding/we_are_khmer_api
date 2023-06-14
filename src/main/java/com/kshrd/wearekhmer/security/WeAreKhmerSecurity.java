@@ -56,7 +56,8 @@ public class WeAreKhmerSecurity {
             //            "/api/v1/notification"
             "/api/v1/order-navbar",
             "/api/v1/author/{authorId}",
-            "/api/v1/author/personal-info/{authorId}"
+            "/api/v1/author/personal-info/{authorId}",
+            "/api/reset/**"
 
     };
 
@@ -133,6 +134,9 @@ public class WeAreKhmerSecurity {
                 .requestMatchers(HttpMethod.POST, "/api/v1/report/author/{reportId}").hasRole("USER")
                 .requestMatchers(HttpMethod.POST, "/api/v1/report/author/isAdminAccept/{authorId}").hasRole("ADMIN")
 //                end feature report author
+//                ⚠️ Smey reply comment
+                .requestMatchers(HttpMethod.POST," /api/v1/comment/article/reply").hasAnyRole("AUTHOR")
+//                ebd feature reply comment
 //                .requestMatchers("/api/v1/author/{authorId}").hasAnyRole("AUTHOR", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/files/**")
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")

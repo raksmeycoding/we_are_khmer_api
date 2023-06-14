@@ -42,13 +42,23 @@ public class BookmarkController {
                     .build();
 
             List<BookmarkResponse> bookmarklist = bookmarkService.getAllBookmarkByCurrentId(weAreKhmerCurrentUser.getUserId());
-            genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .payload(bookmarklist)
-                    .title("success")
-                    .message("You have successfully got all bookmark recorded")
-                    .build();
-            return ResponseEntity.ok(genericResponse);
+
+            if(bookmarklist.size()>0){
+                genericResponse = GenericResponse.builder()
+                        .statusCode(200)
+                        .payload(bookmarklist)
+                        .title("success")
+                        .message("You have successfully got all bookmark recorded")
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }else{
+                genericResponse = GenericResponse.builder()
+                        .statusCode(200)
+                        .title("success")
+                        .message("There's no bookmark records in your list")
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }
 
         } catch (Exception ex) {
             genericResponse =
