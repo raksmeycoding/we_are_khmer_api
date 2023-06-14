@@ -2,6 +2,7 @@ package com.kshrd.wearekhmer.utils.validation;
 
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.exception.ValidateException;
+import com.kshrd.wearekhmer.heroCard.model.entity.HeroCard;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import org.springframework.http.HttpStatus;
 
@@ -76,6 +77,14 @@ public interface WeAreKhmerValidation {
 
 
     void validateAuthorHasAuthorityToReplyComment(String commentId, String userId);
+
+    void validateReportType(String status);
+
+    void validateHeroType(String type);
+
+    boolean validateHeroCardIndexExist(Integer index, String type, String categoryId );
+
+    boolean checkArticleAlreadyExistInHeroCard(String categoryId, String articleId, String type);
 
 
 

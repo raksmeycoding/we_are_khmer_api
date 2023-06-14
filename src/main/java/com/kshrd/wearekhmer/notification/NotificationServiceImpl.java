@@ -36,8 +36,8 @@ public class NotificationServiceImpl implements INotificationService {
     }
 
     @Override
-    public List<UserRequestAuthorList> getAllNotificationTypeRequest(String status) {
-        return notificationMapper.TypeRequest(status);
+    public List<UserRequestAuthorList> getAllNotificationTypeRequest(String status, Integer pageNumber, Integer nextPage) {
+        return notificationMapper.TypeRequest(status, pageNumber,nextPage);
     }
 
 //    @Override
@@ -54,8 +54,8 @@ public class NotificationServiceImpl implements INotificationService {
 //    }
 
     @Override
-    public List<NotificationResponse> getAllNotificationType() {
-        return notificationMapper.getAllNotificationType();
+    public List<NotificationResponse> getAllNotificationType(Integer pageNumber, Integer nextPage) {
+        return notificationMapper.getAllNotificationType(pageNumber, nextPage);
     }
 
     @Override
@@ -104,5 +104,10 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public Integer totalNotificationOfAllType() {
         return notificationMapper.totalNotificationOfAllType();
+    }
+
+    @Override
+    public List<NotificationResponse> getNotificationTypeReport(Integer pageNumber, Integer nextPage, String status) {
+        return notificationMapper.getNotificationTypeReport(pageNumber, nextPage, status);
     }
 }
