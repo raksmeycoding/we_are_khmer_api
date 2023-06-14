@@ -57,7 +57,7 @@ public class WeAreKhmerSecurity {
             "/api/v1/order-navbar",
             "/api/v1/author/{authorId}",
             "/api/v1/author/personal-info/{authorId}",
-            "/api/v1/reset/**"
+            "/api/reset/**"
 
     };
 
