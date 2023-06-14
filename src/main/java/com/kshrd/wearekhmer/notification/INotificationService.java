@@ -12,13 +12,13 @@ public interface INotificationService {
 
     Notification deleteNotificationById(String notificationId);
 
-    List<UserRequestAuthorList> getAllNotificationTypeRequest(String status);
+    List<UserRequestAuthorList> getAllNotificationTypeRequest(String status, Integer pageNumber, Integer nextPage);
 
 //    ViewAuthorRequest ViewUserRequestDetail(String userId);
 
     ViewAuthorRequest ViewUserRequestDetail(String userId, String status);
 
-    List<NotificationResponse> getAllNotificationType();
+    List<NotificationResponse> getAllNotificationType(Integer pageNumber, Integer nextPage);
 
     List<AuthorNotificationList> getAllNotificationForCurrentAuthor(String authorId);
 
@@ -33,6 +33,8 @@ public interface INotificationService {
     Integer totalNotificationOfAllType();
 
     Notification deleteNotificationByTypeAndId( String notificationId, String notificationType);
+
+    List<NotificationResponse> getNotificationTypeReport(Integer pageNumber, Integer nextPage, String status);
 
 
 

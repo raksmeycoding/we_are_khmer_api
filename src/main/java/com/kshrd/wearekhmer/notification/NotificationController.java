@@ -38,6 +38,8 @@ public class NotificationController {
     private static final Integer PAGE_SIZE = 10;
     private final ServiceClassHelper serviceClassHelper;
 
+    private final INotificationMapper notificationMapper;
+
 
 
     private Integer getNextPage(Integer page) {
@@ -52,86 +54,46 @@ public class NotificationController {
         return (page - 1) * PAGE_SIZE;
     }
 
-    @GetMapping
-    @Operation(summary = "Get all notification")
-    @Hidden
-    public ResponseEntity<?> getAllNotificatoin() {
-        try {
-            List<Notification> notificationList = notificationService.getAllNotification();
-            System.out.println(notificationList);
-            return ResponseEntity.ok(GenericResponse.builder()
-                    .status("200")
-                    .title("success")
-                    .message("Get data successfully")
-                    .payload(notificationService.getAllNotification())
-                    .build());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return ResponseEntity.internalServerError().body(GenericResponse.builder()
-                    .message(ex.getMessage())
-                    .title("error")
-                    .build());
-        }
-    }
-
-
-
-    public ResponseEntity<?> getNotificationForCurrentAuthor(){
-        return null;
-    }
-
-
-    @DeleteMapping("/admin/{type}/{notificationId}")
-    @Operation(summary = "(Admin can delete notification)")
-    @Hidden
-    public ResponseEntity<?> deleteNotificationById(HttpServletRequest httpServletRequest,@PathVariable String type, @PathVariable String notificationId) {
-
-        List<String> userRole = null;
-        userRole = weAreKhmerCurrentUser.getAuthorities();
-
-        for(String r : userRole) {
-            if (r.equalsIgnoreCase("ROLE_ADMIN")) {
-
-            }
-        }
-
-        Notification notification = notificationService.deleteNotificationById(notificationId);
-        if (notification == null) {
-            URI uri = URI.create(httpServletRequest.getRequestURL().toString());
-            ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Notification with #id=" + notificationId + " does not exist.");
-            problemDetail.setType(uri);
-            throw new ErrorResponseException(HttpStatus.NOT_FOUND, problemDetail, null);
-        }
-        return ResponseEntity.ok().body(GenericResponse.builder()
-                .payload(notification)
-                .status("200")
-                .title("success")
-                .message("Notification delete successfully.")
-                .build());
-    }
 
     @GetMapping("/admin/user_request_as_author")
     @Operation(summary = "Get request notifications to be author for admin ")
-    public ResponseEntity<?> getRequestNotification(@RequestParam("status") String status){
+    public ResponseEntity<?> getRequestNotification(
+            @RequestParam(defaultValue = "1", required = false) Integer page,
+            @RequestParam("status") String status){
 
  ;
             GenericResponse genericResponse;
+
+            Integer nextPage = getNextPage(page);
 
             weAreKhmerValidation.validateStatus(status.toUpperCase());
 
             Integer totalRecords = notificationService.totalRequestToBeAuthorRecords(status.toUpperCase());
 
-            List<UserRequestAuthorList> notifications = notificationService.getAllNotificationTypeRequest(status.toUpperCase());
+            List<UserRequestAuthorList> notifications = notificationService.getAllNotificationTypeRequest(status.toUpperCase(), PAGE_SIZE, nextPage);
 
-            genericResponse = GenericResponse.builder()
-                    .totalRecords(totalRecords)
-                    .status("200")
-                    .title("success")
-                    .message("You have gotten request to be author records successfully")
-                    .payload(notifications)
-                    .build();
+            if(notifications.size()>0){
 
-            return ResponseEntity.ok(genericResponse);
+                genericResponse = GenericResponse.builder()
+                        .totalRecords(totalRecords)
+                        .statusCode(200)
+                        .title("success")
+                        .message("You have gotten request to be author records successfully")
+                        .payload(notifications)
+                        .build();
+
+                return ResponseEntity.ok(genericResponse);
+            }else{
+                genericResponse = GenericResponse.builder()
+                        .totalRecords(totalRecords)
+                        .statusCode(200)
+                        .title("success")
+                        .message("There's no user-request to be author records in list")
+                        .build();
+
+                return ResponseEntity.ok(genericResponse);
+            }
+
 
         }
 
@@ -149,7 +111,7 @@ public class NotificationController {
         ViewAuthorRequest viewAuthorRequest = notificationService.ViewUserRequestDetail(userId,status.toUpperCase());
 
         genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(viewAuthorRequest)
                 .message("You have gotten request to be author records successfully")
@@ -158,23 +120,42 @@ public class NotificationController {
     }
 
     @GetMapping("/admin/all-notification-type")
-    @Operation(summary = "Get report article notifications for admin")
-    public ResponseEntity<?> getAllReportArticle(
+    @Operation(summary = "Get all notifications for admin")
+    public ResponseEntity<?> getAllNotification(
+            @RequestParam(defaultValue = "1" , required = false) Integer page
     ){
+
+
         GenericResponse genericResponse;
+        Integer nextPage = getNextPage(page);
 
         Integer totalRecords = notificationService.totalNotificationOfAllType();
 
-            List<NotificationResponse> reportArticleLists = notificationService.getAllNotificationType();
-            System.out.println(reportArticleLists);
-            genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .title("success")
-                    .message("You have successfully get all notifications")
-                    .payload(reportArticleLists)
-                    .totalRecords(totalRecords)
-                    .build();
-            return ResponseEntity.ok(genericResponse);
+            List<NotificationResponse> notificationResponses = notificationService.getAllNotificationType(
+                    PAGE_SIZE,
+                    nextPage
+            );
+            System.out.println(notificationResponses);
+
+            if(notificationResponses.size()>0){
+                genericResponse = GenericResponse.builder()
+                        .statusCode(200)
+                        .title("success")
+                        .message("You have successfully get all notifications")
+                        .payload(notificationResponses)
+                        .totalRecords(totalRecords)
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }else{
+                genericResponse = GenericResponse.builder()
+                        .statusCode(200)
+                        .title("success")
+                        .message("There's no notification records in list")
+                        .totalRecords(totalRecords)
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }
+
         }
 
     @GetMapping("/author")
@@ -187,7 +168,7 @@ public class NotificationController {
 
         genericResponse = GenericResponse.builder()
                 .totalRecords(totalRecords)
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .message("You have gotten all notification records successfully")
                 .payload(authorNotificationLists)
@@ -205,7 +186,7 @@ public class NotificationController {
         AuthorNotificationList authorNotificationList = notificationService.deleteNotificationForCurrentAuthorById(notificationId);
 
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .message("You have deleted this notification successfully")
                 .payload(authorNotificationList)
@@ -223,11 +204,44 @@ public class NotificationController {
         defaultWeAreKhmerValidation.validateNotificationTypeAdmin(notificationType);
         Notification notification = notificationService.deleteNotificationByTypeAndId(notificationType,notificationId);
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .message("You have delete a notification successfully")
                 .build();
         return ResponseEntity.ok(genericResponse);
+    }
+
+    @GetMapping("/admin/type")
+    @Operation(summary = "Get report notification by status for admin")
+    public ResponseEntity<?> getReportNotificationByStatus(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam("status") String status){
+        GenericResponse genericResponse;
+        Integer nextPage = getNextPage(page);
+        weAreKhmerValidation.validateReportType(status.toUpperCase());
+
+        List<NotificationResponse> responseList = notificationService.getNotificationTypeReport(PAGE_SIZE,nextPage,status.toUpperCase());
+        Integer totalRecord = notificationMapper.totalRecordNotificationTypeReport(status);
+
+        if(responseList.size()>0){
+            genericResponse = GenericResponse.builder()
+                    .totalRecords(totalRecord)
+                    .statusCode(200)
+                    .payload(responseList)
+                    .title("success")
+                    .message("You have gotten notification reports successfully")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+        }
+
+        genericResponse = GenericResponse.builder()
+                .statusCode(200)
+                .title("success")
+                .message("There's no notification reports in list")
+                .build();
+        return ResponseEntity.ok(genericResponse);
+
+
     }
 
 

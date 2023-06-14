@@ -4,6 +4,7 @@ import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import com.kshrd.wearekhmer.bookmark.model.entity.Bookmark;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.bookmark.model.request.BookmarkRequest;
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.heroCard.model.entity.HeroCard;
 import com.kshrd.wearekhmer.heroCard.model.request.HeroCardRequest;
 import com.kshrd.wearekhmer.heroCard.model.response.HeroCardResponse;
@@ -43,16 +44,18 @@ public class HeroCardController {
     private ServiceClassHelper classHelper;
 
     @PostMapping
-    @Operation(summary = "insert heroCard")
+    @Operation(summary = "Insert hero card for admin")
     public ResponseEntity<?> insertBookmark(HttpServletRequest httpServletRequest, @Validated @RequestBody HeroCardRequest heroCardRequest) {
         if (!(heroCardRequest.getIndex() > 0 && heroCardRequest.getIndex() <= 3)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "index field only contain (1-3)");
+            throw new ValidateException("index field only contain (1-3)",HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
         }
-
-        weAreKhmerValidation.checkHeroCard(heroCardRequest.getCategoryId(), heroCardRequest.getIndex(), heroCardRequest.getArticleId());
+        weAreKhmerValidation.validateHeroType(heroCardRequest.getType());
         weAreKhmerValidation.validateCategoryId(heroCardRequest.getCategoryId());
         weAreKhmerValidation.checkArticleByCategoryId(heroCardRequest.getCategoryId(), heroCardRequest.getArticleId());
-        weAreKhmerValidation.validate3ArticleInCategoryId(heroCardRequest.getCategoryId());
+        weAreKhmerValidation.validateHeroCardIndexExist(heroCardRequest.getIndex(), heroCardRequest.getType(), heroCardRequest.getCategoryId());
+        weAreKhmerValidation.checkArticleAlreadyExistInHeroCard(heroCardRequest.getCategoryId(), heroCardRequest.getArticleId(),heroCardRequest.getType());
+
+
 
         try {
             GenericResponse genericResponse;
@@ -64,14 +67,14 @@ public class HeroCardController {
                     .build();
 
 
-            if (!(heroCardRequest.getType().equalsIgnoreCase("home") || heroCardRequest.getType().equalsIgnoreCase("category"))) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "type field only contain (home and category) only");
-            }
+//            if (!(heroCardRequest.getType().equalsIgnoreCase("home") || heroCardRequest.getType().equalsIgnoreCase("category"))) {
+//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "type field only contain (home and category) only");
+//            }
 
             HeroCard heroCard1 = heroCardServiceImp.insertHeroCard(heroCard);
             genericResponse =
                     GenericResponse.builder()
-                            .status("200")
+                            .statusCode(200)
                             .payload(heroCard1)
                             .title("success")
                             .message("You have insert article to hero card successfully")
@@ -92,33 +95,45 @@ public class HeroCardController {
         }
     }
 
-    @GetMapping("/{categoryId}")
-    @Operation(summary = "get all hero card")
-    public ResponseEntity<?> getAllHeroCard(@PathVariable("categoryId") String categoryId) {
+    @GetMapping("/{type}")
+    @Operation(summary = "Get hero card by categoryId and type for admin")
+    public ResponseEntity<?> getHeroCardByCategoryIdAndType(@RequestParam("categoryId") String categoryId, @PathVariable("type") String type) {
         GenericResponse genericResponse;
             weAreKhmerValidation.validateCategoryId(categoryId);
+            weAreKhmerValidation.validateHeroType(type);
 
-            List<HeroCardResponse> heroCardResponses = heroCardServiceImp.getAllHeroCardByCategoryId(categoryId);
-        System.out.println("List: "+ heroCardResponses);
-            genericResponse = GenericResponse.builder()
-                    .status("200")
-                    .payload(heroCardResponses)
-                    .title("success")
-                    .message("You have successfully got all bookmark recorded")
-                    .build();
-            return ResponseEntity.ok(genericResponse);
+            List<HeroCardResponse> heroCardResponses = heroCardServiceImp.getAllHeroCardByCategoryIdAndType(categoryId,type);
+
+            if(heroCardResponses.size()>0){
+                genericResponse = GenericResponse.builder()
+                        .statusCode(200)
+                        .payload(heroCardResponses)
+                        .title("success")
+                        .message("You have successfully got hero card in categoryId : "+categoryId+ " and its type is "+type)
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }else{
+                genericResponse = GenericResponse.builder()
+                        .statusCode(200)
+                        .title("success")
+                        .message("There's no hero card in categoryId : "+categoryId+ " and type : "+type)
+                        .build();
+                return ResponseEntity.ok(genericResponse);
+            }
+
+
 
     }
 
-    @DeleteMapping("/{categoryId}/{index}")
+    @DeleteMapping("/")
     @Hidden
     @Operation(summary = "delete hero card by categoryId and Index")
-    public ResponseEntity<?> deleteHeroCardByCategoryIdAndIndex(@PathVariable("categoryId") String category, @PathVariable("index") Integer index){
+    public ResponseEntity<?> deleteHeroCardByCategoryIdAndIndex(@RequestParam("categoryId") String category, @RequestParam("index") Integer index){
 
         if(weAreKhmerValidation.checkIsCategoryIdOutOfIndex(category,index)){
             HeroCard heroCard = heroCardServiceImp.deleteHeroCardByCategoryIdAndIndex(category, index);
             GenericResponse genericResponse = GenericResponse.builder()
-                    .status("200")
+                    .statusCode(200)
                     .title("success")
                     .message("You have successfully delete heroCard that is in categoryId : "+category+ " and index : "+index)
                     .payload(heroCard)
@@ -130,45 +145,56 @@ public class HeroCardController {
         }
     }
 
-    @GetMapping("/home")
-    @Operation(summary = "get all hero card by homepage")
+    @GetMapping()
+    @Operation(summary = "Get hero card for homepage for admin")
     public ResponseEntity<?> getAllHeroCardByHome(){
-        List<HeroCardResponse> heroCardResponses = heroCardServiceImp.getAllHeroCardByHome();
+        List<HeroCardResponse> heroCardResponses = heroCardServiceImp.getAllHeroCardByTypeHome();
 
+        if(heroCardResponses.size()>0){
+            GenericResponse genericResponse = GenericResponse.builder()
+                    .statusCode(200)
+                    .title("success")
+                    .message("You have successfully get hero card for homepage")
+                    .payload(heroCardResponses)
+                    .build();
+
+            return ResponseEntity.ok(genericResponse);
+        }
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
-                .message("You have successfully get all hero card by homepage")
-                .payload(heroCardResponses)
+                .message("There's no hero card for homepage")
                 .build();
-
         return ResponseEntity.ok(genericResponse);
 
+
     }
 
-    @DeleteMapping("/home/{index}")
-    @Hidden
-    @Operation(summary = "Delete hero card by Index and Type (home) ")
-    public ResponseEntity<?> deleteHeroCardByIndexAndTypeHome(@PathVariable Integer index){
-        HeroCard heroCard = heroCardServiceImp.deleteHeroCardByIndexAndTypeHome(index);
-                GenericResponse genericResponse = GenericResponse.builder()
-                        .status("200")
-                        .title("success")
-                        .message("You have successfully delete hero card at index : "+index+ " in Type home")
-                        .payload(heroCard)
-                        .build();
 
-                return ResponseEntity.ok(genericResponse);
-    }
-
-    @PutMapping("/heroCardId")
-    @Operation(summary = "Update hero card by heroCardId")
-    public ResponseEntity<?> updateHeroCardByHeroCardId(@RequestParam("heroCardId") String heroCardId, @RequestParam("articleId") String articleId){
+    @PutMapping
+    @Operation(summary = "Update hero card for admin")
+    public ResponseEntity<?> updateHeroCardByHeroCardId(@RequestParam("HeroCardId") String heroCardId, @RequestParam("articleId") String articleId){
         HeroCardResponse heroCardResponse = heroCardServiceImp.updateHeroCardById(heroCardId, articleId);
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .message("You have successfully updated this hero card")
+                .payload(heroCardResponse)
+                .build();
+        return ResponseEntity.ok(genericResponse);
+    }
+
+    @DeleteMapping
+    @Operation(summary = "Delete hero card for admin")
+    public ResponseEntity<?> deleteHeroCardById(@RequestParam("HeroCardId") String heroCardId){
+
+
+        HeroCardResponse heroCardResponse = heroCardServiceImp.deleteHeroCardById(heroCardId);
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .statusCode(200)
+                .title("success")
+                .message("You have successfully delete this hero card")
                 .payload(heroCardResponse)
                 .build();
         return ResponseEntity.ok(genericResponse);

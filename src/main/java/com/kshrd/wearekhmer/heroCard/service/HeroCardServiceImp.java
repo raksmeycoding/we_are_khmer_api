@@ -1,9 +1,11 @@
 package com.kshrd.wearekhmer.heroCard.service;
 
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.heroCard.model.entity.HeroCard;
 import com.kshrd.wearekhmer.heroCard.model.response.HeroCardResponse;
 import com.kshrd.wearekhmer.heroCard.repository.HeroCardRepository;
+import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ public class HeroCardServiceImp implements HeroCardService{
 
     private final ArticleMapper articleMapper;
 
+    private final WeAreKhmerValidation weAreKhmerValidation;
+
 
     @Override
     public HeroCard insertHeroCard(HeroCard heroCard) {
@@ -25,8 +29,8 @@ public class HeroCardServiceImp implements HeroCardService{
     }
 
     @Override
-    public List<HeroCardResponse> getAllHeroCardByCategoryId(String categoryId) {
-        return heroCardRepository.getAllHeroCardByCategoryId(categoryId);
+    public List<HeroCardResponse> getAllHeroCardByCategoryIdAndType(String categoryId, String type) {
+        return heroCardRepository.getAllHeroCardByCategoryIdAndType(categoryId, type);
     }
 
     @Override
@@ -35,8 +39,8 @@ public class HeroCardServiceImp implements HeroCardService{
     }
 
     @Override
-    public List<HeroCardResponse> getAllHeroCardByHome() {
-        return heroCardRepository.getAllHeroCardByHome();
+    public List<HeroCardResponse> getAllHeroCardByTypeHome() {
+        return heroCardRepository.getAllHeroCardByTypeHome();
     }
 
     @Override
@@ -53,17 +57,38 @@ public class HeroCardServiceImp implements HeroCardService{
 
     }
 
-    @Override
-    public HeroCardResponse updateHeroCardById(String heroCardId, String articleId) {
-        if(heroCardRepository.validateHeroCardId(heroCardId)){
-            if(articleMapper.isArticleExist(articleId)){
-                return heroCardRepository.updateHeroCardById(heroCardId,articleId);
-            }else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ArticleId : "+articleId+ " not found");
-            }
+//    @Override
+//    public HeroCardResponse updateHeroCardById(String heroCardId, String articleId) {
+//        if(heroCardRepository.validateHeroCardId(heroCardId)){
+//            if(articleMapper.isArticleExist(articleId)){
+//                return heroCardRepository.updateHeroCardById(heroCardId,articleId);
+//            }else {
+//                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ArticleId : "+articleId+ " not found");
+//            }
+//
+//        }else{
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HeroCardId : "+heroCardId+ " not found");
+//        }
+//
+//    }
 
+    @Override
+    public HeroCardResponse deleteHeroCardById(String HeroCardId) {
+        if(!heroCardRepository.checkHeroCardIdIsExist(HeroCardId))
+            throw new ValidateException("HeroCardId : "+HeroCardId+ " does not exist ", HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value());
+        else
+            return heroCardRepository.deleteHeroCardById(HeroCardId);
+    }
+
+
+    @Override
+    public HeroCardResponse updateHeroCardById(String HeroCardId, String articleId) {
+        if(!heroCardRepository.checkHeroCardIdIsExist(HeroCardId)){
+            throw new ValidateException("HeroCardId : "+HeroCardId+ " does not exist ", HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value());
         }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HeroCardId : "+heroCardId+ " not found");
+            String categoryId = heroCardRepository.getHeroCardById(HeroCardId);
+            weAreKhmerValidation.checkArticleByCategoryId(categoryId,articleId);
+            return heroCardRepository.updateHeroCardById(HeroCardId,articleId);
         }
 
     }
