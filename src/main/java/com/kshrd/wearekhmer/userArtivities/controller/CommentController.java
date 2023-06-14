@@ -93,6 +93,8 @@ public class CommentController implements ICommentController {
         if (status == true) {
             throw new ValidateException("This comment had been replied.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         }
+//        NOT YET VALIDATE MUST HIS OWN AUTHOR ALLOW TO REPLY COMMENT
+        weAreKhmerValidation.validateAuthorHasAuthorityToReplyComment(authorReplyCommentRequest.getComment_id(), weAreKhmerCurrentUser.getUserId());
         try {
             AuthorReplyCommentMapper authorReplyCommentMapper = AuthorReplyCommentMapper.builder()
                     .comment_id(authorReplyCommentRequest.getComment_id())
@@ -103,6 +105,7 @@ public class CommentController implements ICommentController {
                 throw new ValidateException("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
             }
             return ResponseEntity.ok().body(GenericResponse.builder()
+                    .statusCode(200)
                     .message("You had replied comment successfully.")
                     .title("success")
                     .build());

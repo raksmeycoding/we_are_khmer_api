@@ -75,6 +75,9 @@ public interface WeAreKhmerValidation {
     void validateEmail(String email);
 
 
+    void validateAuthorHasAuthorityToReplyComment(String commentId, String userId);
+
+
 
 
 

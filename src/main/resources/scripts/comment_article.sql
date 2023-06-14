@@ -60,19 +60,28 @@ select exists(select 1 from comment_tb where parent_id = '39bc9521-ff00-4655-848
 -- v1
 -- select cb.*, (select comment from comment_tb where comment_tb.parent_id is not null and comment_tb.parent_id = cb.comment_id) as author_replay from comment_tb cb where cb.parent_id is null and article_id = '8256a9af-da04-4c25-837f-3b9ccebd443a';
 -- v1.1 (used in repository)
-select cb.*,
-       (select username
-        from comment_tb
-                 inner join user_tb on comment_tb.user_id = user_tb.user_id
-        where comment_tb.parent_id is not null
-          and comment_tb.parent_id = cb.comment_id) as author_replay_name,
-       (select comment
-        from comment_tb
-        where comment_tb.parent_id is not null
-          and comment_tb.parent_id = cb.comment_id) as author_replay_comment
-from comment_tb cb
+select cb.*, ut.photo_url, ut.username
+from comment_tb cb inner join article_tb a on a.article_id = cb.article_id inner join user_tb ut on cb.user_id = ut.user_id
 where cb.parent_id is null
-  and article_id = '8256a9af-da04-4c25-837f-3b9ccebd443a';
+  and cb.article_id = '085404e9-9d1f-4c2d-988c-ba70b7a54f35';
+
+select c.*, u.username, u.photo_url from comment_tb c inner join article_tb a on a.article_id = c.article_id inner join user_tb u on a.user_id = u.user_id where parent_id = '39bc9521-ff00-4655-8480-21d26d940189';
+
+
+
+select max(u.photo_url)
+from article_tb a
+         inner join comment_tb ct on a.article_id = ct.article_id
+         inner join user_tb u on u.user_id = a.user_id
+where a.article_id = '085404e9-9d1f-4c2d-988c-ba70b7a54f35';
+
+
+-- validate author has authority to reply comment
+select * from comment_tb where comment_id = 'f98dc928-bd49-476f-8483-b64bfd4b32df';
+
+select a.user_id from article_tb a where article_id = 'f22eaa31-01da-48f9-8ec2-dc2741df2a72';
+
+select exists(select a.user_id  from comment_tb c inner join article_tb a on a.article_id = c.article_id where comment_id = 'f98dc928-bd49-476f-8483-b64bfd4b32df' and a.user_id = 'f27491a7-346c-4a4d-9db7-882daab7284c');
 
 -- select comment from comment_tb where comment_tb.parent_id is not null and comment_tb.parent_id = '0c22bb0c-621d-4862-a52c-48590f65edee';
 --

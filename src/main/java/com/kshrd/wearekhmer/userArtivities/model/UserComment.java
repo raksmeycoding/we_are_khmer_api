@@ -15,19 +15,21 @@ import lombok.NoArgsConstructor;
 public class UserComment {
     private String comment_id;
     private String user_id;
-    private String username;
-    private String photo_url;
+
     private String article_id;
+
     private String comment;
+
     private String createAt;
+    private String photo_url;
+
+    private String username;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String update;
 
-    private String author_reply_image;
-    private String author_replay_name;
-    private String author_replay_comment;
 
-    //mapper need
-
+    private AuthorReplyCommentMapperResponse author_reply;
 
 
 }
