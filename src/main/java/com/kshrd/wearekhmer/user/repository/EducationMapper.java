@@ -38,7 +38,9 @@ public interface EducationMapper {
     EducationResponse getEducationByUserIdObject(String userId);
 
     @Select("INSERT INTO education (e_name, user_id) VALUES (#{educationName}, #{userId}) returning *")
-    @ResultMap("educationMapperId")
+    @Result(property = "educationId", column = "e_id")
+    @Result(property = "educationName", column = "e_name")
+    @Result(property = "userId", column = "user_id")
     Education insert(Education education);
 
     @Select("UPDATE education SET e_name = #{educationName} WHERE e_id = #{educationId} returning *")
