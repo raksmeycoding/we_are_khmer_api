@@ -52,7 +52,7 @@ logging:
       springframework:
         security: DEBUG
 server:
-  port: 9090
+  port: 8080
 
 
 
