@@ -39,7 +39,9 @@ public interface QuoteMapper {
     QuoteResponse getQuoteByUserIdAsObject(String userId);
 
     @Select("INSERT INTO quote_tb(q_name, user_id) VALUES (#{quoteName}, #{userId}) returning *")
-    @ResultMap("quoteMapperId")
+    @Result(property = "quoteId", column = "q_id")
+    @Result(property = "quoteName", column = "q_name")
+    @Result(property = "userId", column = "user_id")
     Quote insert(Quote quote);
 
     @Select("UPDATE quote_tb SET q_name = #{quoteName} WHERE q_id = #{quoteId} returning *")

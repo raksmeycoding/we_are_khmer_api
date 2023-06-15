@@ -24,7 +24,10 @@ public interface WorkingExperienceMapper {
     List<WorkingExperienceResponse> getAll();
 
     @Select("INSERT INTO working_experience_tb (w_name, user_id) VALUES (#{workingExperienceName}, #{userId}) returning *")
-    @ResultMap("workingExperienceMap")
+//    @ResultMap("workingExperienceMap")
+    @Result(property = "workingExperienceId", column = "wid" )
+    @Result(property = "workingExperienceName", column = "w_name")
+    @Result(property = "userId", column = "user_id")
     WorkingExperience insert(WorkingExperience workingExperience);
 
 
