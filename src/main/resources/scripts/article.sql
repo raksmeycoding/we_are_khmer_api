@@ -198,6 +198,9 @@ select count(*) as record_count from article_tb;
 update article_tb set isban = true where article_id = '3f88bac1-42c9-465a-9cf5-691e2248b30b';
 
 
+select exists(select 1 from article_tb where article_id = '3f88bac1-42c9-465a-9cf5-691e2248b30b' and article_tb.isBan = true)
+
+
 
 
 

@@ -9,6 +9,7 @@ import com.kshrd.wearekhmer.article.repository.FilterArticleCriteria;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.files.service.IFileService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
@@ -19,10 +20,8 @@ import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
-import org.modelmapper.internal.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -118,11 +117,11 @@ public class ArticleController {
 
             // Return the response using ResponseEntity
             return ResponseEntity.ok().body(GenericResponse.builder()
-                            .message("Get data successfully.")
-                            .title("success")
-                            .statusCode(200)
-                            .totalRecords(totalRecords)
-                            .payload(filteredArticles)
+                    .message("Get data successfully.")
+                    .title("success")
+                    .statusCode(200)
+                    .totalRecords(totalRecords)
+                    .payload(filteredArticles)
                     .build());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -1009,5 +1008,29 @@ public class ArticleController {
                 .message("You have successfully get total views per year.")
                 .build();
         return ResponseEntity.ok(genericResponse);
+    }
+
+
+    @PostMapping("/adminBanArticle/{articleId}")
+    @Operation(summary = "(Only admin has permission to ban this article.)")
+    public ResponseEntity<?> adminBanArticle(@PathVariable String articleId) {
+        boolean isArticleExist = articleMapper.isArticleExist(articleId);
+        if(!isArticleExist) {
+            throw new ValidateException("No article had been found.", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+        }
+        if(articleMapper.validateIsArticleAlreadyBand(articleId)) {
+           throw new ValidateException("This article had been already banned.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+        }
+        boolean isban = articleMapper.adminBanArticle(articleId);
+        System.out.println(isban);
+        if (!isban) {
+            throw new ValidateException("Article is not able to be ban.", HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
+
+        return ResponseEntity.ok().body(GenericResponse.builder()
+                .statusCode(200)
+                .title("success")
+                .message("Article had been bad successfully.").build());
     }
 }

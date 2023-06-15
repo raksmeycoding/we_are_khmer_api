@@ -198,4 +198,8 @@ public class ArticleServiceImp implements ArticleService {
     }
 
 
+    @Override
+    public boolean adminBanArticle(String articleId) {
+        return articleMapper.adminBanArticle(articleId);
+    }
 }
