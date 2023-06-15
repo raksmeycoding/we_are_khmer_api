@@ -447,6 +447,14 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
         else
             return true;
     }
+
+    @Override
+    public boolean checkCategoryId(String categoryId) {
+        if(categoryMapper.isCategoryExist(categoryId))
+            return true;
+        else
+            throw new ValidateException("categoryId : "+categoryId+ " does not exist", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+    }
 }
 
 

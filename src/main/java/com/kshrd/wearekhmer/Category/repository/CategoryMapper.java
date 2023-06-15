@@ -68,5 +68,7 @@ public interface CategoryMapper {
             select count(*) from category;
             """)
     Integer getTotalCategoryRecord ();
+
+
 }
 
