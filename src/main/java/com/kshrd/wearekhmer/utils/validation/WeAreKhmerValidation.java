@@ -86,6 +86,8 @@ public interface WeAreKhmerValidation {
 
     boolean checkArticleAlreadyExistInHeroCard(String categoryId, String articleId, String type);
 
+    boolean checkCategoryId(String categoryId);
+
 
 
 

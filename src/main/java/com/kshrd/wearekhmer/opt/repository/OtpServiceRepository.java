@@ -9,7 +9,7 @@ public interface OtpServiceRepository {
 
 
     @Select("""
-            insert into otp2(token, email, temp_password, expiredAt, user_id)
+            insert into otp_tb(token, email, temp_password, expiredAt, user_id)
             values (#{token},#{email}, #{temp_password}, #{expiredAt}, #{userId})
             returning *
             """)
@@ -31,14 +31,14 @@ public interface OtpServiceRepository {
 
 
     @Select("""
-            select * from otp2 where token = #{token}
+            select * from otp_tb where token = #{token}
             """)
     @ResultMap("optMap")
     Otp findByToken(@Param("token") String token);
 
 
     @Select("""
-            delete from otp2 where token = #{token} returning * 
+            delete from otp_tb where token = #{token} returning * 
              """)
     @ResultMap("optMap")
     Otp removeByToken(@Param("token") String token);
@@ -48,12 +48,12 @@ public interface OtpServiceRepository {
             WITH updated_users AS (
                 UPDATE user_tb
                     SET is_enable = true
-                    WHERE user_id = (SELECT user_id FROM otp2 WHERE otp2.token = #{token})
+                    WHERE user_id = (SELECT user_id FROM otp_tb WHERE otp_tb.token = #{token})
                     RETURNING *
             )
-            SELECT otp2.*
-            FROM otp2
-                     JOIN updated_users ON otp2.user_id = updated_users.user_id;
+            SELECT otp_tb.*
+            FROM otp_tb
+                     JOIN updated_users ON otp_tb.user_id = updated_users.user_id;
             """)
     @Result(property = "optId", column = "token_id")
     @Result(property = "token", column = "token")

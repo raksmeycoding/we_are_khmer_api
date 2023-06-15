@@ -6,6 +6,7 @@ import com.kshrd.wearekhmer.Category.model.CategoryRequestDTO;
 import com.kshrd.wearekhmer.Category.repository.CategoryMapper;
 import com.kshrd.wearekhmer.Category.service.CategoryService;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
+import com.kshrd.wearekhmer.files.service.serviceImplement.FileServiceImpl;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,6 +35,8 @@ public class CategoryController {
 
 
     private static final Integer PAGE_SIZE = 10;
+
+    private final FileServiceImpl fileService;
 
 
     private Integer getNextPageCategory(Integer page) {
@@ -89,11 +92,12 @@ public class CategoryController {
     @GetMapping("{categoryId}")
     public ResponseEntity<?> getCategoryById(@PathVariable String categoryId) {
         GenericResponse genericResponse;
+        weAreKhmerValidation.checkCategoryId(categoryId);
         try {
             Category category = categoryService.getCategoryById(categoryId);
             genericResponse =
                     GenericResponse.builder()
-                            .status("200")
+                            .statusCode(200)
                             .title("success")
                             .payload(category)
                             .build();
@@ -103,7 +107,7 @@ public class CategoryController {
             e.printStackTrace();
             genericResponse =
                     GenericResponse.builder()
-                            .status("500")
+                            .statusCode(500)
                             .title("internal server error")
                             .message(e.getMessage())
                             .build();
@@ -157,6 +161,8 @@ public class CategoryController {
         if (!weAreKhmerValidation.isAdmin()) {
             throw new CustomRuntimeException("You are not administrator.");
         }
+
+        weAreKhmerValidation.checkCategoryId(category.getCategoryId());
         GenericResponse genericResponse;
         try {
             Category category2 = categoryService.updateCategory(category);
@@ -189,11 +195,16 @@ public class CategoryController {
             throw new CustomRuntimeException("You are not administrator.");
         }
         GenericResponse genericResponse;
+        weAreKhmerValidation.checkCategoryId(categoryId);
         try {
             Category category2 = categoryService.deleteCategory(categoryId);
+            String filename = category2.getCategoryImage().substring(category2.getCategoryImage().lastIndexOf('=') + 1);
+            System.out.println(filename);
+            fileService.deleteFileByFileName(filename);
+
             genericResponse =
                     GenericResponse.builder()
-                            .status("200")
+                            .statusCode(200)
                             .title("success")
                             .payload(category2)
                             .build();
@@ -203,7 +214,7 @@ public class CategoryController {
             e.printStackTrace();
             genericResponse =
                     GenericResponse.builder()
-                            .status("500")
+                            .statusCode(500)
                             .title("internal server error")
                             .message(e.getMessage())
                             .build();

@@ -419,8 +419,13 @@ public class ArticleController {
                 );
             }
 
+            String filename = article1.getImage().substring(article1.getImage().lastIndexOf('=') + 1);
+            System.out.println(filename);
+            fileService.deleteFileByFileName(filename);
+
+
             //            delete image file if article exist
-            fileService.deleteFileByFileName(article1.getImage());
+//            fileService.deleteFileByFileName(article1.getImage());
 
             genericResponse =
                     GenericResponse
