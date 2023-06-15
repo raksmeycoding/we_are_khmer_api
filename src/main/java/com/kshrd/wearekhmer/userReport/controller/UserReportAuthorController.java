@@ -96,7 +96,7 @@ public class UserReportAuthorController {
             weAreKhmerValidation.validateAdminIsRejectOrApprove(adminIsApproveRequestBody.getStatus());
             AdminIsApproveMapperRequest adminIsApproveMapperRequest = AdminIsApproveMapperRequest.builder()
                     .author_id(authorId)
-                    .status(adminIsApproveRequestBody.getStatus())
+                    .status(adminIsApproveRequestBody.getStatus().toUpperCase())
                     .build();
             List<String> effectedRowAuthorId = userReportAuthorService.adminWillApproveOrNot(adminIsApproveMapperRequest);
             if (effectedRowAuthorId.size() == 0) {

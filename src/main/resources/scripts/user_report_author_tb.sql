@@ -109,7 +109,7 @@ order by create_at desc;
 
 
 
--- create user band author
+-- create admin band author
 create function check_status_on_table_user_report_author() returns trigger as
 $$
 begin
