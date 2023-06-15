@@ -34,9 +34,9 @@ drop function check_user_is_author_status_change cascade;
 
 
 create trigger trg_check_user_is_author_status_change
-    before update
+    before update of is_author
     on user_tb
-    for each row
+    for each row when ( OLD.is_author is distinct from NEW.is_author )
 execute function check_user_is_author_status_change();
 
 DROP trigger trg_check_user_is_author_status_change on user_tb;
