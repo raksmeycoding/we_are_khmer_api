@@ -740,8 +740,15 @@ public interface ArticleMapper {
 
 
     @Select("""
-            
+            update article_tb set isban = true where article_id = #{articleId} returning isban
             """)
-    ArticleResponse2 adminBanArticle(String articleId);
+    boolean adminBanArticle(String articleId);
+
+
+
+    @Select("""
+            select exists(select 1 from article_tb where article_id = #{articleId} and article_tb.isBan = true)
+            """)
+    boolean validateIsArticleAlreadyBand(String articleId);
     
 }

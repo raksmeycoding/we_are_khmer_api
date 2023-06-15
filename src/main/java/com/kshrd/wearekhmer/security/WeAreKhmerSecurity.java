@@ -138,6 +138,8 @@ public class WeAreKhmerSecurity {
                 .requestMatchers(HttpMethod.POST," /api/v1/comment/article/reply").hasAnyRole("AUTHOR")
 //                ebd feature reply comment
 //                .requestMatchers("/api/v1/author/{authorId}").hasAnyRole("AUTHOR", "ADMIN")
+//                ⚠️Smey
+                .requestMatchers(HttpMethod.POST, "/api/v1/article/adminBanArticle/{articleId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/files/**")
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers("/api/v1/article/react/**")
