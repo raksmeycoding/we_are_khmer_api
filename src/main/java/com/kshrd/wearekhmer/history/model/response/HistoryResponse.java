@@ -19,7 +19,7 @@ public class HistoryResponse {
 
     private String historyId;
     private String userId;
-    private ArticleResponse2 article;
+    private ArticleResponse article;
 
     private Timestamp createdAt;
 }
