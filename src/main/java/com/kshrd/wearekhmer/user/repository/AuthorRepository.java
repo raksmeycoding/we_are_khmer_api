@@ -129,7 +129,7 @@ public interface AuthorRepository {
     @Select("""
             select exists(select  1 from author_request_tb arb where user_id = #{authorId} and is_author_accepted = 'REJECTED')
             """)
-    boolean checkAuthorRequestHadBennRejected(String authorId);
+    boolean checkAuthorRequestHadBendedOrRejected(String authorId);
 
 }
 

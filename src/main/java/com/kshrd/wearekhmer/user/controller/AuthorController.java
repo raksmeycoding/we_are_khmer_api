@@ -115,11 +115,10 @@ public class AuthorController {
     @Operation(summary = "(Accept user request as author.)")
     public ResponseEntity<?> updateUserRequestToBeAsRejected(@PathVariable String userId) {
         String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
-//        check author had been already rejected
-
-        boolean isAlreadyRejected = authorRepository.checkAuthorRequestHadBennRejected(userId);
+//        check author had been already rejected or banded
+        boolean isAlreadyRejected = authorRepository.checkAuthorRequestHadBendedOrRejected(userId);
         if (isAlreadyRejected) {
-            throw new ValidateException("This author had been already rejected", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+            throw new ValidateException("This author had been already rejected. ⚠️ If you want to reject this author, we have a solution you can delete this author or ban to let this author can no longer post any article in your application", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
         }
 //        check author had already author
         if (hasRoleAuthor != null && hasRoleAuthor.equalsIgnoreCase("ROLE_AUTHOR")) {

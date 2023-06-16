@@ -132,7 +132,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/report/author/{reportId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/v1/report/author").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/report/author/{reportId}").hasRole("USER")
-                .requestMatchers(HttpMethod.POST, "/api/v1/report/author/isAdminAccept/{authorId}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/v1/report/author/admin/approveOrReject/{authorId}").hasRole("ADMIN")
 //                end feature report author
 //                ⚠️ Smey reply comment
                 .requestMatchers(HttpMethod.POST," /api/v1/comment/article/reply").hasAnyRole("AUTHOR")
