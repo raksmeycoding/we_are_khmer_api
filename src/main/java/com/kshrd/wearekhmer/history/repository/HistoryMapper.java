@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer.history.repository;
 
+import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.history.model.entity.History;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
@@ -43,7 +44,7 @@ public interface HistoryMapper {
     @Result(property = "historyId", column = "history_id")
     @Result(property = "userId", column = "user_id")
     @Result(property = "createdAt", column = "created_at")
-    @Result(property = "article", column = "article_id", many = @Many(select = "com.kshrd.wearekhmer.article.repository.ArticleMapper.getArticleById"))
+    @Result(property = "article", column = "article_id", many = @Many(select = "com.kshrd.wearekhmer.article.repository.ArticleMapper.getArticleByIdForBookmarkAndHistory"))
     List<HistoryResponse> getAllHistoryByCurrentUser(String userId);
 
     @Select("""
@@ -76,6 +77,7 @@ public interface HistoryMapper {
 
 
 
+
 //    @Select("""
 //            SELECT * FROM history_tb
 //            WHERE user_id = #{userId}
@@ -84,3 +86,5 @@ public interface HistoryMapper {
 //            """)
 //    HistoryResponse validateHistoryRemoveAll(History history);
 }
+
+

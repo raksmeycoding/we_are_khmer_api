@@ -59,6 +59,7 @@ FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id 
     @Result(property = "quote", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.QuoteMapper.getQuoteByUserIdAsObject"))
     @Result(property = "reason", column = "reason")
     @Result(property = "isAccepted", column = "is_author_accepted")
+    @Result(property = "requestOn", column = "createat")
     ViewAuthorRequest getUserRequestDetail(String userId, String status);
 
 
