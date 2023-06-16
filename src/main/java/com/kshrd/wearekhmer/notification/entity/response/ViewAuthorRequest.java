@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -22,6 +23,8 @@ public class ViewAuthorRequest {
     private String reason;
 
     private String isAccepted;
+
+    private Date requestOn;
 
     private List<WorkingExperienceResponse> workingExperience;
 

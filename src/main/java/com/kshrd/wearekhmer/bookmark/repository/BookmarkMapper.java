@@ -35,7 +35,7 @@ public interface BookmarkMapper {
     @Result(property = "bookmarkId", column = "bookmark_id")
     @Result(property = "userId", column = "user_id")
     @Result(property = "createdAt", column = "created_at")
-    @Result(property = "article", column = "article_id", many = @Many(select = "com.kshrd.wearekhmer.article.repository.ArticleMapper.getArticleById"))
+    @Result(property = "article", column = "article_id", many = @Many(select = "com.kshrd.wearekhmer.article.repository.ArticleMapper.getArticleByIdForBookmarkAndHistory"))
     List<BookmarkResponse> getAllBookmarkByCurrentId(String userId);
 
 

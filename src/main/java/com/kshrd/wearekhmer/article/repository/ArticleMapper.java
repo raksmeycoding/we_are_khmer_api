@@ -182,7 +182,8 @@ public interface ArticleMapper {
                    ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, 
+                   (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
                      left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
@@ -198,7 +199,7 @@ public interface ArticleMapper {
             select ab.article_id,
                    ab.user_id,
                    ab.category_id,
-                   ab.title,
+                   ab.title, 
                    ab.sub_title,
                    ab.publish_date,
                    ab.description,
@@ -210,7 +211,8 @@ public interface ArticleMapper {
                    ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{currentUserId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, 
+                   (CASE WHEN bt.user_id = #{currentUserId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
                      inner join user_tb ub on ab.user_id = ub.user_id
                      inner join category c on c.category_id = ab.category_id
                      left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{currentUserId}
@@ -750,5 +752,32 @@ public interface ArticleMapper {
             select exists(select 1 from article_tb where article_id = #{articleId} and article_tb.isBan = true)
             """)
     boolean validateIsArticleAlreadyBand(String articleId);
+
+    @Select("""
+select ab.article_id,
+       ab.user_id,
+       ab.category_id,
+       ab.title,
+       ab.sub_title,
+       ab.publish_date,
+       ab.description,
+       ab.updatedat,
+       coalesce((nullif(ab.image, '')),
+                'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80') as image,
+       ab.count_view,
+       ab.isban,
+       ab.hero_card_in,
+       ub.photo_url,
+       ub.username                                                                                                                                                                        as author_name,
+       c.category_name,
+       (select count(react_id) as react_count
+        from react_tb
+        where react_tb.article_id = ab.article_id)  
+    FROM article_tb ab
+    inner join user_tb ub on ab.user_id = ub.user_id
+    inner join category c on c.category_id = ab.category_id
+where ab.article_id = #{articleId}
+            """)
+    ArticleResponse getArticleByIdForBookmarkAndHistory(String articleId, String userId);
     
 }

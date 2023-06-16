@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer.history.model.entity;
 
+import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

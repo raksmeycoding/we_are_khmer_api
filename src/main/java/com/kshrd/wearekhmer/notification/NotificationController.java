@@ -55,7 +55,7 @@ public class NotificationController {
     }
 
 
-    @GetMapping("/admin/user_request_as_author")
+    @GetMapping("/admin/user-request-as-author")
     @Operation(summary = "Get request notifications to be author for admin ")
     public ResponseEntity<?> getRequestNotification(
             @RequestParam(defaultValue = "1", required = false) Integer page,

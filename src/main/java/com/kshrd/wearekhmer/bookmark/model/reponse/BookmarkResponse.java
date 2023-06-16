@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 public class BookmarkResponse {
     private String bookmarkId;
     private String userId;
-    private ArticleResponse2 article;
+    private ArticleResponse article;
 
     private Timestamp createdAt;
 }
