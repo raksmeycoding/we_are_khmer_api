@@ -141,3 +141,8 @@ select * from article_tb where user_id = 'd0e1bd19-d4bc-45d5-9beb-32538d16b769';
 
 
 -- check author role
+
+select user_id from user_role_tb where user_id = '7e913fab-eb8c-4d52-aff8-266eb1185d7a';
+
+
+select exists(select  1 from author_request_tb arb where user_id = '0cd89dbf-0075-48a0-8be0-fd5dd786c37b' and is_author_accepted = 'REJECTED')

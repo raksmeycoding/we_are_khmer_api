@@ -2,6 +2,7 @@ package com.kshrd.wearekhmer.exception;
 
 
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -96,6 +97,23 @@ public class DomrraCustomExceptionHandler {
     @ExceptionHandler(ErrorResponseException.class)
     public ErrorResponseException responseStatusException(ErrorResponseException ex) {
         return new ErrorResponseException(ex.getStatusCode(), ex.getBody(), ex.getCause());
+    }
+
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<?> validateException(ExpiredJwtException ex , WebRequest request) {
+        HttpServletRequest httpServletRequest = ((ServletWebRequest) request).getRequest();
+        String instance = httpServletRequest.getRequestURI();
+        String type = httpServletRequest.getRequestURL().toString();
+        GenericResponse genericResponse = GenericResponse.builder()
+                .type(type)
+                .instance(instance)
+                .statusName(HttpStatus.UNAUTHORIZED.name())
+                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                .message("Token had been already expired")
+                .title("error")
+                .build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(genericResponse);
     }
 
 
