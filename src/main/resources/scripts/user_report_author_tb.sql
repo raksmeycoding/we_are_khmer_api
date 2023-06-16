@@ -121,6 +121,10 @@ end;
 $$
     language plpgsql;
 
+
+--         CHECK IF YOU AUTHOR HAD BEEN APPROVED TO BE BAN
+select exists(select 1 from user_tb u where u.user_id = '0cd89dbf-0075-48a0-8be0-fd5dd786c37b' and is_enable = false);
+
 DROP function check_status_on_table_user_report_author cascade;
 
 

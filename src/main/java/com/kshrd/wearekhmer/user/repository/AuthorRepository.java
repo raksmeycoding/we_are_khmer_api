@@ -4,6 +4,7 @@ package com.kshrd.wearekhmer.user.repository;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
 import com.kshrd.wearekhmer.userRating.reponse.PersonalInformationResponse;
+import com.sun.mail.imap.protocol.BODY;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.TypeHandler;
 import org.springframework.http.ResponseEntity;
@@ -122,6 +123,13 @@ public interface AuthorRepository {
             select u.user_id, u.username, u.email, u.gender, u.data_of_birth from user_tb u inner join user_role_tb urb on urb.user_id = u.user_id inner join  role_tb r on urb.role_id = r.role_id where u.user_id = #{authorId} and r.name = 'ROLE_AUTHOR'
             """)
     PersonalInformationResponse getAuthorPersonalInfoByAuthorId(String authorId);
+
+
+
+    @Select("""
+            select exists(select  1 from author_request_tb arb where user_id = #{authorId} and is_author_accepted = 'REJECTED')
+            """)
+    boolean checkAuthorRequestHadBendedOrRejected(String authorId);
 
 }
 

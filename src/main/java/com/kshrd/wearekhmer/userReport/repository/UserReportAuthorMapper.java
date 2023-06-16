@@ -38,4 +38,9 @@ public interface UserReportAuthorMapper {
             where urab.author_id = #{author_id} returning urab.author_id;
             """)
     List<String> adminWillApproveOrNot(AdminIsApproveMapperRequest adminIsApproveMapperRequest);
+
+    @Select("""
+            select exists(select 1 from user_tb u where u.user_id = #{userId} and is_enable = false);
+            """)
+    boolean isAuthorOrUserHadBennAlreadyBan(String userId);
 }

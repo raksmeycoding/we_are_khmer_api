@@ -1,7 +1,7 @@
 package com.kshrd.wearekhmer.user.controller;
 
 
-import com.kshrd.wearekhmer.exception.CustomRuntimeException;
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
@@ -42,7 +42,7 @@ public class AuthorController {
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
 
-    @GetMapping("authorRequest")
+    @GetMapping("/authorRequest")
     @Operation(summary = "(Get all authors request either accept as author or not.)")
     public ResponseEntity<?> getAllUserRequestAsAuthorEitherAcceptOrNot() {
         try {
@@ -55,7 +55,7 @@ public class AuthorController {
     }
 
 
-    @GetMapping("authorUser")
+    @GetMapping("/authorUser")
     @Operation(summary = "(Get all only authors user.)")
     public ResponseEntity<?> getAllAuthorUser() {
         try {
@@ -90,12 +90,8 @@ public class AuthorController {
     @Operation(summary = "(Accept user request as author.)")
     public ResponseEntity<?> updateUserRequestToBeAsAuthor(@PathVariable String userId) {
         String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
-        System.out.println(hasRoleAuthor);
-        if (!weAreKhmerValidation.isAdmin()) {
-            throw new CustomRuntimeException("You are not admin.");
-        }
         if (hasRoleAuthor != null && hasRoleAuthor.equalsIgnoreCase("ROLE_AUTHOR")) {
-            throw new CustomRuntimeException("User Already Exist.");
+            throw new ValidateException("User had already be author.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         }
         String userIdAccepted = authorService.updateUserRequestToBeAsAuthor(userId);
         GenericResponse res;
@@ -107,8 +103,9 @@ public class AuthorController {
             return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         res = GenericResponse.builder()
-                .status("200")
-                .message("User is accepted as author.")
+                .statusCode(200)
+                .message("Successfully accepted as author.")
+                .title("success")
                 .build();
         return ResponseEntity.ok(res);
 
@@ -118,25 +115,22 @@ public class AuthorController {
     @Operation(summary = "(Accept user request as author.)")
     public ResponseEntity<?> updateUserRequestToBeAsRejected(@PathVariable String userId) {
         String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
-        System.out.println(hasRoleAuthor);
-        if (!weAreKhmerValidation.isAdmin()) {
-            throw new CustomRuntimeException("You are not admin.");
+//        check author had been already rejected or banded
+        boolean isAlreadyRejected = authorRepository.checkAuthorRequestHadBendedOrRejected(userId);
+        if (isAlreadyRejected) {
+            throw new ValidateException("This author had been already rejected. ⚠️ If you want to reject this author, we have a solution you can delete this author or ban to let this author can no longer post any article in your application", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
         }
+//        check author had already author
         if (hasRoleAuthor != null && hasRoleAuthor.equalsIgnoreCase("ROLE_AUTHOR")) {
-            throw new CustomRuntimeException("User Already Exist.");
+            throw new ValidateException("User had already be author.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         }
         String userIdAccepted = authorService.updateUserRequestToBeAsAuthorAsReject(userId);
         GenericResponse res;
-//        if (userIdAccepted == null) {
-//            res = GenericResponse.builder()
-//                    .status("500")
-//                    .message("is not accepted.")
-//                    .build();
-//            return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
+
         res = GenericResponse.builder()
-                .status("200")
-                .message("User is accepted as author.")
+                .statusCode(200)
+                .message("Successfully rejected as author.")
+                .title("success")
                 .build();
         return ResponseEntity.ok(res);
 
