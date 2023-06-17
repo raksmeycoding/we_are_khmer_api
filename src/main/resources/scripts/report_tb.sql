@@ -4,8 +4,8 @@ create table report_tb
     article_id  varchar references article_tb (article_id) on delete cascade not null,
     crate_at    timestamp           default current_timestamp,
     reason      varchar                                    not null,
-    reciever_id varchar references user_tb (user_id)       not null,
-    user_id   varchar references user_tb (user_id)       not null
+    reciever_id varchar references user_tb (user_id)  on delete cascade     not null,
+    user_id   varchar references user_tb (user_id) on delete cascade      not null
 );
 drop table report_tb;
 alter table report_tb rename column sender_id to user_id;
