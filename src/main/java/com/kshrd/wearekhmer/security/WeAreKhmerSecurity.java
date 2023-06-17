@@ -35,6 +35,7 @@ public class WeAreKhmerSecurity {
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/api/v1/user/**",
+             "/api/v1/auth/register",
             "/api/v1/auth/register/**",
             "/api/v1/auth/login",
             "/images/**",
