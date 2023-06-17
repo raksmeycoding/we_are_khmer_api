@@ -20,6 +20,6 @@ public class Otp {
     private String createAt;
     private Timestamp expiredAt;
 
-    private Boolean isExpired;
+    private Boolean isexpired;
     private String userId;
 }

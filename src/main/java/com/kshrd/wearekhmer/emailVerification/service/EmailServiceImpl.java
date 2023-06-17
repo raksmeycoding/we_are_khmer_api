@@ -65,4 +65,24 @@ public class EmailServiceImpl implements EmailService{
         mimeMessageHelper.setFrom("no-reply@ethandev.com");
         mailSender.send(mimeMessage);
     }
+
+
+    @Override
+    public void sendResendVerificationCode(String to, String token) throws MessagingException {
+        SimpleMailMessage message = new SimpleMailMessage();
+        Context context = new Context();
+        Map<String, Object> map = new HashMap<>();
+        map.put("link", "http://localhost:3000/codeVerification");
+        map.put("code", token);
+        context.setVariables(map);
+        String process = springTemplateEngine.process("resend-verification-code", context);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(to);
+        mimeMessageHelper.setText(process, true);
+        mimeMessageHelper.setSubject("Resend Code to Verify Email");
+        mimeMessageHelper.setFrom("no-reply@ethandev.com");
+        mailSender.send(mimeMessage);
+
+    }
 }

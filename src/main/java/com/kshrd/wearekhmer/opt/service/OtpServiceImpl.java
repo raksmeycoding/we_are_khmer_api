@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.opt.service;
 
 import com.kshrd.wearekhmer.opt.model.Otp;
+import com.kshrd.wearekhmer.opt.model.Otp2;
 import com.kshrd.wearekhmer.opt.repository.OtpServiceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,5 +32,10 @@ public class OtpServiceImpl implements OtpService{
     @Override
     public Otp enableUserByToken(String token) {
         return otpServiceRepository.enableUserByToken(token);
+    }
+
+    @Override
+    public Otp2 resendVerificationTokenToVerifyEmail(String email) {
+        return otpServiceRepository.resendVerificationTokenToVerifyEmail(email);
     }
 }
