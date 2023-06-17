@@ -181,7 +181,7 @@ public class AuthenticationController {
         } catch (Exception ex) {
             ex.printStackTrace();
             if (ex instanceof DisabledException) {
-                throw new ValidateException("This user had banned. " + "["  + (ex.getMessage()) + "]", HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.value());
+                throw new ValidateException("This user had been banded or disabled.", HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.value());
             }
             if (ex instanceof BadCredentialsException) {
                 throw new BadCredentialsException(null, new ValidateException("Invalid user name or password.", HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.value()));

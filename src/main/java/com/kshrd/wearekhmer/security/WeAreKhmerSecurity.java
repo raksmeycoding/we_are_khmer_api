@@ -35,6 +35,7 @@ public class WeAreKhmerSecurity {
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/api/v1/user/**",
+             "/api/v1/auth/register",
             "/api/v1/auth/register/**",
             "/api/v1/auth/login",
             "/images/**",
@@ -57,7 +58,9 @@ public class WeAreKhmerSecurity {
             "/api/v1/order-navbar",
             "/api/v1/author/{authorId}",
             "/api/v1/author/personal-info/{authorId}",
-            "/api/reset/**"
+            "/api/reset/**",
+            "/api/v1/token/resendEmailVerificationToken"
+
 
     };
 

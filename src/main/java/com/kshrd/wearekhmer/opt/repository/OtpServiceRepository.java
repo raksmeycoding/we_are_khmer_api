@@ -2,6 +2,7 @@ package com.kshrd.wearekhmer.opt.repository;
 
 
 import com.kshrd.wearekhmer.opt.model.Otp;
+import com.kshrd.wearekhmer.opt.model.Otp2;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
@@ -64,6 +65,18 @@ public interface OtpServiceRepository {
     @Result(property = "isexpired", column = "isExpired")
     @Result(property = "userId", column = "user_id")
     Otp enableUserByToken(String token);
+
+
+    @Select("""
+            select *
+            from handle_resend_otp_tb(#{email});
+            """)
+    Otp2 resendVerificationTokenToVerifyEmail(String email);
+
+    @Select("""
+            select * from validUserInputPassword(#{userEmail});
+            """)
+    String getUserRawPasswordByUserEmail(String userEmail);
 
 
 }
