@@ -59,8 +59,10 @@ public class WeAreKhmerSecurity {
             "/api/v1/author/{authorId}",
             "/api/v1/author/personal-info/{authorId}",
             "/api/reset/**",
-            "/api/v1/token/resendEmailVerificationToken"
-
+            "/api/v1/token/resendEmailVerificationToken",
+            "/api/reset/**",
+            "/api/v1/heroCard",
+            "/api/v1/heroCard/{type}"
 
     };
 
@@ -191,7 +193,9 @@ public class WeAreKhmerSecurity {
                 .requestMatchers("/api/v1/article/admin/**")
                 .hasRole("ADMIN")
                 .requestMatchers("/api/v1/author/profile").hasRole("AUTHOR")
-                .requestMatchers( "/api/v1/heroCard/**").hasRole("ADMIN")
+                .requestMatchers( HttpMethod.POST,"/api/v1/heroCard").hasRole("ADMIN")
+                .requestMatchers( HttpMethod.PUT,"/api/v1/heroCard").hasRole("ADMIN")
+                .requestMatchers( HttpMethod.DELETE,"/api/v1/heroCard").hasRole("ADMIN")
                 .requestMatchers("/api/v1/notification/author/**").hasRole("AUTHOR")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()
