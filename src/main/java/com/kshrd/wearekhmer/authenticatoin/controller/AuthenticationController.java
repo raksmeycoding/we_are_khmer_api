@@ -4,7 +4,6 @@ package com.kshrd.wearekhmer.authenticatoin.controller;
 import com.kshrd.wearekhmer.authenticatoin.AuthenticationService;
 import com.kshrd.wearekhmer.emailVerification.controller.TokenRequest;
 import com.kshrd.wearekhmer.emailVerification.service.EmailService;
-import com.kshrd.wearekhmer.exception.DuplicateKeyException;
 import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.opt.model.Otp;
 import com.kshrd.wearekhmer.opt.service.OtpService;
@@ -97,9 +96,13 @@ public class AuthenticationController {
 //            password validation
             defaultWeAreKhmerValidation.passwordValidation(normalUserRequest.getPassword());
 
+            String username = normalUserRequest.getEmail().split("@", 2)[0];
+
             NormalUserRequest n = NormalUserRequest.builder()
+                    .username(username)
                     .email(normalUserRequest.getEmail())
                     .password(passwordEncoder.encode(normalUserRequest.getPassword()))
+                    .photo_url("http://localhost:8080/api/v1/files/file/filename?name=defaultUserProfile.png")
                     .gender(normalUserRequest.getGender().toLowerCase())
                     .build();
 
@@ -196,7 +199,7 @@ public class AuthenticationController {
     public ResponseEntity<?> emailVerificatoin(@RequestBody TokenRequest tokenRequest) {
 
         Otp findOtp = otpService.findByToken(tokenRequest.getToken());
-        if(findOtp == null) {
+        if (findOtp == null) {
             throw new ValidateException("No verification token had been found!", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         }
         GenericResponse genericResponse;

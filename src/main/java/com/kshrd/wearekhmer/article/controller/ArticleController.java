@@ -430,9 +430,9 @@ public class ArticleController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("200")
+                            .statusCode(200)
                             .message("success")
-                            .message("delete successfully")
+                            .message("You have deleted your article successfully")
                             .build();
 
             return ResponseEntity.ok(genericResponse);
