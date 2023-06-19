@@ -62,7 +62,8 @@ public class WeAreKhmerSecurity {
             "/api/v1/token/resendEmailVerificationToken",
             "/api/reset/**",
             "/api/v1/heroCard",
-            "/api/v1/heroCard/{type}"
+            "/api/v1/heroCard/{type}",
+            "/api/v1/article/"
 
     };
 

@@ -204,4 +204,9 @@ public class ArticleServiceImp implements ArticleService {
     public boolean adminBanArticle(String articleId) {
         return articleMapper.adminBanArticle(articleId);
     }
+
+    @Override
+    public List<ArticleResponse2> getAllArticlesByAuthorId(String userId) {
+        return articleMapper.getAllArticlesByAuthorId(userId);
+    }
 }
