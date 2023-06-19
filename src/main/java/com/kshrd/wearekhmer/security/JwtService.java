@@ -63,6 +63,9 @@ public class JwtService {
         String userId = ((UserApp) t).getUserId();
         extraClaims.put("authorities", authories);
         extraClaims.put("userId", userId);
+        extraClaims.put("photo_url", userApp.getPhotoUrl());
+        extraClaims.put("email", userApp.getEmail());
+        extraClaims.put("username", userApp.getUserName());
         return generateToken(extraClaims,(UserDetails) t);
     }
 

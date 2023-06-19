@@ -29,8 +29,9 @@ public class AuthenticationService {
         var token = jwtService.generateToken(user);
 //        return UserRepsonse.builder().email(userLoginRequest.getEmail()).token(token).roles(userAppRepository.getUserRolesByUserEmail(userLoginRequest.getEmail())).build();
 
+
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .message("login success!")
                 .payload(UserRepsonse.builder().token(token).build())

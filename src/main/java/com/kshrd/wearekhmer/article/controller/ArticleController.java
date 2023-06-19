@@ -430,9 +430,9 @@ public class ArticleController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("200")
+                            .statusCode(200)
                             .message("success")
-                            .message("delete successfully")
+                            .message("You have deleted your article successfully")
                             .build();
 
             return ResponseEntity.ok(genericResponse);
@@ -1037,5 +1037,22 @@ public class ArticleController {
                 .statusCode(200)
                 .title("success")
                 .message("Article had been bad successfully.").build());
+    }
+
+    @GetMapping("/")
+    @Operation(summary = "Get aritlces by author id")
+    public ResponseEntity<?> getAllArticlesByAuthorId(@RequestParam("authorId") String authorId){
+
+        weAreKhmerValidation.checkAuthorExist(authorId);
+
+        List<ArticleResponse2> articles = articleService.getAllArticlesByAuthorId(authorId);
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .statusCode(200)
+                .title("success")
+                .message("You have successfully get all article of this author")
+                .payload(articles)
+                .build();
+        return ResponseEntity.ok(genericResponse);
     }
 }
