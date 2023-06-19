@@ -198,6 +198,8 @@ public class WeAreKhmerSecurity {
                 .requestMatchers( HttpMethod.PUT,"/api/v1/heroCard").hasRole("ADMIN")
                 .requestMatchers( HttpMethod.DELETE,"/api/v1/heroCard").hasRole("ADMIN")
                 .requestMatchers("/api/v1/notification/author/**").hasRole("AUTHOR")
+                .requestMatchers(HttpMethod.GET, "/api/v1/author/account-setting").hasRole("AUTHOR")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/author/update-account-setting").hasRole("AUTHOR")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()
                 .anyRequest()
