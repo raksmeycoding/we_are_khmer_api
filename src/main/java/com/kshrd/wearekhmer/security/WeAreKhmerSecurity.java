@@ -55,6 +55,7 @@ public class WeAreKhmerSecurity {
             "/api/v1/article/category/**",
             "/api/v1/article/increase/{articleId}",
             //            "/api/v1/notification"
+            "/api/v1/rating/rating-bar/{authorId}",
             "/api/v1/order-navbar",
             "/api/v1/author/{authorId}",
             "/api/v1/author/personal-info/{authorId}",
@@ -154,7 +155,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers("/api/v1/comment/article")
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")
                 //                .requestMatchers(HttpMethod.GET,"/api/v1/notification").hasAnyRole("ADMIN","AUTHOR")
-                .requestMatchers("/api/v1/rating")
+                .requestMatchers(HttpMethod.POST,"/api/v1/rating")
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers(HttpMethod.POST, "/api/v1/report")
                 .hasAnyRole("AUTHOR", "USER")
