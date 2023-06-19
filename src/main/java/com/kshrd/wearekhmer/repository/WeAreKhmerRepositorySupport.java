@@ -35,7 +35,7 @@ public interface WeAreKhmerRepositorySupport {
     @Select("""
             select rt.name as role_name from user_tb utb inner join user_role_tb urt on utb.user_id = urt.user_id
                                           inner join role_tb rt on urt.role_id = rt.role_id
-                                          where urt.user_id = #{userId}
+                                          where urt.user_id = #{userId}   
             """)
     List<String> getUserRolesById(@Param("userId") String userId);
 

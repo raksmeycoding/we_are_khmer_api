@@ -798,12 +798,12 @@ where ab.article_id = #{articleId}
                    ub.photo_url,
                    ub.username                                                                as author_name,
                    c.category_name,
-                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = 'd0e1bd19-d4bc-45d5-9beb-32538d16b769' THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
                                                                                                                                                                                                                                                                    inner join user_tb ub on ab.user_id = ub.user_id
                                                                                                                                                                                                                                                                    inner join category c on c.category_id = ab.category_id
-                                                                                                                                                                                                                                                                   left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = 'd0e1bd19-d4bc-45d5-9beb-32538d16b769'
-                left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = 'd0e1bd19-d4bc-45d5-9beb-32538d16b769'
-            where ab.user_id = 'd0e1bd19-d4bc-45d5-9beb-32538d16b769' AND isBan = false AND is_author = true ORDER BY ab.publish_date desc LIMIT 10 OFFSET 0
+                                                                                                                                                                                                                                                                   left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
+            where ab.user_id = #{userId} AND isBan = false AND is_author = true ORDER BY ab.publish_date desc LIMIT 10 OFFSET 0
             """)
     List<ArticleResponse2> getAllArticlesByAuthorId(@Param("userId") String userId);
 
