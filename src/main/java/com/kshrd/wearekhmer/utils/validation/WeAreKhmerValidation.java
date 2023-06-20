@@ -88,6 +88,10 @@ public interface WeAreKhmerValidation {
 
     boolean checkCategoryId(String categoryId);
 
+    boolean checkEducationId(String educationId, String userId);
+    boolean checkQuoteId(String quoteId, String userId);
+    boolean checkWorkingExperienceId(String workingExperienceId, String userId);
+
 
 
 
