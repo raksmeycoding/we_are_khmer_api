@@ -201,7 +201,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers("/api/v1/notification/author/**").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.GET, "/api/v1/author/account-setting").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.PUT, "/api/v1/author/update-account-setting").hasRole("AUTHOR")
-                .requestMatchers(HttpMethod.PUT,"/api/v1/author/update-profile").hasAnyRole("USER","AUTHOR")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/author/update-user-image").hasAnyRole("USER","AUTHOR","ADMIN")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()
                 .anyRequest()

@@ -215,8 +215,8 @@ public class AuthorController {
 
     }
 
-    @PutMapping("/update-profile")
-    @Operation(summary = "Update profile for current author and user")
+    @PutMapping("/update-user-image")
+    @Operation(summary = "Update user image for all user in platform")
     public ResponseEntity<?> updateProfile(String imageUrl){
 
 
