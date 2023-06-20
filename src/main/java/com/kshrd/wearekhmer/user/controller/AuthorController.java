@@ -215,4 +215,22 @@ public class AuthorController {
 
     }
 
+    @PutMapping("/update-profile")
+    @Operation(summary = "Update profile for current author and user")
+    public ResponseEntity<?> updateProfile(String imageUrl){
+
+
+        UpdateProfile updateProfile = authorServiceImpl.updateProfile(imageUrl, weAreKhmerCurrentUser.getUserId());
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .statusCode(200)
+                .title("success")
+                .message("You have updated profile successfully")
+                .payload(updateProfile)
+                .build();
+
+        return ResponseEntity.ok(genericResponse);
+
+    }
+
 }
