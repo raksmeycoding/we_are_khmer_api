@@ -220,7 +220,7 @@ public class AuthorController {
     public ResponseEntity<?> updateProfile(String imageUrl){
 
 
-        UpdateProfile updateProfile = authorServiceImpl.updateProfile(imageUrl, weAreKhmerCurrentUser.getUserId());
+        UpdateProfile updateProfile = authorRepository.updateProfile(imageUrl, weAreKhmerCurrentUser.getUserId());
 
         GenericResponse genericResponse = GenericResponse.builder()
                 .statusCode(200)
