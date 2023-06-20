@@ -146,7 +146,7 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
 
     @Override
     public UpdateProfile updateProfile(String userId, String photoUrl) {
-        if(!authorRepository.checkUserIdExist(userId))
+        if(!authorRepository.checkUserIdExist(weAreKhmerCurrentUser.getUserId()))
             throw new ValidateException("There's no userId : "+userId, HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         return authorRepository.updateProfile(photoUrl,userId);
     }
