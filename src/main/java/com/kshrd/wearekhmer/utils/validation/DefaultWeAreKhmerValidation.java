@@ -12,6 +12,7 @@ import com.kshrd.wearekhmer.heroCard.repository.HeroCardRepository;
 import com.kshrd.wearekhmer.history.model.response.HistoryResponse;
 import com.kshrd.wearekhmer.history.repository.HistoryMapper;
 import com.kshrd.wearekhmer.notification.INotificationMapper;
+import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
 import com.kshrd.wearekhmer.userArtivities.repository.ICommentRepository;
 import com.kshrd.wearekhmer.userArtivities.repository.IReactRepository;
@@ -66,6 +67,8 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     private final INotificationMapper notificationMapper;
 
     private final ICommentRepository commentRepository;
+
+    private final AuthorRepository authorRepository;
 
     @Override
     public void validateElementInAList(List<?> list, Integer x, String mssErrSizeZero, String mssErrMaxSize) {
@@ -454,6 +457,27 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
             return true;
         else
             throw new ValidateException("categoryId : "+categoryId+ " does not exist", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+    }
+
+    @Override
+    public boolean checkEducationId(String educationId, String userId) {
+        if(!authorRepository.checkEducationIdForCurrentAuthor(educationId,userId))
+            throw new ValidateException("You don't have this educationId : "+educationId,HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+        return true;
+    }
+
+    @Override
+    public boolean checkQuoteId(String quoteId, String userId) {
+        if(!authorRepository.checkQuoteIdForCurrentAuthor(quoteId,userId))
+            throw new ValidateException("You don't have this quoteId : "+quoteId,HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+        return true;
+    }
+
+    @Override
+    public boolean checkWorkingExperienceId(String workingExperienceId, String userId) {
+        if(!authorRepository.checkWorkingExperienceIdForCurrentAuthor(workingExperienceId,userId))
+            throw new ValidateException("You don't have this workingExperienceId : "+workingExperienceId,HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+        return true;
     }
 }
 

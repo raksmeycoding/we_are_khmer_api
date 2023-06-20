@@ -58,5 +58,10 @@ public interface QuoteMapper {
             delete from quote_tb where user_id = #{useId}
             """)
     void deleteAllQuoteIfUserIdIsExist(String useId);
+
+
+    @Select("UPDATE quote_tb SET q_name = #{quoteName} WHERE q_id = #{quoteId} AND user_id = #{userId} returning *")
+    @ResultMap("quoteMapperId")
+    QuoteResponse updateCurrentAuthorQuote(String userId, String quoteId, String quoteName);
 }
 

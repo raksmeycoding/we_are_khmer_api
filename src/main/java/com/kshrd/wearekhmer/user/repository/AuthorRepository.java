@@ -10,6 +10,7 @@ import org.apache.ibatis.type.TypeHandler;
 import org.intellij.lang.annotations.JdkConstants;
 import org.springframework.http.ResponseEntity;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
@@ -149,7 +150,43 @@ public interface AuthorRepository {
 
 
 
+    @Select("""
+            UPDATE user_tb
+            SET username = #{username},
+                data_of_birth = #{dateOfBirth},
+                gender = cast(#{gender} as gender)
+                WHERE user_id = #{userId}
+            """)
+    UpdateAccountSetting updateAuthorAccountSetting(@Param("username") String username,
+                                    @Param("gender") String gender,
+                                    @Param("userId") String userId,
+                                    Timestamp dateOfBirth
 
+                                    );
+
+//        @Select("""
+//            UPDATE user_tb
+//            SET username = #{username},
+//                data_of_birth = #{dateOfBirth},
+//                gender = cast(#{gender} as gender)
+//                WHERE user_id = #{userId}
+//            """)
+//    UpdateAccountSetting updateAuthorAccountSetting(UpdateAccountSetting updateAccountSetting);
+
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM education WHERE e_id = #{educationId} AND user_id = #{userId})
+            """)
+    boolean checkEducationIdForCurrentAuthor(String educationId, String userId);
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM working_experience_tb WHERE wid = #{workingExperienceId} AND user_id = #{userId})
+            """)
+    boolean checkWorkingExperienceIdForCurrentAuthor(String workingExperienceId, String userId);
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM quote_tb WHERE q_id = #{quoteId} AND user_id = #{userId})
+            """)
+    boolean checkQuoteIdForCurrentAuthor(String quoteId, String userId);
 
 }
 
