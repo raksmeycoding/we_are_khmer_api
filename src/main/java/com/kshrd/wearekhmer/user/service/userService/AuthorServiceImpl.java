@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer.user.service.userService;
 
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.*;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
@@ -13,6 +14,7 @@ import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -140,5 +142,12 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
 
 
         return authorRepository.updateAuthorAccountSetting(updateAccountSetting.getUsername(),updateAccountSetting.getGender(),authorId, new java.sql.Timestamp(dateOfBirth.getTime()));
+    }
+
+    @Override
+    public UpdateProfile updateProfile(String userId, String photoUrl) {
+        if(!authorRepository.checkUserIdExist(userId))
+            throw new ValidateException("There's no userId : "+userId, HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+        return authorRepository.updateProfile(photoUrl,userId);
     }
 }
