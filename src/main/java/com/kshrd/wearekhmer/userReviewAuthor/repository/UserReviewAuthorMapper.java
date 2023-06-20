@@ -2,7 +2,9 @@ package com.kshrd.wearekhmer.userReviewAuthor.repository;
 
 
 import com.kshrd.wearekhmer.userReviewAuthor.model.entity.UserReviewAuthor;
+import com.kshrd.wearekhmer.userReviewAuthor.model.response.UserReviewAuthorResponse;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -21,9 +23,14 @@ public interface UserReviewAuthorMapper {
 
 
     @Select("""
-            select * from user_review_author_tb where author_id = #{authorId}
+                SELECT urat.author_id, urat.user_review_author_id,urat.user_id,author_name,
+                       create_at,update_at, urat.comment, ut.username, ut.photo_url
+                FROM user_review_author_tb urat INNER JOIN user_tb ut on urat.user_id = ut.user_id
+                WHERE author_id = #{authorId} 
             """)
-    List<UserReviewAuthor> getAllUserReviewAuthorByAuthorId(String authorId);
+    @Result(property = "photoUrl", column = "photo_url")
+    @Result(property = "senderName", column = "username")
+    List<UserReviewAuthorResponse> getAllUserReviewAuthorByAuthorId(String authorId);
 
 
 }
