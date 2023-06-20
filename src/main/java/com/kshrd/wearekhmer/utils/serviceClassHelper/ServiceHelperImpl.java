@@ -97,6 +97,7 @@ public class ServiceHelperImpl implements ServiceClassHelper {
                     .build();
 
             WorkingExperience workingExperience1 = workingExperienceMapper.insert(toInsertWorkingExperience);
+
         }
 
 

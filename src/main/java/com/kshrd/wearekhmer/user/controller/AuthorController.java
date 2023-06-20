@@ -4,7 +4,9 @@ package com.kshrd.wearekhmer.user.controller;
 import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
+import com.kshrd.wearekhmer.user.model.entity.AccountSettingResponse;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
+import com.kshrd.wearekhmer.user.model.entity.UpdateAccountSetting;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
 import com.kshrd.wearekhmer.user.service.AuthorRequestTableService;
 import com.kshrd.wearekhmer.user.service.AuthorService;
@@ -161,6 +163,27 @@ public class AuthorController {
                 .statusCode(200)
                 .payload(personalInformationResponse)
                 .build());
+    }
+
+    @GetMapping("/account-setting")
+    @Operation(summary = "Get account setting for current author")
+    public ResponseEntity<?> getAccountSettingByAuthorId(){
+        String authorId =  weAreKhmerCurrentUser.getUserId();
+        AccountSettingResponse accountSettingResponse = authorRepository.getAccountSetting(authorId);
+        GenericResponse genericResponse = GenericResponse.builder()
+                .statusCode(200)
+                .title("success")
+                .message("You have successfully gotten account setting of this authorId : "+authorId)
+                .payload(accountSettingResponse)
+                .build();
+        return ResponseEntity.ok(genericResponse);
+    }
+
+    @PutMapping("/update-account-setting")
+    @Operation(summary = "Update account setting for current author")
+    public ResponseEntity<?> updateAccountSettingByAuthorId(@RequestBody AccountSettingResponse accountSettingResponse){
+        String authorId = weAreKhmerCurrentUser.getUserId();
+        return null;
     }
 
 }

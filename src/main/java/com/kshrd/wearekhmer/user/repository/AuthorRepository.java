@@ -2,11 +2,12 @@ package com.kshrd.wearekhmer.user.repository;
 
 
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
-import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
+import com.kshrd.wearekhmer.user.model.entity.*;
 import com.kshrd.wearekhmer.userRating.reponse.PersonalInformationResponse;
 import com.sun.mail.imap.protocol.BODY;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.TypeHandler;
+import org.intellij.lang.annotations.JdkConstants;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -130,6 +131,25 @@ public interface AuthorRepository {
             select exists(select  1 from author_request_tb arb where user_id = #{authorId} and is_author_accepted = 'REJECTED')
             """)
     boolean checkAuthorRequestHadBendedOrRejected(String authorId);
+
+
+    @Select("""
+            select * from user_tb where is_author = true AND user_id = #{userId}
+            """)
+    @Result(property = "authorId", column = "user_id")
+    @Result(property = "email", column = "email")
+    @Result(property = "username", column = "username")
+    @Result(property = "profile", column = "photo_url")
+    @Result(property = "date", column = "data_of_birth")
+    @Result(property = "gender", column = "gender")
+    @Result(property = "workingExperience", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper.getByUserId"))
+    @Result(property = "education", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.EducationMapper.getEducationByUserIdObject"))
+    @Result(property = "bio", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.QuoteMapper.getQuoteByUserIdAsObject"))
+    AccountSettingResponse getAccountSetting(@Param("userId") String userId);
+
+
+
+
 
 }
 
