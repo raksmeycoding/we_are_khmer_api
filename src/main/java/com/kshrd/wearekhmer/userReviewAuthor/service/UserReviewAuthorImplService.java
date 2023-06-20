@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.userReviewAuthor.service;
 
 import com.kshrd.wearekhmer.userReviewAuthor.model.entity.UserReviewAuthor;
+import com.kshrd.wearekhmer.userReviewAuthor.model.response.UserReviewAuthorResponse;
 import com.kshrd.wearekhmer.userReviewAuthor.repository.UserReviewAuthorMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class UserReviewAuthorImplService implements IUserReviewAuthorService {
 
 
     @Override
-    public List<UserReviewAuthor> getAllUserReviewAuthorByAuthorId(String authorId) {
+    public List<UserReviewAuthorResponse> getAllUserReviewAuthorByAuthorId(String authorId) {
         return userReviewAuthorMapper.getAllUserReviewAuthorByAuthorId(authorId);
     }
 }
