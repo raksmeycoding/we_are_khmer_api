@@ -86,7 +86,7 @@ public class NotificationController {
             }else{
                 genericResponse = GenericResponse.builder()
                         .totalRecords(totalRecords)
-                        .statusCode(200)
+                        .statusCode(404)
                         .title("success")
                         .message("There's no user-request to be author records in list")
                         .build();
@@ -148,7 +148,7 @@ public class NotificationController {
                 return ResponseEntity.ok(genericResponse);
             }else{
                 genericResponse = GenericResponse.builder()
-                        .statusCode(200)
+                        .statusCode(404)
                         .title("success")
                         .message("There's no notification records in list")
                         .totalRecords(totalRecords)
@@ -166,15 +166,25 @@ public class NotificationController {
         Integer totalRecords = notificationService.totalNotificationRecordsForCurrentAuthor(weAreKhmerCurrentUser.getUserId());
         List<AuthorNotificationList> authorNotificationLists = notificationService.getAllNotificationForCurrentAuthor(weAreKhmerCurrentUser.getUserId());
 
-        genericResponse = GenericResponse.builder()
-                .totalRecords(totalRecords)
-                .statusCode(200)
-                .title("success")
-                .message("You have gotten all notification records successfully")
-                .payload(authorNotificationLists)
-                .build();
+        if(authorNotificationLists.size()>0){
+            genericResponse = GenericResponse.builder()
+                    .totalRecords(totalRecords)
+                    .statusCode(200)
+                    .title("success")
+                    .message("You have gotten all notification records successfully")
+                    .payload(authorNotificationLists)
+                    .build();
 
+            return ResponseEntity.ok(genericResponse);
+        }
+        genericResponse = GenericResponse.builder()
+                .statusCode(404)
+                .title("success")
+                .message("There's no notification in list")
+                .build();
         return ResponseEntity.ok(genericResponse);
+
+
     }
 
     @DeleteMapping("/author")
@@ -223,6 +233,7 @@ public class NotificationController {
         List<NotificationResponse> responseList = notificationService.getNotificationTypeReport(PAGE_SIZE,nextPage,status.toUpperCase());
         Integer totalRecord = notificationMapper.totalRecordNotificationTypeReport(status);
 
+
         if(responseList.size()>0){
             genericResponse = GenericResponse.builder()
                     .totalRecords(totalRecord)
@@ -235,9 +246,9 @@ public class NotificationController {
         }
 
         genericResponse = GenericResponse.builder()
-                .statusCode(200)
+                .statusCode(404)
                 .title("success")
-                .message("There's no notification reports in list")
+                .message("There's no notification in list")
                 .build();
         return ResponseEntity.ok(genericResponse);
 
