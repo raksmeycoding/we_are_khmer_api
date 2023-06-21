@@ -87,7 +87,7 @@ public class NotificationController {
                 genericResponse = GenericResponse.builder()
                         .totalRecords(totalRecords)
                         .statusCode(404)
-                        .title("success")
+                        .title("failure")
                         .message("There's no user-request to be author records in list")
                         .build();
 
@@ -149,7 +149,7 @@ public class NotificationController {
             }else{
                 genericResponse = GenericResponse.builder()
                         .statusCode(404)
-                        .title("success")
+                        .title("failure")
                         .message("There's no notification records in list")
                         .totalRecords(totalRecords)
                         .build();
@@ -179,7 +179,7 @@ public class NotificationController {
         }
         genericResponse = GenericResponse.builder()
                 .statusCode(404)
-                .title("success")
+                .title("failure")
                 .message("There's no notification in list")
                 .build();
         return ResponseEntity.ok(genericResponse);
@@ -247,7 +247,7 @@ public class NotificationController {
 
         genericResponse = GenericResponse.builder()
                 .statusCode(404)
-                .title("success")
+                .title("failure")
                 .message("There's no notification in list")
                 .build();
         return ResponseEntity.ok(genericResponse);
