@@ -83,7 +83,7 @@ public class FileServiceImpl implements IFileService {
     boolean isFileNameContains(String fileName) {
         return
                 fileName.contains(".jpeg") ||
-                        fileName.contains("defaultUserProfile.png") ||
+                        fileName.contains(".png") ||
                         fileName.contains(".jpg") ||
                         fileName.contains(".docx") ||
                         fileName.contains(".pptx") ||
