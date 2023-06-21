@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer.article.model.Response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,6 +34,7 @@ public class ArticleResponse {
 
     private boolean isban;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String hero_card_in;
 
 

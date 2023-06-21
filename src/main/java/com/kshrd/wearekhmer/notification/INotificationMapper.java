@@ -78,12 +78,13 @@ ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage};
 
 
     @Select("""
-            SELECT nt.notification_id, notification_type, nt.notification_type_id, nt.createat, ut.photo_url, ut.username
+            SELECT nt.notification_id, nt.receiver_id, notification_type, nt.notification_type_id, nt.createat, ut.photo_url, ut.username
             FROM notification_tb AS nt INNER JOIN user_tb ut on ut.user_id = nt.sender_id WHERE receiver_id = #{authorId}
             ORDER BY nt.createat DESC
             ;
             """)
     @Results(id = "authorNotification", value = {
+            @Result(property = "authorId", column = "receiver_id"),
             @Result(property = "notificationId", column = "notification_id"),
             @Result(property = "notificationType", column = "notification_type"),
             @Result(property = "date", column = "createat"),

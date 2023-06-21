@@ -27,6 +27,8 @@ public class GenericResponse {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     String type;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    Integer totalComment;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     String status;
@@ -48,6 +50,8 @@ public class GenericResponse {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     Object payload;
+
+
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     List<String> details;

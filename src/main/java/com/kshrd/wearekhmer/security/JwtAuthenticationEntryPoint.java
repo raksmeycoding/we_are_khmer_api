@@ -29,13 +29,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         Map<String, Object> errorDetails = new HashMap<>();
         errorDetails.put("time", LocalDateTime.now());
-        errorDetails.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-        errorDetails.put("error", "Unauthorized");
-        errorDetails.put("message", authException.getMessage());
+        errorDetails.put("status", HttpServletResponse.SC_FORBIDDEN);
+        errorDetails.put("error", "FORBIDDEN");
+        errorDetails.put("message", "You're not allow to access this resource");
         String requestPath = request.getRequestURI();
         errorDetails.put("path", requestPath);
         response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.getWriter().write(objectMapper.writeValueAsString(errorDetails));
     }
 }

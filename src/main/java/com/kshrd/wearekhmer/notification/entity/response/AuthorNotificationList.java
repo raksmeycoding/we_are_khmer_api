@@ -12,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class AuthorNotificationList {
+    private String authorId;
     private String notificationId;
     private String notificationType;
     private Date date;

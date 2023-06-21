@@ -46,7 +46,7 @@ public interface ArticleMapper {
                            ab.title,
                            ab.sub_title,
                            ab.publish_date,
-                           ab.description,
+                           
                            ab.updatedat,
                            coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                            ab.count_view,
@@ -62,6 +62,7 @@ public interface ArticleMapper {
                             left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId} where isban = false
                             ORDER BY publish_date DESC limit #{pageSize} offset #{nextPage};
                 """)
+                @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse2> getAllArticlesByLatest(Integer pageSize, Integer nextPage, @Param("userId") String userId);
 
 
@@ -72,7 +73,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -98,7 +99,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -123,7 +124,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -148,7 +149,6 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -190,6 +190,7 @@ public interface ArticleMapper {
                      left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where ab.article_id = #{articleId}
             """)
+    @Result(property = "updateAt", column = "updatedat")
     ArticleResponse2 getArticleById(String articleId, String userId);
 
 
@@ -202,7 +203,7 @@ public interface ArticleMapper {
                    ab.title, 
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   ab.description, 
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -219,6 +220,7 @@ public interface ArticleMapper {
                      left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{currentUserId}
             where ab.article_id = #{articleId} and ub.user_id = #{currentUserId}
             """)
+    @Result(property = "updateAt", column = "updatedat")
     ArticleResponse2 getArticleByIdForCurrentUser(String articleId, String currentUserId);
 
     @Select("INSERT INTO article_tb (title, sub_title, description, image, user_id, category_id) " +
@@ -229,7 +231,7 @@ public interface ArticleMapper {
             @Result(property = "subTitle", column = "sub_title"),
             @Result(property = "publishDate", column = "publish_date"),
             @Result(property = "description", column = "description"),
-            @Result(property = "updateAt", column = "updatedAt"),
+            @Result(property = "updateAt", column = "updatedat"),
             @Result(property = "image", column = "image"),
             @Result(property = "countView", column = "count_view"),
             @Result(property = "isBan", column = "isBan"),
@@ -263,7 +265,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -311,7 +313,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -325,6 +327,7 @@ public interface ArticleMapper {
             WHERE  publish_date :: date = current_date -1 AND isban = false
             ORDER BY publish_date DESC limit #{pageNumber} offset #{nextPage}
             """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse> getAllArticlesByYesterday(Integer pageNumber, Integer nextPage);
 
     @Select("""
@@ -334,7 +337,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -349,6 +352,7 @@ public interface ArticleMapper {
             AND isban = false
             ORDER BY publish_date DESC limit #{pageNumber} offset #{nextPage}
             """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse> getAllArticlesPerWeek(Integer pageNumber, Integer nextPage);
 
     @Select("""
@@ -358,7 +362,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -374,6 +378,7 @@ public interface ArticleMapper {
             AND isban = false 
             ORDER BY publish_date DESC limit #{pageNumber} offset #{nextPage}
             """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse> getAllArticlesPerMonth(Integer pageNumber, Integer nextPage);
 
     @Select("""
@@ -383,7 +388,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+               
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -399,6 +404,7 @@ public interface ArticleMapper {
             AND isban = false 
             ORDER BY publish_date DESC limit #{pageNumber} offset #{nextPage}
             """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse> getAllArticlesPerYear(Integer pageNumber, Integer nextPage);
 
     @Select("""
@@ -408,7 +414,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -437,7 +443,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -453,6 +459,7 @@ public interface ArticleMapper {
                      left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where c.category_id = #{categoryId} limit #{pageNumber} offset #{nextPage}
             """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse2> getAllArticleByCategoryId(String categoryId, Integer pageNumber, Integer nextPage, String userId);
 
 
@@ -468,7 +475,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -484,6 +491,7 @@ public interface ArticleMapper {
                      left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where ab.user_id = #{userId} AND isBan = false AND is_author = true order by count_view desc limit #{pageNumber} offset #{nextPage}
                         """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse2> getAllArticleCurrentUserByMostView(String userId, Integer pageNumber, Integer nextPage);
 
     @Select("""
@@ -493,7 +501,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -509,6 +517,7 @@ public interface ArticleMapper {
                      left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where ab.user_id = #{userId} AND isBan = false AND is_author = true ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse2> getAllArticleCurrentUserByLatest(String userId, Integer pageNumber, Integer nextPage);
 
     @Select("""
@@ -518,7 +527,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -534,6 +543,7 @@ public interface ArticleMapper {
                      left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where publish_date :: date = (current_date -1) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse2> getAllArticleCurrentUserByYesterday(String userId, Integer pageNumber, Integer nextPage);
 
     @Select("""
@@ -543,7 +553,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -559,6 +569,7 @@ public interface ArticleMapper {
                      left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where date_trunc('week', publish_date) = date_trunc('week', current_date) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse2> getAllArticleCurrentUserPerWeek(String userId, Integer pageNumber, Integer nextPage);
 
     @Select("""
@@ -568,7 +579,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -585,6 +596,7 @@ public interface ArticleMapper {
             where EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
                     AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse2> getAllArticleCurrentUserPerMonth(String userId, Integer pageNumber, Integer nextPage);
 
     @Select("""
@@ -594,7 +606,7 @@ public interface ArticleMapper {
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -611,6 +623,7 @@ public interface ArticleMapper {
             where date_trunc('year', publish_date) = date_trunc('year', current_date)
                     AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND ab.user_id = #{userId} AND isBan = false AND is_author = true  ORDER BY ab.publish_date desc limit #{pageNumber} offset #{nextPage}
                         """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse2> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage);
 
 
@@ -760,7 +773,7 @@ select ab.article_id,
        ab.title,
        ab.sub_title,
        ab.publish_date,
-       ab.description,
+      ab.description,
        ab.updatedat,
        coalesce((nullif(ab.image, '')),
                 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80') as image,
@@ -778,6 +791,7 @@ select ab.article_id,
     inner join category c on c.category_id = ab.category_id
 where ab.article_id = #{articleId}
             """)
+    @Result(property = "updateAt", column = "updatedat")
     ArticleResponse getArticleByIdForBookmarkAndHistory(String articleId, String userId);
 
 
@@ -789,7 +803,8 @@ where ab.article_id = #{articleId}
                    ab.title,
                    ab.sub_title,
                    ab.publish_date,
-                   ab.description,
+                   
+                   
                    ab.updatedat,
                    coalesce((nullif(ab.image, '')), 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80' ) as image,
                    ab.count_view,
@@ -805,6 +820,7 @@ where ab.article_id = #{articleId}
                 left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where ab.user_id = #{userId} AND isBan = false AND is_author = true ORDER BY ab.publish_date desc LIMIT 10 OFFSET 0
             """)
+    @Result(property = "updateAt", column = "updatedat")
     List<ArticleResponse2> getAllArticlesByAuthorId(@Param("userId") String userId);
 
     
