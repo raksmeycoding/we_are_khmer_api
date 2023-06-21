@@ -209,6 +209,11 @@ public interface AuthorRepository {
     @Result(property = "userName", column = "username")
     @Result(property = "email", column = "email")
     GetEmailAndNameUser getEmailAndName(String userId);
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM user_tb WHERE user_id = #{userId})
+            """)
+    boolean checkUserId(String userId);
 }
 
 
