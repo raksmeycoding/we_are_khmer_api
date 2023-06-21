@@ -49,7 +49,7 @@ public class ReactController {
             React react1 = reactService.createUserReactForCurrentUser(react);
             GenericResponse genericResponse = GenericResponse.builder()
                     .title("success")
-                    .status("200")
+                    .statusCode(201)
                     .message("You have reacted on this article successfully")
                     .payload(react1)
                     .build();
@@ -90,7 +90,7 @@ public class ReactController {
 
         GenericResponse genericResponse = GenericResponse.builder()
                 .title("success")
-                .status("200")
+                .statusCode(200)
                 .message("You have unliked this article ")
                 .build();
 
