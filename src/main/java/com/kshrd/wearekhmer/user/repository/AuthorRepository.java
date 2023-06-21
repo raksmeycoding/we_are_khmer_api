@@ -188,6 +188,18 @@ public interface AuthorRepository {
             """)
     boolean checkQuoteIdForCurrentAuthor(String quoteId, String userId);
 
+
+    @Select("""
+            UPDATE user_tb
+            SET photo_url = #{photoUrl}
+            WHERE user_id = #{userId}
+            """)
+    UpdateProfile updateProfile(String photoUrl, String userId);
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM user_tb WHERE user_id = #{userId})
+            """)
+    boolean checkUserIdExist(String userId);
 }
 
 
