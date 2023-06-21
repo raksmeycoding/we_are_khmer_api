@@ -53,8 +53,8 @@ public class BookmarkController {
                 return ResponseEntity.ok(genericResponse);
             }else{
                 genericResponse = GenericResponse.builder()
-                        .statusCode(200)
-                        .title("success")
+                        .statusCode(404)
+                        .title("failure")
                         .message("There's no bookmark records in your list")
                         .build();
                 return ResponseEntity.ok(genericResponse);
@@ -64,7 +64,7 @@ public class BookmarkController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -92,7 +92,7 @@ public class BookmarkController {
                 Bookmark bookmark1 = bookmarkService.deleteBookmarkByArticleId(bookmark);
                 genericResponse =
                         GenericResponse.builder()
-                                .status("200")
+                                .statusCode(200)
                                 .payload(bookmark1)
                                 .title("success")
                                 .message("You have deleted bookmark successfully")
@@ -102,7 +102,7 @@ public class BookmarkController {
             Bookmark bookmark1 = bookmarkService.insertBookmark(bookmark);
             genericResponse =
                     GenericResponse.builder()
-                            .status("200")
+                            .statusCode(201)
                             .payload(bookmark1)
                             .title("success")
                             .message("You have saved to bookmark successfully")
@@ -113,7 +113,7 @@ public class BookmarkController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -135,7 +135,7 @@ public class BookmarkController {
                 Bookmark bookmark1 = bookmarkService.deleteBookmark(bookmark);
 
                 genericResponse = GenericResponse.builder()
-                        .status("200")
+                        .statusCode(200)
                         .message("You have deleted bookmark record successfully")
                         .payload(bookmark1)
                         .title("success")
@@ -146,7 +146,7 @@ public class BookmarkController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -170,7 +170,7 @@ public class BookmarkController {
                 List<Bookmark> bookmark1 = bookmarkService.removeAllBookmark(bookmark);
 
                 genericResponse = GenericResponse.builder()
-                        .status("200")
+                        .statusCode(200)
                         .message("You have deleted bookmark record successfully")
                         .payload(bookmark1)
                         .title("success")
@@ -178,9 +178,9 @@ public class BookmarkController {
                 return ResponseEntity.ok(genericResponse);
             }
             genericResponse = GenericResponse.builder()
-                    .status("404")
+                    .statusCode(404)
                     .message("You don't have any bookmark records")
-                    .title("Empty bookmark")
+                    .title("failure")
                     .build();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(genericResponse);
 
@@ -188,7 +188,7 @@ public class BookmarkController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
