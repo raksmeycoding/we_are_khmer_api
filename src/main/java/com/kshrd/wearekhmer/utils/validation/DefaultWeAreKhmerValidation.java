@@ -144,7 +144,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     @Override
     public boolean validateArticleId(String articleId) {
         if (!articleService.isArticleExist(articleId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Article ID : " + articleId + " does not exists");
+            throw new ValidateException("Article ID : " + articleId + " does not exists",HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value());
         }
         return articleService.isArticleExist(articleId);
 
@@ -160,7 +160,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     @Override
     public boolean validateHistoryId(String historyId, String userId) {
         if (!historyMapper.validateHistoryId(historyId, userId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User have no History ID : " + historyId);
+            throw new ValidateException( "User have no History ID : " + historyId,HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value());
         }
         return historyMapper.validateHistoryId(historyId, userId);
     }
@@ -173,7 +173,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     @Override
     public boolean validateBookmarkId(String bookmarkId, String userId) {
         if (!bookmarkMapper.validateBookmarkId(bookmarkId, userId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User have no Bookmark ID : " + bookmarkId);
+            throw new ValidateException( "User have no Bookmark ID : " + bookmarkId,HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value());
         }
         return bookmarkMapper.validateBookmarkId(bookmarkId, userId);
     }
@@ -227,7 +227,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     public boolean validateCategoryId(String categoryId) {
 
         if (!categoryMapper.isCategoryExist(categoryId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "categoryId " + categoryId + " does not exists");
+            throw new ValidateException( "categoryId " + categoryId + " does not exists",HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value());
         }
         return categoryMapper.isCategoryExist(categoryId);
     }
@@ -279,7 +279,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     @Override
     public boolean checkArticleByCategoryId(String categoryId, String articleId) {
         if(!heroCardRepository.checkArticleIsExistInCategory(categoryId,articleId))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "article does not exists in category");
+            throw new ValidateException("article does not exists in category",HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         return heroCardRepository.checkArticleIsExistInCategory(categoryId,articleId);
     }
 
