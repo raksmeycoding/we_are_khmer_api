@@ -543,7 +543,7 @@ public class ArticleController {
                             GenericResponse
                                     .builder()
                                     .title("success")
-                                    .message("Article insert successfully.")
+                                    .message("You have successfully view this article.")
                                     .payload(returnArticleId)
                                     .build()
                     );
