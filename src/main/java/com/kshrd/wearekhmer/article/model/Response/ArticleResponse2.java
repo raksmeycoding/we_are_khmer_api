@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.article.model.Response;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class ArticleResponse2 {
 
     private Timestamp publish_date;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String description;
 
     private Timestamp updateat;
