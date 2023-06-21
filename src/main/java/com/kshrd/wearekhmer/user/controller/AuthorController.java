@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.user.controller;
 
 
+import com.kshrd.wearekhmer.emailVerification.service.EmailService;
 import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
@@ -18,6 +19,7 @@ import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,6 +52,8 @@ public class AuthorController {
     private final DefaultWeAreKhmerValidation defaultWeAreKhmerValidation;
 
     private final AuthorServiceImpl authorServiceImpl;
+
+    private final EmailService emailService;
 
 
     @GetMapping("/authorRequest")
@@ -98,12 +102,18 @@ public class AuthorController {
 
     @PostMapping("accept/{userId}")
     @Operation(summary = "(Accept user request as author.)")
-    public ResponseEntity<?> updateUserRequestToBeAsAuthor(@PathVariable String userId) {
+    public ResponseEntity<?> updateUserRequestToBeAsAuthor(@PathVariable String userId) throws MessagingException {
         String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
         if (hasRoleAuthor != null && hasRoleAuthor.equalsIgnoreCase("ROLE_AUTHOR")) {
             throw new ValidateException("User had already be author.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         }
+
+        GetEmailAndNameUser getEmailAndNameUser = authorRepository.getEmailAndName(userId);
+
+        emailService.sendEmailToAuthor(getEmailAndNameUser.getEmail(), getEmailAndNameUser.getUserName());
         String userIdAccepted = authorService.updateUserRequestToBeAsAuthor(userId);
+
+
         GenericResponse res;
         if (userIdAccepted == null) {
             res = GenericResponse.builder()

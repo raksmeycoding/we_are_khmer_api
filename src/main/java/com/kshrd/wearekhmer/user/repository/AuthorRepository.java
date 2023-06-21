@@ -200,6 +200,15 @@ public interface AuthorRepository {
             SELECT EXISTS(SELECT 1 FROM user_tb WHERE user_id = #{userId})
             """)
     boolean checkUserIdExist(String userId);
+
+    @Select("""
+            SELECT user_id, username, email
+            FROM user_tb WHERE user_id = #{userId}
+            """)
+    @Result(property = "userId", column = "user_id")
+    @Result(property = "userName", column = "username")
+    @Result(property = "email", column = "email")
+    GetEmailAndNameUser getEmailAndName(String userId);
 }
 
 

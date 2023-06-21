@@ -85,4 +85,22 @@ public class EmailServiceImpl implements EmailService{
         mailSender.send(mimeMessage);
 
     }
+
+    @Override
+    public void sendEmailToAuthor(String to, String name) throws MessagingException {
+        SimpleMailMessage message = new SimpleMailMessage();
+        Context context = new Context();
+        Map<String, Object> map = new HashMap<>();
+        map.put("email", "This email " + to + " was requested to be author on domrra");
+        map.put("name", name);
+        context.setVariables(map);
+        String process = springTemplateEngine.process("send-to-author", context);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(to);
+        mimeMessageHelper.setText(process, true);
+        mimeMessageHelper.setSubject("Approved to be author");
+        mimeMessageHelper.setFrom("no-reply@ethandev.com");
+        mailSender.send(mimeMessage);
+    }
 }

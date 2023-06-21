@@ -28,7 +28,7 @@ public class ArticleResponse2 {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String description;
 
-    private Timestamp updateat;
+    private Timestamp updateAt;
 
     private String image;
 
@@ -36,6 +36,8 @@ public class ArticleResponse2 {
 
     private boolean isban;
 
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String hero_card_in;
 
 
