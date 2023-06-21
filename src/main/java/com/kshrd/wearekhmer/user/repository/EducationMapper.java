@@ -56,6 +56,12 @@ public interface EducationMapper {
             delete from education where user_id = #{userId}
             """)
     void deleteAllEducationIfUserIdExist(String userId);
+
+
+
+    @Select("UPDATE education SET e_name = #{educationName} WHERE e_id = #{educationId} AND user_id = #{userId} returning *")
+    @ResultMap("educationMapperId")
+    EducationResponse updateCurrentAuthorEducation(String userId, String educationId, String educationName);
 }
 
 

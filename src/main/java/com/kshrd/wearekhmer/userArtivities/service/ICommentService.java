@@ -13,4 +13,6 @@ public interface ICommentService {
 
 
     boolean validateParentIdExist(String parentId);
+
+    Integer countComment(String articleId);
 }

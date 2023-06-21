@@ -4,14 +4,17 @@ package com.kshrd.wearekhmer.user.controller;
 import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
-import com.kshrd.wearekhmer.user.model.entity.AccountSettingResponse;
-import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
-import com.kshrd.wearekhmer.user.model.entity.UpdateAccountSetting;
+import com.kshrd.wearekhmer.user.model.entity.*;
 import com.kshrd.wearekhmer.user.repository.AuthorRepository;
+import com.kshrd.wearekhmer.user.repository.EducationMapper;
+import com.kshrd.wearekhmer.user.repository.QuoteMapper;
+import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
 import com.kshrd.wearekhmer.user.service.AuthorRequestTableService;
 import com.kshrd.wearekhmer.user.service.AuthorService;
+import com.kshrd.wearekhmer.user.service.userService.AuthorServiceImpl;
 import com.kshrd.wearekhmer.userRating.reponse.PersonalInformationResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -20,6 +23,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +46,10 @@ public class AuthorController {
     private final WeAreKhmerValidation weAreKhmerValidation;
 
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
+
+    private final DefaultWeAreKhmerValidation defaultWeAreKhmerValidation;
+
+    private final AuthorServiceImpl authorServiceImpl;
 
 
     @GetMapping("/authorRequest")
@@ -181,9 +189,48 @@ public class AuthorController {
 
     @PutMapping("/update-account-setting")
     @Operation(summary = "Update account setting for current author")
-    public ResponseEntity<?> updateAccountSettingByAuthorId(@RequestBody AccountSettingResponse accountSettingResponse){
+    public ResponseEntity<?> updateAccountSettingByAuthorId(@RequestBody @Validated UpdateAccountSetting updateAccountSetting){
         String authorId = weAreKhmerCurrentUser.getUserId();
-        return null;
+        weAreKhmerValidation.genderValidation(updateAccountSetting.getGender());
+        java.sql.Date dateOfBirth = defaultWeAreKhmerValidation.validateDateOfBirth(updateAccountSetting.getDateOfBirth());
+        if (updateAccountSetting.getWorkingExperiences().size()>3) {
+            throw new ValidateException("Working Experience has 3 maximum fields", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+        }
+        if (updateAccountSetting.getEducations().size() > 3) {
+            throw new ValidateException("Education has 3 maximum fields", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+        }
+        if (updateAccountSetting.getBio().size() > 3) {
+            throw new ValidateException("Bio has 3 maximum fields", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+        }
+
+        UpdateAccountSetting updateAccountSetting1 = authorServiceImpl.updateAccountSetting(updateAccountSetting);
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .statusCode(200)
+                .title("success")
+                .message("You have successfully update your account setting")
+                .payload(updateAccountSetting1)
+                .build();
+        return ResponseEntity.ok(genericResponse);
+
+    }
+
+    @PutMapping("/update-user-image")
+    @Operation(summary = "Update user image for all user in platform")
+    public ResponseEntity<?> updateProfile(String imageUrl){
+
+
+        UpdateProfile updateProfile = authorRepository.updateProfile(imageUrl, weAreKhmerCurrentUser.getUserId());
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .statusCode(200)
+                .title("success")
+                .message("You have updated profile successfully")
+                .payload(updateProfile)
+                .build();
+
+        return ResponseEntity.ok(genericResponse);
+
     }
 
 }

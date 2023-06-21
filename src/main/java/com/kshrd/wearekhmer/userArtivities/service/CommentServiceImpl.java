@@ -35,4 +35,9 @@ public class CommentServiceImpl implements ICommentService{
     public boolean validateParentIdExist(String parentId) {
         return commentRepository.validateParentIdExist(parentId);
     }
+
+    @Override
+    public Integer countComment(String articleId) {
+        return commentRepository.countComment(articleId);
+    }
 }

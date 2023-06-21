@@ -7,6 +7,7 @@ import com.kshrd.wearekhmer.userArtivities.model.UserComment;
 import com.kshrd.wearekhmer.userArtivities.model.dto.AuthorReplyCommentMapper;
 import com.kshrd.wearekhmer.userArtivities.model.request.AuthorReplyCommentRequest;
 import com.kshrd.wearekhmer.userArtivities.model.request.CommentRequest;
+import com.kshrd.wearekhmer.userArtivities.repository.ICommentRepository;
 import com.kshrd.wearekhmer.userArtivities.service.ICommentService;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
@@ -30,16 +31,21 @@ public class CommentController implements ICommentController {
     private final WeAreKhmerCurrentUser weAreKhmerCurrentUser;
     private final WeAreKhmerValidation weAreKhmerValidation;
 
+
+
     @Override
     @GetMapping("/{articleId}")
     @Operation(summary = "(Get all comment by article id)")
     public ResponseEntity<?> getUserCommentByArticleId(@Valid @PathVariable String articleId) {
         GenericResponse genericResponse;
         weAreKhmerValidation.validateArticleId(articleId);
+        Integer totalComment = commentService.countComment(articleId);
+
         try {
             List<UserComment> userCommentList = commentService.getUserCommentByArticleId(articleId);
             genericResponse = GenericResponse.builder()
                     .message("get successfully")
+                    .totalComment(totalComment)
                     .payload(userCommentList)
                     .title("success")
                     .status("200")
@@ -118,4 +124,6 @@ public class CommentController implements ICommentController {
             throw new RuntimeException(ex.getCause());
         }
     }
+
+
 }

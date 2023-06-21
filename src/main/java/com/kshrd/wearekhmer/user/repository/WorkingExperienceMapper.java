@@ -59,5 +59,10 @@ public interface WorkingExperienceMapper {
             delete from working_experience_tb where user_id = #{userId}
             """)
     void deleteAllWorkingExperienceIfUserIdExist(String userId);
+
+
+    @Select("UPDATE working_experience_tb SET w_name = #{workingExperienceName} WHERE wId = #{workingExperienceId} AND user_id = #{userId} RETURNING *")
+    @ResultMap("workingExperienceMap")
+    WorkingExperienceResponse updateCurrentAuthorWorkingExperience(String userId, String workingExperienceId, String workingExperienceName);
 }
 

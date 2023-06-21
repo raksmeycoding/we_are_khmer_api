@@ -60,5 +60,10 @@ public interface ICommentRepository {
             """)
     boolean validateAuthorHasAuthorityToReplyComment(String commentId, String userId);
 
+    @Select("""
+            SELECT COUNT(*) FROM comment_tb WHERE article_id = #{articleId}
+            """)
+    Integer countComment(String articleId);
+
 
 }

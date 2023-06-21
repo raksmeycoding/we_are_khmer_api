@@ -10,4 +10,5 @@ public interface ICommentController {
     ResponseEntity<?> getUserCommentByArticleId(String articleId);
 
     ResponseEntity<?> creatArticleComment(CommentRequest commentRequest);
+
 }
