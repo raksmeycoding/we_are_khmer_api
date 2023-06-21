@@ -69,7 +69,7 @@ public class ArticleMapperProvider {
 //            FROM("article_tb a");
 //            INNER_JOIN("user_tb ub on ub.user_id = a.user_id");
 //            INNER_JOIN("category c on c.category_id = a.category_id");
-            SELECT("a.article_id, a.title, a.sub_title, a.publish_date, a.description, a.updatedat as updateat, a.image, a.count_view, a.isban, a.hero_card_in, a.user_id, a.category_id, ub.photo_url, ub.username as author_name, c.category_name, (select count(*) from react_tb r where r.article_id = a.article_id) as react_count, (CASE WHEN b.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN r.status = true THEN true ELSE false END) AS reacted");
+            SELECT("a.article_id, a.title, a.sub_title, a.publish_date, a.updatedat as updateat, a.image, a.count_view, a.isban, a.hero_card_in, a.user_id, a.category_id, ub.photo_url, ub.username as author_name, c.category_name, (select count(*) from react_tb r where r.article_id = a.article_id) as react_count, (CASE WHEN b.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN r.status = true THEN true ELSE false END) AS reacted");
             FROM("article_tb a");
             INNER_JOIN("user_tb ub on ub.user_id = a.user_id");
             INNER_JOIN("category c on c.category_id = a.category_id");

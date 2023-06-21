@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.article.response;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,10 +20,12 @@ public class ArticleResponse {
     private String sub_title;
     private Timestamp publish_date;
     private String description;
-    private Timestamp updateat;
+    private Timestamp updateAt;
     private String image;
     private Integer count_view;
     private boolean isban;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String hero_card_in;
 
     private String photo_url;
