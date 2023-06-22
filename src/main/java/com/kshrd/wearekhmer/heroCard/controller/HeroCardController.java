@@ -113,12 +113,7 @@ public class HeroCardController {
                         .build();
                 return ResponseEntity.ok(genericResponse);
             }else{
-                genericResponse = GenericResponse.builder()
-                        .statusCode(200)
-                        .title("success")
-                        .message("There's no hero card in categoryId : "+categoryId+ " and type : "+type)
-                        .build();
-                return ResponseEntity.ok(genericResponse);
+                throw new ValidateException("There's no hero card in categoryId : "+categoryId+ " and type : "+type, HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
             }
 
 

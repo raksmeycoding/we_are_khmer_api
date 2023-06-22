@@ -30,6 +30,9 @@ import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -107,11 +110,12 @@ public class AuthorController {
         if (hasRoleAuthor != null && hasRoleAuthor.equalsIgnoreCase("ROLE_AUTHOR")) {
             throw new ValidateException("User had already be author.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         }
-
+        if(!authorRepository.checkUserId(userId))
+            throw new ValidateException("User not found",HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value());
+        String userIdAccepted = authorService.updateUserRequestToBeAsAuthor(userId);
         GetEmailAndNameUser getEmailAndNameUser = authorRepository.getEmailAndName(userId);
 
         emailService.sendEmailToAuthor(getEmailAndNameUser.getEmail(), getEmailAndNameUser.getUserName());
-        String userIdAccepted = authorService.updateUserRequestToBeAsAuthor(userId);
 
 
         GenericResponse res;
@@ -133,7 +137,7 @@ public class AuthorController {
 
     @PostMapping("rejected/{userId}")
     @Operation(summary = "(Accept user request as author.)")
-    public ResponseEntity<?> updateUserRequestToBeAsRejected(@PathVariable String userId) {
+    public ResponseEntity<?> updateUserRequestToBeAsRejected(@PathVariable String userId) throws MessagingException {
         String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
 //        check author had been already rejected or banded
         boolean isAlreadyRejected = authorRepository.checkAuthorRequestHadBendedOrRejected(userId);
@@ -144,7 +148,14 @@ public class AuthorController {
         if (hasRoleAuthor != null && hasRoleAuthor.equalsIgnoreCase("ROLE_AUTHOR")) {
             throw new ValidateException("User had already be author.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         }
+
+        if(!authorRepository.checkUserId(userId))
+            throw new ValidateException("User not found",HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value());
         String userIdAccepted = authorService.updateUserRequestToBeAsAuthorAsReject(userId);
+
+        GetEmailAndNameUser getEmailAndNameUser = authorRepository.getEmailAndName(userId);
+
+        emailService.rejectEmailToAuthor(getEmailAndNameUser.getEmail(), getEmailAndNameUser.getUserName());
         GenericResponse res;
 
         res = GenericResponse.builder()
@@ -228,7 +239,6 @@ public class AuthorController {
     @PutMapping("/update-user-image")
     @Operation(summary = "Update user image for all user in platform")
     public ResponseEntity<?> updateProfile(String imageUrl){
-
 
         UpdateProfile updateProfile = authorRepository.updateProfile(imageUrl, weAreKhmerCurrentUser.getUserId());
 

@@ -17,7 +17,7 @@ public class AccountSettingResponse {
     private String username;
     private String email;
     private String profile;
-    private Date date;
+    private String date;
     private String gender;
     private List<WorkingExperienceResponse> workingExperience;
     private List<EducationResponse> education;

@@ -153,14 +153,14 @@ public interface AuthorRepository {
     @Select("""
             UPDATE user_tb
             SET username = #{username},
-                data_of_birth = #{dateOfBirth},
+                data_of_birth = cast(#{dateOfBirth} as timestamp),
                 gender = cast(#{gender} as gender)
                 WHERE user_id = #{userId}
             """)
     UpdateAccountSetting updateAuthorAccountSetting(@Param("username") String username,
                                     @Param("gender") String gender,
                                     @Param("userId") String userId,
-                                    Timestamp dateOfBirth
+                                    String dateOfBirth
 
                                     );
 
@@ -209,6 +209,11 @@ public interface AuthorRepository {
     @Result(property = "userName", column = "username")
     @Result(property = "email", column = "email")
     GetEmailAndNameUser getEmailAndName(String userId);
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM user_tb WHERE user_id = #{userId})
+            """)
+    boolean checkUserId(String userId);
 }
 
 

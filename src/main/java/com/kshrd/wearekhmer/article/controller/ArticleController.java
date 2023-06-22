@@ -283,6 +283,8 @@ public class ArticleController {
                                             @RequestParam(value = "userId", required = false) String userId) {
         GenericResponse genericResponse;
         weAreKhmerValidation.validateArticleId(articleId);
+        if(articleMapper.checkArticleIsBan(articleId))
+            throw new ValidateException("Article not found !", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         try {
             ArticleResponse2 article = articleService.getArticleById(articleId, userId);
             genericResponse =

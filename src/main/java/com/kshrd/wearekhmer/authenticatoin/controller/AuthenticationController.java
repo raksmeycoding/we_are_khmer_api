@@ -159,7 +159,7 @@ public class AuthenticationController {
         AuthorRequestTable authorRequestTable = serviceClassHelper.insertAndGetAuthorRequestFromDatabase(authorRequest);
         if (authorRequestTable != null) {
             weAreKhmerRepositorySupport.changeGenderAfterUserRequestAsAuthorSuccess(authorRequest.getGender(), authorRequest.getAuthorName(), authorRequestTable.getAuthorRequestId());
-            weAreKhmerRepositorySupport.updateDateOfBirthOfUserAfterRegisteredAsAuthor(authorRequestTable.getUserId(), new java.sql.Timestamp(dateOfBirth.getTime()));
+            weAreKhmerRepositorySupport.updateDateOfBirthOfUserAfterRegisteredAsAuthor(authorRequestTable.getUserId(), authorRequest.getDateOfBirth());
         }
         GenericResponse AUTHOR_REQUEST_RESULT = GenericResponse.builder()
                 .message("You request as author successfully. ⚠️ Import noted: For this controller either works both for post and update.")

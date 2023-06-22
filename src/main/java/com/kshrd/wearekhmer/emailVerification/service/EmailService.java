@@ -11,4 +11,6 @@ public interface EmailService {
     public void sendResendVerificationCode(String to, String token) throws MessagingException;
 
     public void sendEmailToAuthor(String to, String name) throws MessagingException;
+
+    public void rejectEmailToAuthor(String to, String name) throws MessagingException;
 }
