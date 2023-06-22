@@ -221,5 +221,7 @@ public class ArticleServiceImp implements ArticleService {
     public List<BanArticles> getAllBanArticle(Integer pageNumber, Integer nextPage) {
         return articleMapper.getAllBanArticle(pageNumber, nextPage);
     }
+
+
 }
 

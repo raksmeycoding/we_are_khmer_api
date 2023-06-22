@@ -81,6 +81,7 @@ public interface ArticleService {
 
 
 
+
     List<ArticleResponse2> getAllArticlesByAuthorId(String userId);
 
     List<BanArticles> getAllBanArticle(Integer pageNumber, Integer nextPage);
