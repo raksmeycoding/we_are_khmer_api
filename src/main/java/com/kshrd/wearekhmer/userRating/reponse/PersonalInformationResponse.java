@@ -17,5 +17,7 @@ public class PersonalInformationResponse {
     private String username;
     private String email;
     private String gender;
-    private Timestamp date_of_birth;
+    private String dateOfBirth;
+
+    private String photoUrl;
 }
