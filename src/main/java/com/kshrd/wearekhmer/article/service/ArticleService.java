@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.article.service;
 
 import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
+import com.kshrd.wearekhmer.article.model.Response.BanArticles;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 
@@ -81,4 +82,6 @@ public interface ArticleService {
 
 
     List<ArticleResponse2> getAllArticlesByAuthorId(String userId);
+
+    List<BanArticles> getAllBanArticle(Integer pageNumber, Integer nextPage);
 }
