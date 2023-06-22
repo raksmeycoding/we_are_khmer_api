@@ -136,7 +136,7 @@ public class AuthorController {
     }
 
     @PostMapping("rejected/{userId}")
-    @Operation(summary = "(Accept user request as author.)")
+    @Operation(summary = "(Reject user request as author.)")
     public ResponseEntity<?> updateUserRequestToBeAsRejected(@PathVariable String userId) throws MessagingException {
         String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
 //        check author had been already rejected or banded
@@ -182,13 +182,17 @@ public class AuthorController {
     }
 
 
-    @GetMapping("/personal-info/{authorId}")
-    public ResponseEntity<?> getAuthorPeronalInfoByAuthorId(@PathVariable String authorId) {
-        weAreKhmerValidation.checkAuthorExist(authorId);
-        PersonalInformationResponse personalInformationResponse = authorRepository.getAuthorPersonalInfoByAuthorId(authorId);
+    @GetMapping("/personal-info/{userId}")
+    @Operation(summary = "View profile user (everyone)")
+    public ResponseEntity<?> getAuthorPeronalInfoByAuthorId(@PathVariable String userId) {
+
+        if(!authorRepository.checkUserId(userId))
+            throw new ValidateException("User not found !", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+
+        PersonalInformationResponse personalInformationResponse = authorRepository.getAuthorPersonalInfoByAuthorId(userId);
         return ResponseEntity.ok().body(GenericResponse.builder()
                 .title("success")
-                .message("Get author profile successfully")
+                .message("Get user profile successfully")
                 .statusCode(200)
                 .payload(personalInformationResponse)
                 .build());
