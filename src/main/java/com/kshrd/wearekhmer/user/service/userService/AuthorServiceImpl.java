@@ -66,8 +66,8 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
     }
 
     @Override
-    public List<AuthorDTO> getAllAuthor() {
-        return authorRepository.getAllAuthor();
+    public List<AuthorDTO> getAllAuthor(Integer pageNumber, Integer nextPage) {
+        return authorRepository.getAllAuthor(pageNumber,nextPage);
     }
 
 

@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.article.service;
 
 import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
+import com.kshrd.wearekhmer.article.model.Response.BanArticles;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
@@ -215,4 +216,10 @@ public class ArticleServiceImp implements ArticleService {
     public boolean adminUnBanArticle(String articleId) {
         return articleMapper.adminUnBanArticle(articleId);
     }
+
+    @Override
+    public List<BanArticles> getAllBanArticle(Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllBanArticle(pageNumber, nextPage);
+    }
 }
+

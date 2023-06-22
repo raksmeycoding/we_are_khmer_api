@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.article.controller;
 
 import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
+import com.kshrd.wearekhmer.article.model.Response.BanArticles;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.model.request.ArticleRequest;
 import com.kshrd.wearekhmer.article.model.request.ArticleUpdateRequest;
@@ -1016,5 +1017,35 @@ public class ArticleController {
                 .payload(articles)
                 .build();
         return ResponseEntity.ok(genericResponse);
+    }
+
+    @GetMapping("/admin/getBanArticles")
+    @Operation(summary = "Get all ban articles (only for admin)")
+    public ResponseEntity<?> getBanArticles( @RequestParam(defaultValue = "1", required = false) Integer page){
+        GenericResponse genericResponse;
+        Integer nextPage = getNextPage(page);
+
+        Integer totalBanArticle = articleMapper.totalBanArticle();
+
+        List<BanArticles> getBanArticles = articleService.getAllBanArticle(PAGE_SIZE,nextPage);
+
+
+        if(getBanArticles.size()>0){
+            genericResponse = GenericResponse.builder()
+                    .title("success")
+                    .totalRecords(totalBanArticle)
+                    .message("You have successfully gotten all ban articles")
+                    .payload(getBanArticles)
+                    .statusCode(200)
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+        }
+        genericResponse = GenericResponse.builder()
+                .title("failure")
+                .message("There's no ban articles")
+                .statusCode(404)
+                .build();
+        return ResponseEntity.ok(genericResponse);
+
     }
 }
