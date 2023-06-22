@@ -1,17 +1,20 @@
 package com.kshrd.wearekhmer.files.service.serviceImplement;
 
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.files.service.IFileService;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -92,15 +95,20 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public ResponseEntity<?> getFile(String fileName) throws IOException {
-        try {
-            Path imagePath = Paths.get(this.root + "/" + fileName);
-            ByteArrayResource byteArrayResource = new ByteArrayResource(Files.readAllBytes(imagePath));
-            return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(new InputStreamResource(byteArrayResource.getInputStream()));
-        } catch (Exception ex) {
-            throw new IOException("File not found!");
+
+        Path imagePath = Paths.get(this.root + "/" + fileName);
+        if (!Files.exists(imagePath)) {
+            throw new ValidateException("filename not found!", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+        }
+            try {
+                ByteArrayResource byteArrayResource = new ByteArrayResource(Files.readAllBytes(imagePath));
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(new InputStreamResource(byteArrayResource.getInputStream()));
+            } catch (Exception ex) {
+                throw new IOException("File not found!");
+            }
+
         }
 
-    }
 
     @Override
     public ResponseEntity<?> uploadMultiFile(MultipartFile[] files) throws IOException {

@@ -53,8 +53,8 @@ public class HistoryController {
             }else {
                 genericResponse = GenericResponse.builder()
                         .message("There's no history records in your list")
-                        .statusCode(200)
-                        .title("success")
+                        .statusCode(404)
+                        .title("failure")
                         .build();
                 return ResponseEntity.ok(genericResponse);
 
@@ -66,7 +66,7 @@ public class HistoryController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -91,7 +91,7 @@ public class HistoryController {
             if (historyService.getAllHistoryByCurrentId(articleId, weAreKhmerCurrentUser.getUserId())) {
                 History update = historyService.updateHistory(articleId, weAreKhmerCurrentUser.getUserId());
                 genericResponse = GenericResponse.builder()
-                        .status("200")
+                        .statusCode(201)
                         .payload(update)
                         .title("success")
                         .message("You have update this record successfully")
@@ -104,7 +104,7 @@ public class HistoryController {
                         .build();
                 History history1 = historyService.insertHistory(history);
                 genericResponse = GenericResponse.builder()
-                        .status("200")
+                        .statusCode(201)
                         .payload(history1)
                         .title("success")
                         .message("You have successfully recorded history")
@@ -115,7 +115,7 @@ public class HistoryController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -136,7 +136,7 @@ public class HistoryController {
         try {
             History history1 = historyService.deleteHistory(history);
             genericResponse = GenericResponse.builder()
-                    .status("200")
+                    .statusCode(200)
                     .message("You have deleted history record successfully")
                     .payload(history1)
                     .title("success")
@@ -146,7 +146,7 @@ public class HistoryController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -168,7 +168,7 @@ public class HistoryController {
             if (historyResponseList.size() > 0) {
                 List<History> history1 = historyService.removeAllHistory(history);
                 genericResponse = GenericResponse.builder()
-                        .status("200")
+                        .statusCode(200)
                         .message("You have deleted history record successfully")
                         .payload(history1)
                         .title("success")
@@ -177,9 +177,9 @@ public class HistoryController {
             }
 
             genericResponse = GenericResponse.builder()
-                    .status("404")
+                    .statusCode(404)
                     .message("You don't have any history records")
-                    .title("Empty history")
+                    .title("failure")
                     .build();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(genericResponse);
 
@@ -188,7 +188,7 @@ public class HistoryController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
