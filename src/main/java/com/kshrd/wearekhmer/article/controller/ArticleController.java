@@ -154,7 +154,7 @@ public class ArticleController {
                     GenericResponse
                             .builder()
                             .totalRecords(totalRecords)
-                            .status("200")
+                            .statusCode(200)
                             .title("success")
                             .message("You have successfully get all articles")
                             .payload(articleResponses)
@@ -165,7 +165,7 @@ public class ArticleController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -259,7 +259,7 @@ public class ArticleController {
                     GenericResponse
                             .builder()
                             .title("success")
-                            .status("200")
+                            .statusCode(201)
                             .message("insert successfully successfully")
                             .payload(article1)
                             .build();
@@ -268,7 +268,7 @@ public class ArticleController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .title("insert failed")
                             .build();
@@ -284,13 +284,13 @@ public class ArticleController {
         GenericResponse genericResponse;
         weAreKhmerValidation.validateArticleId(articleId);
         if(articleMapper.checkArticleIsBan(articleId))
-            throw new ValidateException("Article not found !", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+            throw new ValidateException("Article is already banned ", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         try {
             ArticleResponse2 article = articleService.getArticleById(articleId, userId);
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("200")
+                            .statusCode(200)
                             .title("success")
                             .message("request successfully")
                             .payload(article)
@@ -301,7 +301,7 @@ public class ArticleController {
                     GenericResponse
                             .builder()
                             .title("request failed")
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -330,7 +330,7 @@ public class ArticleController {
                             GenericResponse
                                     .builder()
                                     .title("success")
-                                    .status("200")
+                                    .statusCode(200)
                                     .payload(articleResponse)
                                     .message("Get article successfully.")
                                     .build()
@@ -343,7 +343,7 @@ public class ArticleController {
                             GenericResponse
                                     .builder()
                                     .title("error")
-                                    .status("500")
+                                    .statusCode(500)
                                     .message(ex.getMessage())
                                     .build()
                     );
@@ -378,7 +378,7 @@ public class ArticleController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("200")
+                            .statusCode(200)
                             .title("success")
                             .message("update successfully.")
                             .payload(article2)
@@ -390,7 +390,7 @@ public class ArticleController {
                             .builder()
                             .title("failed")
                             .message(ex.getMessage())
-                            .status("500")
+                            .statusCode(500)
                             .build();
             ex.printStackTrace();
             return ResponseEntity.internalServerError().body(genericResponse);
@@ -443,7 +443,7 @@ public class ArticleController {
                     GenericResponse
                             .builder()
                             .message("delete failed")
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -472,7 +472,7 @@ public class ArticleController {
                     GenericResponse
                             .builder()
                             .message("Get data successfully.")
-                            .status("200")
+                            .statusCode(200)
                             .title("success")
                             .payload(articleResponseList)
                             .build()
@@ -485,7 +485,7 @@ public class ArticleController {
                             GenericResponse
                                     .builder()
                                     .message(ex.getMessage())
-                                    .status("500")
+                                    .statusCode(500)
                                     .title("error")
                                     .build()
                     );
@@ -506,7 +506,7 @@ public class ArticleController {
                                     .title("success")
                                     .message("Fetching data successfully.")
                                     .payload(articleResponseList)
-                                    .status("200")
+                                    .statusCode(200)
                                     .build()
                     );
         } catch (Exception ex) {
@@ -516,7 +516,7 @@ public class ArticleController {
                     .body(
                             GenericResponse
                                     .builder()
-                                    .status("500")
+                                    .statusCode(500)
                                     .message(ex.getMessage())
                                     .title("error.")
                                     .build()
@@ -545,6 +545,7 @@ public class ArticleController {
                             GenericResponse
                                     .builder()
                                     .title("success")
+                                    .statusCode(200)
                                     .message("You have successfully view this article.")
                                     .payload(returnArticleId)
                                     .build()
@@ -556,7 +557,7 @@ public class ArticleController {
                     .body(
                             GenericResponse
                                     .builder()
-                                    .status("500")
+                                    .statusCode(500)
                                     .message("Internal server error.")
                                     .title("error.")
                                     .build()
@@ -578,7 +579,7 @@ public class ArticleController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("200")
+                            .statusCode(200)
                             .payload(articleResponseList)
                             .title("success")
                             .message("You have successfully got last 24 hour articles recorded")
@@ -588,7 +589,7 @@ public class ArticleController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -674,7 +675,7 @@ public class ArticleController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("200")
+                            .statusCode(200)
                             .payload(articleResponseList)
                             .title("success")
                             .message("You have successfully got per year articles recorded")
@@ -684,7 +685,7 @@ public class ArticleController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -711,7 +712,7 @@ public class ArticleController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("200")
+                            .statusCode(200)
                             .payload(articleResponseList)
                             .title("success")
                             .message(
@@ -726,7 +727,7 @@ public class ArticleController {
             genericResponse =
                     GenericResponse
                             .builder()
-                            .status("500")
+                            .statusCode(500)
                             .message(ex.getMessage())
                             .build();
             ex.printStackTrace();
@@ -750,7 +751,7 @@ public class ArticleController {
                 userId
         );
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(articleResponseList)
                 .message("You have successfully get articles in this category")
@@ -774,7 +775,7 @@ public class ArticleController {
                 nextPage
         );
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(articleResponseList)
                 .message("You have successfully get all most view articles.")
@@ -801,7 +802,7 @@ public class ArticleController {
         );
         genericResponse = GenericResponse.builder()
                 .totalRecords(totalRecordByLatest)
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(articleResponseList)
                 .message("You have successfully get all latest articles.")
@@ -831,7 +832,7 @@ public class ArticleController {
         );
         GenericResponse genericResponse = GenericResponse.builder()
                 .totalRecords(totalRecordByYesterday)
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(articleResponseList)
                 .message("You have successfully get all articles by yesterday.")
@@ -858,7 +859,7 @@ public class ArticleController {
         );
         GenericResponse genericResponse = GenericResponse.builder()
                 .totalRecords(totalRecordPerWeek)
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(articleResponseList)
                 .message("You have successfully get all articles per week.")
@@ -883,7 +884,7 @@ public class ArticleController {
         );
         GenericResponse genericResponse = GenericResponse.builder()
                 .totalRecords(totalRecordByPerMonth)
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(articleResponseList)
                 .message("You have successfully get all articles per month.")
@@ -910,7 +911,7 @@ public class ArticleController {
         );
         GenericResponse genericResponse = GenericResponse.builder()
                 .totalRecords(totalRecordPerYear)
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(articles)
                 .message("You have successfully get all articles per year.")
@@ -930,7 +931,7 @@ public class ArticleController {
         Integer totalView = articleService.getTotalViewCurrentAuthorPerWeek(weAreKhmerCurrentUser.getUserId());
 
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(totalView)
                 .message("You have successfully get total views per week.")
@@ -948,7 +949,7 @@ public class ArticleController {
         Integer totalView = articleService.getTotalViewCurrentAuthorPerMonth(weAreKhmerCurrentUser.getUserId());
 
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(totalView)
                 .message("You have successfully get total views per month.")
@@ -966,7 +967,7 @@ public class ArticleController {
         Integer totalView = articleService.getTotalViewCurrentAuthorPerYear(weAreKhmerCurrentUser.getUserId());
 
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(totalView)
                 .message("You have successfully get total views per year.")
@@ -980,7 +981,7 @@ public class ArticleController {
     ) {
         Integer totalView = articleService.getTotalViewAdminPerWeek();
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(totalView)
                 .message("You have successfully get total views per week.")
@@ -995,7 +996,7 @@ public class ArticleController {
     ) {
         Integer totalView = articleService.getTotalViewAdminPerMonth();
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(totalView)
                 .message("You have successfully get total views per month.")
@@ -1009,7 +1010,7 @@ public class ArticleController {
     ) {
         Integer totalView = articleService.getTotalViewAdminPerYear();
         GenericResponse genericResponse = GenericResponse.builder()
-                .status("200")
+                .statusCode(200)
                 .title("success")
                 .payload(totalView)
                 .message("You have successfully get total views per year.")
