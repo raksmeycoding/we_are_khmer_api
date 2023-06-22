@@ -141,7 +141,7 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
         }
 
 
-        return authorRepository.updateAuthorAccountSetting(updateAccountSetting.getUsername(),updateAccountSetting.getGender(),authorId, new java.sql.Timestamp(dateOfBirth.getTime()));
+        return authorRepository.updateAuthorAccountSetting(updateAccountSetting.getUsername(),updateAccountSetting.getGender(),authorId, updateAccountSetting.getDateOfBirth());
     }
 
     @Override

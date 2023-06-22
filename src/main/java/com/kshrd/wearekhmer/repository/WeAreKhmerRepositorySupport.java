@@ -5,7 +5,9 @@ import com.kshrd.wearekhmer.user.model.dto.UserAppDTO;
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
 import org.apache.ibatis.annotations.*;
 
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 
@@ -136,8 +138,8 @@ public interface WeAreKhmerRepositorySupport {
 
 
 
-    @Update("UPDATE user_tb SET data_of_birth = #{dateOfBirth} WHERE user_id = #{userId}")
-    void updateDateOfBirthOfUserAfterRegisteredAsAuthor(@Param("userId") String userId, @Param("dateOfBirth") Timestamp dateOfBirth);
+    @Update("UPDATE user_tb SET data_of_birth = cast(#{dateOfBirth} as date) WHERE user_id = #{userId}")
+    void updateDateOfBirthOfUserAfterRegisteredAsAuthor(@Param("userId") String userId, @Param("dateOfBirth") String dateOfBirth);
 
 
 
