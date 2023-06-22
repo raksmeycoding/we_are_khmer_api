@@ -48,7 +48,7 @@ public class RatingController {
             Rating returnRating = ratingService.createUserRatingToAuthor(ratingDto);
             return ResponseEntity.ok(GenericResponse.builder()
                     .title("success")
-                    .status("200")
+                    .statusCode(201)
                     .message("Rating successfully.")
                     .payload(returnRating)
                     .build());
@@ -71,7 +71,7 @@ public class RatingController {
         weAreKhmerValidation.checkAuthorExist(authorId);
         try {
             RatingResponse ratingResponse = ratingService.getRatingByAuthorId(authorId);
-            return ResponseEntity.ok(GenericResponse.builder().statusCode(200).message("Get total of rating for author by authorIdr successfully").title("success").payload(ratingResponse).build());
+            return ResponseEntity.ok(GenericResponse.builder().statusCode(200).message("Get total of rating for author by authorId successfully").title("success").payload(ratingResponse).build());
         } catch (Exception exception) {
             return ResponseEntity.internalServerError().body(GenericResponse.builder()
                     .title("error")
