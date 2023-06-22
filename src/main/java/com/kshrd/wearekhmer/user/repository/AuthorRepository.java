@@ -153,14 +153,14 @@ public interface AuthorRepository {
     @Select("""
             UPDATE user_tb
             SET username = #{username},
-                data_of_birth = #{dateOfBirth},
+                data_of_birth = cast(#{dateOfBirth} as timestamp),
                 gender = cast(#{gender} as gender)
                 WHERE user_id = #{userId}
             """)
     UpdateAccountSetting updateAuthorAccountSetting(@Param("username") String username,
                                     @Param("gender") String gender,
                                     @Param("userId") String userId,
-                                    Timestamp dateOfBirth
+                                    String dateOfBirth
 
                                     );
 
