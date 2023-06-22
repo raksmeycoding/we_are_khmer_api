@@ -173,7 +173,7 @@ public class AuthenticationController {
 
 
     @PostMapping("/login")
-    @Operation(summary = "(Dommra user can register here)")
+    @Operation(summary = "(Domrra user can register here)")
     private ResponseEntity<?> userLogin(@RequestBody UserLoginRequest userLoginRequest) {
         System.out.println(userLoginRequest);
         defaultWeAreKhmerValidation.validateEmail(userLoginRequest.getEmail());
