@@ -4,14 +4,14 @@ create table navbar_tb
     category_id  varchar references category (category_id) on delete cascade not null unique ,
     real_name    varchar                                                     not null ,
     navbar_name  varchar                                                     not null  ,
-    order_number integer                                                     not null unique
+    order_number integer                                                     not null
 );
 
 -- drop table navbar_tb;
 
 
 -- first record
-INSERT INTO navbar_tb (navbar_id, real_name, navbar_name, category_id, order_number)
+INSERT INTO navbar_tb (navbar_id, r eal_name, navbar_name, category_id, order_number)
 SELECT uuid_generate_v4(), category_name, 'Navbar Name Value', '4671d16e-d470-4b0d-8989-551306143866', 1
 FROM category
 WHERE category_id = '4671d16e-d470-4b0d-8989-551306143866';
@@ -72,6 +72,29 @@ select coalesce(max(order_number) + 1, 1) from navbar_tb;
 -- update navbar if exist
 update navbar_tb set navbar_name = 'Khmer brashat', order_number = 5 where category_id = '67a5da27-71b6-4cca-a33f-38a156008263';
 select * from navbar_tb;
+
+
+
+
+-- if category update, navbar also update
+CREATE OR REPLACE FUNCTION update_navbar_names()
+    RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE navbar_tb
+    SET real_name = NEW.category_name,
+        navbar_name = NEW.category_name
+    WHERE category_id = NEW.category_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER category_name_update_trigger
+    AFTER UPDATE OF category_name ON category
+    FOR EACH ROW
+EXECUTE FUNCTION update_navbar_names();
+
 
 
 
