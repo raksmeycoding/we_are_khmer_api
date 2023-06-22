@@ -10,7 +10,6 @@ import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import com.kshrd.wearekhmer.article.service.ArticleService;
 import com.kshrd.wearekhmer.exception.CustomRuntimeException;
 import com.kshrd.wearekhmer.exception.ValidateException;
-import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.files.service.IFileService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
@@ -39,9 +38,7 @@ public class ArticleController {
     private ArticleService articleService;
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
-    private final IFileService IFileService;
 
-    private final FileConfig fileConfig;
     private static final Integer PAGE_SIZE = 10;
 
     private final WeAreKhmerValidation weAreKhmerValidation;
@@ -67,7 +64,6 @@ public class ArticleController {
 
     private Integer getNextPageForCurrentUser(Integer page) {
         int numberOfRecord = serviceClassHelper.getTotalOfRecordInArticleTbForCurrentUser();
-        System.out.println(numberOfRecord);
         int totalPage = (int) Math.ceil((double) numberOfRecord / PAGE_SIZE);
         System.out.println(totalPage);
         if (page > totalPage) {
@@ -100,9 +96,7 @@ public class ArticleController {
 
             Map<String, Object> param = new HashMap<>();
             param.put("title", title);
-//        List<ArticleResponse2> filteredArticles = articleMapper.filterArticles(title, date, categoryId );
 
-//        List<ArticleResponse2> filteredArticles = articleMapper.getArticlesByFilter(title, date, categoryId);
             FilterArticleCriteria filterArticleCriteria = new FilterArticleCriteria();
             filterArticleCriteria.setTitle(title);
             filterArticleCriteria.setPublishDate(publishDate);
@@ -173,59 +167,6 @@ public class ArticleController {
         }
     }
 
-//    @Operation(summary = "(Get all articles for current author)")
-//    @GetMapping("/author")
-//    @Hidden
-//    public ResponseEntity<?> getAllArticlesForCurrentUser(
-//            @RequestParam(value = "page", required = false) Integer page
-//    ) {
-//        GenericResponse genericResponse;
-//        try {
-//            if (page != null) {
-//                Integer nextPage = getNextPageForCurrentUser(page);
-//                List<ArticleResponse> articleResponseList = articleService.getArticlesForCurrentUserWithPaginate(
-//                        weAreKhmerCurrentUser.getUserId(),
-//                        PAGE_SIZE,
-//                        nextPage
-//                );
-//                return ResponseEntity
-//                        .ok()
-//                        .body(
-//                                GenericResponse
-//                                        .builder()
-//                                        .status("200")
-//                                        .message("Get data successfully.")
-//                                        .payload(articleResponseList)
-//                                        .title("success")
-//                                        .build()
-//                        );
-//            }
-//            String currentUerId = weAreKhmerCurrentUser.getUserId();
-//            List<ArticleResponse> articles = articleService.getArticlesForCurrentUser(
-//                    currentUerId
-//            );
-//            genericResponse =
-//                    GenericResponse
-//                            .builder()
-//                            .status("200")
-//                            .message("request successfully")
-//                            .payload(articles)
-//                            .title("success")
-//                            .build();
-//            return ResponseEntity.ok(genericResponse);
-//        } catch (Exception ex) {
-//            genericResponse =
-//                    GenericResponse
-//                            .builder()
-//                            .title("failed")
-//                            .message(ex.getMessage())
-//                            .status("500")
-//                            .build();
-//
-//            ex.printStackTrace();
-//            return ResponseEntity.internalServerError().body(genericResponse);
-//        }
-//    }
 
     @PostMapping("/author")
     @Operation(summary = "(Insert article for current author)")
@@ -1029,9 +970,9 @@ public class ArticleController {
         if(articleMapper.validateIsArticleAlreadyBand(articleId)) {
            throw new ValidateException("This article had been already banned.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         }
-        boolean isban = articleMapper.adminBanArticle(articleId);
-        System.out.println(isban);
-        if (!isban) {
+        boolean isBan = articleMapper.adminBanArticle(articleId);
+        System.out.println(isBan);
+        if (!isBan) {
             throw new ValidateException("Article is not able to be ban.", HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
@@ -1051,12 +992,8 @@ public class ArticleController {
         if(!articleMapper.validateIsArticleAlreadyBand(articleId)) {
             throw new ValidateException("This article had not been banned.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         }
-        boolean isban = articleMapper.adminUnBanArticle(articleId);
-//        System.out.println(isban);
-//        if (!isban) {
-//            throw new ValidateException("Article is not able to be ban.", HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
-//        }
-
+        boolean isBan = articleMapper.adminUnBanArticle(articleId);
+        System.out.println(isBan);
 
         return ResponseEntity.ok().body(GenericResponse.builder()
                 .statusCode(200)
@@ -1065,7 +1002,7 @@ public class ArticleController {
     }
 
     @GetMapping("/")
-    @Operation(summary = "Get aritlces by author id")
+    @Operation(summary = "Get articles by author id")
     public ResponseEntity<?> getAllArticlesByAuthorId(@RequestParam("authorId") String authorId){
 
         weAreKhmerValidation.checkAuthorExist(authorId);
