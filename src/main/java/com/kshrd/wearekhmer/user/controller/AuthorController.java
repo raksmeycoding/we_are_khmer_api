@@ -30,6 +30,9 @@ import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -236,7 +239,6 @@ public class AuthorController {
     @PutMapping("/update-user-image")
     @Operation(summary = "Update user image for all user in platform")
     public ResponseEntity<?> updateProfile(String imageUrl){
-
 
         UpdateProfile updateProfile = authorRepository.updateProfile(imageUrl, weAreKhmerCurrentUser.getUserId());
 
