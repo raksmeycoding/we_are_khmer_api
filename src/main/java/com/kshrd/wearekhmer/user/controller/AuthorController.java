@@ -75,9 +75,16 @@ public class AuthorController {
     @GetMapping("/authorUser")
     @Operation(summary = "(Get all only authors user.)")
     public ResponseEntity<?> getAllAuthorUser() {
+        Integer totalAuthor = authorRepository.totalAuthor();
         try {
             List<AuthorDTO> authorDTOList = authorService.getAllAuthor();
-            return ResponseEntity.ok(authorDTOList);
+            return ResponseEntity.ok(GenericResponse.builder()
+                            .statusCode(200)
+                            .totalAuthors(totalAuthor)
+                            .message("You have successfully got total author")
+                            .title("success")
+                            .payload(authorDTOList)
+                    .build());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new RuntimeException();

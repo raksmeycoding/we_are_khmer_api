@@ -67,6 +67,11 @@ public interface AuthorRepository {
             })
     List<AuthorDTO> getAllAuthor();
 
+    @Select("""
+            SELECT COUNT(*) FROM user_tb WHERE is_author = true
+            """)
+    Integer totalAuthor();
+
 
 
     @Select("""
