@@ -245,7 +245,7 @@ public class DefaultWeAreKhmerValidation implements WeAreKhmerValidation {
     @Override
     public boolean checkAuthorExist(String authorId) {
         if (!(ratingRepository.isExistAuthor(authorId)))
-            throw new ValidateException("No author had been found with this #id=" + authorId , HttpStatus.NOT_FOUND, HttpStatus.BAD_REQUEST.value());
+            throw new ValidateException("No author had been found with this #id=" + authorId , HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         else
             return ratingRepository.isExistAuthor(authorId);
     }
