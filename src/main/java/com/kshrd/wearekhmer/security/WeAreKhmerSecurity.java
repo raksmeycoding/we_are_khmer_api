@@ -64,7 +64,8 @@ public class WeAreKhmerSecurity {
             "/api/reset/**",
             "/api/v1/heroCard",
             "/api/v1/heroCard/{type}",
-            "/api/v1/article/"
+            "/api/v1/article/",
+            "/api/v1/author/personal-info"
 
     };
 

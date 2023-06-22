@@ -183,7 +183,7 @@ public class AuthorController {
 
 
     @GetMapping("/personal-info/{userId}")
-    @Operation(summary = "View user info for admin")
+    @Operation(summary = "View profile user (everyone)")
     public ResponseEntity<?> getAuthorPeronalInfoByAuthorId(@PathVariable String userId) {
 
         if(!authorRepository.checkUserId(userId))
