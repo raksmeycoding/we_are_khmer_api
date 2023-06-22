@@ -188,7 +188,7 @@ public interface ArticleMapper {
                      inner join category c on c.category_id = ab.category_id
                      left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
                      left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
-            where ab.article_id = #{articleId}
+            where ab.article_id = #{articleId} AND ab.isban = false
             """)
     @Result(property = "updateAt", column = "updatedat")
     ArticleResponse2 getArticleById(String articleId, String userId);
