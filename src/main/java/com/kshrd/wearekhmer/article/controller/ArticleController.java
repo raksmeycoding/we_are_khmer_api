@@ -1040,6 +1040,28 @@ public class ArticleController {
                 .title("success")
                 .message("Article had been bad successfully.").build());
     }
+    @PutMapping("/adminUnBanArticle/{articleId}")
+    @Operation(summary = "(Only admin has permission to unban this article.)")
+    public ResponseEntity<?> adminUnBanArticle(@PathVariable String articleId) {
+        boolean isArticleExist = articleMapper.isArticleExist(articleId);
+        if(!isArticleExist) {
+            throw new ValidateException("No article had been found.", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+        }
+        if(!articleMapper.validateIsArticleAlreadyBand(articleId)) {
+            throw new ValidateException("This article had not been banned.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+        }
+        boolean isban = articleMapper.adminUnBanArticle(articleId);
+//        System.out.println(isban);
+//        if (!isban) {
+//            throw new ValidateException("Article is not able to be ban.", HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
+//        }
+
+
+        return ResponseEntity.ok().body(GenericResponse.builder()
+                .statusCode(200)
+                .title("success")
+                .message("Article had been unban successfully.").build());
+    }
 
     @GetMapping("/")
     @Operation(summary = "Get aritlces by author id")

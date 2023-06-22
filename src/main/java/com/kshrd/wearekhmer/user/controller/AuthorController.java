@@ -136,7 +136,7 @@ public class AuthorController {
     }
 
     @PostMapping("rejected/{userId}")
-    @Operation(summary = "(Accept user request as author.)")
+    @Operation(summary = "(Reject user request as author.)")
     public ResponseEntity<?> updateUserRequestToBeAsRejected(@PathVariable String userId) throws MessagingException {
         String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
 //        check author had been already rejected or banded

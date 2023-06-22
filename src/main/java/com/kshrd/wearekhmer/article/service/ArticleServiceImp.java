@@ -29,6 +29,7 @@ public class ArticleServiceImp implements ArticleService {
 
 
 
+
     @Override
     public List<ArticleResponse2> getAllArticlesByLatest(Integer pageSize, Integer nextPage, String userId) {
         return articleMapper.getAllArticlesByLatest(pageSize, nextPage, userId);
@@ -208,5 +209,10 @@ public class ArticleServiceImp implements ArticleService {
     @Override
     public List<ArticleResponse2> getAllArticlesByAuthorId(String userId) {
         return articleMapper.getAllArticlesByAuthorId(userId);
+    }
+
+    @Override
+    public boolean adminUnBanArticle(String articleId) {
+        return articleMapper.adminUnBanArticle(articleId);
     }
 }

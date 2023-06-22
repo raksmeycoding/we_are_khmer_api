@@ -824,7 +824,17 @@ where ab.article_id = #{articleId}
     List<ArticleResponse2> getAllArticlesByAuthorId(@Param("userId") String userId);
 
     @Select("""
-            SELECT EXISTS(SELECT 1 FROM article_tb WHERE article_id = #{articleId} AND isban = false)
+            SELECT EXISTS(SELECT 1 FROM article_tb WHERE article_id = #{articleId} AND isban = true)
             """)
     boolean checkArticleIsBan(String articleId);
+
+
+    @Select("""
+            UPDATE article_tb 
+            SET isban = false
+            WHERE article_id =#{articleId}
+            returning isban
+            """)
+    boolean adminUnBanArticle(String articleId);
+
 }
