@@ -27,7 +27,7 @@ public interface ArticleService {
 
     Article updateArticle(Article article);
 
-    List<ArticleResponse> getArticleByMostViewLimit20();
+    List<com.kshrd.wearekhmer.article.model.Response.ArticleResponse> getArticleByMostViewLimit20();
 
     Article deleteArticleByIdAndCurrentUser(Article article);
 
@@ -77,6 +77,7 @@ public interface ArticleService {
     boolean adminBanArticle(String articleId);
 
     boolean adminUnBanArticle(String articleId);
+
 
 
 

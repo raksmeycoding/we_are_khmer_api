@@ -281,7 +281,8 @@ public interface ArticleMapper {
                      inner join category c on c.category_id = ab.category_id
             where isBan = false order by count_view desc limit 20 offset 0;
             """)
-    List<ArticleResponse> getArticleByMostViewLimit20();
+    @Result(property = "updateat", column = "updatedat")
+    List<com.kshrd.wearekhmer.article.model.Response.ArticleResponse> getArticleByMostViewLimit20();
 
 
     @Select("""
@@ -862,5 +863,7 @@ where ab.article_id = #{articleId}
             SELECT COUNT(*) FROM article_tb WHERE isban = true;
             """)
     Integer totalBanArticle();
+
+
 
 }
