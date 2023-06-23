@@ -65,6 +65,11 @@ public interface RatingRepository {
     Integer getTotalViewAllRecordsByAuthorId(String authorId);
 //    'd0e1bd19-d4bc-45d5-9beb-32538d16b769'
 
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM rating_tb WHERE author_id = #{authorId} AND user_id= #{userId})
+            """)
+    boolean checkAlreadyRating(String userId, String authorId);
+
 
 
 

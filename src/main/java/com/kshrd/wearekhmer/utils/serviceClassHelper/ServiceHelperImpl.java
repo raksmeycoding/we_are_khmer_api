@@ -58,9 +58,8 @@ public class ServiceHelperImpl implements ServiceClassHelper {
     public AuthorRequestTable insertAndGetAuthorRequestFromDatabase(AuthorRequest authorRequest) {
         String currentUserId = weAreKhmerCurrentUser.getUserId();
 
-//        validate gender
         weAreKhmerValidation.genderValidation(authorRequest.getGender());
-//        validate delete all existing quote, education, and working experience if user request as author again
+
         workingExperienceMapper.deleteAllWorkingExperienceIfUserIdExist(currentUserId);
         quoteMapper.deleteAllQuoteIfUserIdIsExist(currentUserId);
         educationMapper.deleteAllEducationIfUserIdExist(currentUserId);
@@ -73,6 +72,19 @@ public class ServiceHelperImpl implements ServiceClassHelper {
         List<String> quotes = authorRequest.getQuote();
         assert quotes != null;
 
+
+        if(educations.isEmpty()) {
+            educations.add("None");
+            educations.add("None");
+            educations.add("None");
+        } else if (educations.size() < 3) {
+
+            int remainingSlots = 3 - educations.size();
+            for (int i = 0; i < remainingSlots; i++) {
+                educations.add("None");
+            }
+        }
+
         for (String education : educations) {
             Education education1 = Education.builder()
                     .educationName(education)
@@ -81,23 +93,45 @@ public class ServiceHelperImpl implements ServiceClassHelper {
             Education education11 = educationMapper.insert(education1);
         }
 
+
+        if (quotes.isEmpty()) {
+            quotes.add("None");
+            quotes.add("None");
+            quotes.add("None");
+        } else if (quotes.size() < 3) {
+
+            int remainingSlots = 3 - quotes.size();
+            for (int i = 0; i < remainingSlots; i++) {
+                quotes.add("None");
+            }
+        }
+
         for (String quote : quotes) {
-            Quote toInsertQuote = Quote.builder()
+            Quote quoteName = Quote.builder()
                     .quoteName(quote)
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .build();
-
-            Quote insertedQuote = quoteMapper.insert(toInsertQuote);
+            Quote education11 = quoteMapper.insert(quoteName);
         }
 
-        for (String workingExperience : workingExperiences) {
-            WorkingExperience toInsertWorkingExperience = WorkingExperience.builder()
+        if (workingExperiences.isEmpty()) {
+            workingExperiences.add("None");
+            workingExperiences.add("None");
+            workingExperiences.add("None");
+        } else if (workingExperiences.size() < 3) {
+
+            int remainingSlots = 3 - quotes.size();
+            for (int i = 0; i < remainingSlots; i++) {
+                workingExperiences.add("None");
+            }
+        }
+
+        for (String workingExperience : quotes) {
+            WorkingExperience workingExperience1 = WorkingExperience.builder()
                     .workingExperienceName(workingExperience)
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .build();
-
-            WorkingExperience workingExperience1 = workingExperienceMapper.insert(toInsertWorkingExperience);
-
+            WorkingExperience workingExperience2 = workingExperienceMapper.insert(workingExperience1);
         }
 
 
