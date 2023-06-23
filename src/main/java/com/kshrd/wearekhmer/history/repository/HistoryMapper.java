@@ -57,7 +57,7 @@ public interface HistoryMapper {
     @Select("""
             UPDATE history_tb
             SET created_at = current_timestamp
-            WHERE article_id = #{articleId} AND user_id = #{userId} returning *
+            WHERE article_id = #{articleId} AND user_id = #{userId} 
             """)
     @ResultMap("historyResultMap")
     History updateHistory(String articleId, String userId);
