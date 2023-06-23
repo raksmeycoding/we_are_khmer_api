@@ -28,7 +28,7 @@ public class ResetPasswordImp implements ResetPassword{
         if(!resetPasswordMapper.checkEmailExistInResetTb(email))
             return resetPasswordMapper.checkEmailExistInResetTb(email);
         else
-            throw new DuplicateKeyException("Email already exist in OTP");
+            throw new DuplicateKeyException("This user had been already requested to reset please ");
     }
 
     @Override
