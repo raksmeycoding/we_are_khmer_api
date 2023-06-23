@@ -63,7 +63,7 @@ public class FileController {
             throw new CustomRuntimeException("File is empty");
         }
         try {
-            String returnUrl = IFileService.uploadFile(file);
+            String returnUrl = IFileService.uploadFile(file, httpServletRequest);
             return ResponseEntity.ok().body(GenericResponse.builder()
                     .title("success")
                     .message("File upload successfully!")
