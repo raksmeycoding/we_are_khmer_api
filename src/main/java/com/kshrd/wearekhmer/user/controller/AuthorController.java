@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.user.controller;
 
 
+import com.kshrd.wearekhmer.article.model.Response.BanAuthor;
 import com.kshrd.wearekhmer.emailVerification.service.EmailService;
 import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
@@ -18,6 +19,7 @@ import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
+import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.mail.MessagingException;
@@ -289,6 +291,78 @@ public class AuthorController {
                 .payload(updateProfile)
                 .build();
 
+        return ResponseEntity.ok(genericResponse);
+
+    }
+
+    @PutMapping("/admin/banAuthor")
+    @Operation(summary = "Ban author for (only admin has permission to ban)")
+    public ResponseEntity<?> banAuthor(@RequestParam("authorId") String authorId){
+
+        weAreKhmerValidation.checkAuthorExist(authorId);
+
+        if(authorRepository.checkAuthorIsBan(authorId))
+            throw new ValidateException("This author already banned", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+
+
+        BanAuthor isAuthor = authorServiceImpl.adminBanAuthor(authorId);
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .message("You have successfully banned this author")
+                .title("success")
+                .payload(isAuthor)
+                .statusCode(200)
+                .build();
+
+        return ResponseEntity.ok(genericResponse);
+    }
+
+    @PutMapping("/admin/unBanAuthor")
+    @Operation(summary = "Unban author for (only admin has permission to unban)")
+    public ResponseEntity<?> unBanAuthor(@RequestParam("authorId") String authorId){
+
+        weAreKhmerValidation.checkAuthorExist(authorId);
+
+        if(!authorRepository.checkAuthorIsBan(authorId))
+            throw new ValidateException("This author has not banned", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+
+
+        BanAuthor isAuthor = authorServiceImpl.adminUnBanAuthor(authorId);
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .message("You have successfully unbanned this author")
+                .title("success")
+                .payload(isAuthor)
+                .statusCode(200)
+                .build();
+
+        return ResponseEntity.ok(genericResponse);
+    }
+    @GetMapping("/admin/getAllBannedAuthor")
+    @Operation(summary = "Get all banned author for (only admin has permission to get all banned author)")
+    public ResponseEntity<?> getAllBannedAuthor(@RequestParam(defaultValue = "1", required = false) Integer page){
+        GenericResponse genericResponse;
+        Integer nextPage = getNextPage(page);
+        Integer totalBannedAuthor = authorRepository.totalBannedAuthor();
+        List<BanAuthor> getBanAuthor = authorServiceImpl.adminGetAllBannedAuthor(PAGE_SIZE,nextPage);
+
+        if(getBanAuthor.size()>0){
+           genericResponse = GenericResponse.builder()
+                    .message("You have successfully gotten all banned author")
+                    .totalAuthors(totalBannedAuthor)
+                    .title("success")
+                    .payload(getBanAuthor)
+                    .statusCode(200)
+                    .build();
+
+            return ResponseEntity.ok(genericResponse);
+        }
+
+         genericResponse = GenericResponse.builder()
+                .message("There's no banned author")
+                .title("failure")
+                .statusCode(404)
+                .build();
         return ResponseEntity.ok(genericResponse);
 
     }

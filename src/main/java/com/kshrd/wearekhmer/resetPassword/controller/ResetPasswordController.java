@@ -11,6 +11,7 @@ import com.kshrd.wearekhmer.requestRequest.NormalUserRequest;
 import com.kshrd.wearekhmer.resetPassword.model.entity.Reset;
 import com.kshrd.wearekhmer.resetPassword.model.request.InputEmail;
 import com.kshrd.wearekhmer.resetPassword.model.request.NewPassword;
+import com.kshrd.wearekhmer.resetPassword.model.request.VerifyOTP;
 import com.kshrd.wearekhmer.resetPassword.repository.ResetPasswordMapper;
 import com.kshrd.wearekhmer.resetPassword.service.ResetPasswordImp;
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
@@ -35,7 +36,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/reset")
+@RequestMapping("/api/v1/reset")
 @SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
 public class ResetPasswordController {
@@ -68,7 +69,7 @@ public class ResetPasswordController {
 
         weAreKhmerValidation.validateEmail(email.getEmail());
 
-        resetPasswordImp.checkEmailExistInResetTb(email.getEmail());
+//        resetPasswordImp.checkEmailExistInResetTb(email.getEmail());
 
 
         resetPasswordImp.checkEmail(email.getEmail());
@@ -102,11 +103,11 @@ public class ResetPasswordController {
         }
     }
 
-    @PostMapping("/verify")
+    @PostMapping("/send-verification")
     @Operation(summary = "verify otp to reset password")
-    public ResponseEntity<?> verifyOTP(@RequestParam("otp") String otp){
+    public ResponseEntity<?> verifyOTP(@RequestBody VerifyOTP otp){
 
-        boolean verifyOtp = resetPasswordImp.VerifyOTP(otp);
+        boolean verifyOtp = resetPasswordImp.VerifyOTP(otp.getOtp());
 
         GenericResponse genericResponse = GenericResponse.builder()
                 .title("success")
@@ -117,18 +118,16 @@ public class ResetPasswordController {
         return ResponseEntity.ok(genericResponse);
     }
 
-    @PutMapping("/reset")
+    @PutMapping("/new-password")
     @Operation(summary = "reset password")
-    public ResponseEntity<?> resetPassword(
-            @RequestParam("email") String email,
-            @RequestBody NewPassword newPassword
+    public ResponseEntity<?> resetPassword(@RequestBody @Validated NewPassword newPassword
     ){
-        weAreKhmerValidation.validateEmail(email);
+        weAreKhmerValidation.validateEmail(newPassword.getEmail());
         defaultWeAreKhmerValidation.passwordValidation(newPassword.getNewPassword());
 
         String rawPassword = passwordEncoder.encode(newPassword.getNewPassword());
 
-        Reset reset = resetPasswordImp.resetPassword(email, rawPassword);
+        Reset reset = resetPasswordImp.resetPassword(newPassword.getEmail(), rawPassword);
 
         GenericResponse genericResponse = GenericResponse.builder()
                 .title("success")

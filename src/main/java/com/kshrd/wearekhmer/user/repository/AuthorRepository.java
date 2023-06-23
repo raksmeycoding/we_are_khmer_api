@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.user.repository;
 
 
+import com.kshrd.wearekhmer.article.model.Response.BanAuthor;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.*;
 import com.kshrd.wearekhmer.userRating.reponse.PersonalInformationResponse;
@@ -222,6 +223,50 @@ public interface AuthorRepository {
             SELECT EXISTS(SELECT 1 FROM user_tb WHERE user_id = #{userId})
             """)
     boolean checkUserId(String userId);
+
+    @Select("""
+            UPDATE user_tb
+            SET is_enable = false
+            WHERE user_id = #{userId} AND is_author = true returning *;
+            """)
+
+    @Results(id = "banAuthor",
+        value = {
+                @Result(property = "authorId", column = "user_id"),
+                @Result(property = "authorName", column = "username"),
+                @Result(property = "authorProfile", column = "photo_url"),
+                @Result(property = "dateOfBirth", column = "data_of_birth"),
+                @Result(property = "email", column = "email")
+        }
+    )
+    BanAuthor adminBanAuthor(String userId);
+
+
+    @Select("""
+            UPDATE user_tb
+            SET is_enable = true
+            WHERE user_id = #{userId} AND is_author = true returning *;
+            """)
+    @ResultMap("banAuthor")
+    BanAuthor adminUnBanAuthor(String userId);
+
+
+    @Select("""
+            SELECT ut.user_id, ut.username, ut.email, ut.photo_url,ut.data_of_birth FROM user_tb ut WHERE ut.is_enable = false AND ut.is_author = true
+            LIMIT #{pageNumber} OFFSET #{nextPage}
+            """)
+    @ResultMap("banAuthor")
+    List<BanAuthor> getAllBannedAuthor(Integer pageNumber, Integer nextPage);
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM user_tb WHERE user_id = #{userId} AND is_enable = false);
+            """)
+    boolean checkAuthorIsBan(String userId);
+
+    @Select("""
+            SELECT COUNT(*) FROM user_tb WHERE is_enable = false AND is_author = true;
+            """)
+    Integer totalBannedAuthor();
 
 }
 
