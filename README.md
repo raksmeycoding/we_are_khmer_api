@@ -72,29 +72,55 @@ sh
 sh
    http://localhost:8080/swagger-ui/index.html
 
-<!-- USAGE EXAMPLES -->
+     <!-- USAGE EXAMPLES -->
 ## Usage
 
 Domrra is a sharing knowledge website developed by the 11th generation students of Korea Software HRD during basic course in 2023.
 
 <!-- _For more examples, please refer to the [Demo](http://110.74.194.124:5605/swagger-ui/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config&configUrl=/v3/api-docs/swagger-config#/)_ -->
 
+4. Login with Role
+
+- Admin Dashboard
+   1. email : kongthary240@gmail.com
+      password : 12345678
+
+- Author Dashboard
+   1. email : kongthary240@gmail.com
+      password : 12345678
+   2. email : seungphearun1@gmail.com
+      password : 12345678
+   3. email : savongchamroeun@gmail.com
+      password : 12345678
+
+- Normal User
+   1. email : jameleo7777@gmail.com
+      password : 11223344  
+   2. email : houtvouyim2023@gmail.com
+      password : 00112233
+
+- Guest : default
+      login without account
 
 <!-- ACKNOWLEDGEMENTS -->
 ## What we have done
 
-* [Category Controller](http://localhost:8080/swagger-ui/index.html#/category-controller)
-* [Article Controller](http://localhost:8080/swagger-ui/index.html#/article-controller)
-* [User-review-author Controller](http://localhost:8080/swagger-ui/index.html#/user-review-author-controller)
-* [Report Controller](http://localhost:8080/swagger-ui/index.html#/report-controller)
-* [Rating Controller](http://localhost:8080/swagger-ui/index.html#/rating-controller)
-* [History Controller](http://localhost:8080/swagger-ui/index.html#/history-controller)
-* [File Controller](http://localhost:8080/swagger-ui/index.html#/file-controller)
-* [History Controller](http://localhost:8080/swagger-ui/index.html#/history-controller)
-* [File Controller](http://localhost:8080/swagger-ui/index.html#/file-controller)
-* [Comment Controller](http://localhost:8080/swagger-ui/index.html#/comment-controller)
-* [Bookmark Controller](http://localhost:8080/swagger-ui/index.html#/bookmark-controller)
-* [Author Controller](http://localhost:8080/swagger-ui/index.html#/author-controller)
-* [Authentication Controller](http://localhost:8080/swagger-ui/index.html#/authentication-controller)
-* [React Controller](http://localhost:8080/swagger-ui/index.html#/react-controller)
-* [Notification Controller](http://localhost:8080/swagger-ui/index.html#/notification-controller)
+* [reset-password-controller](http://localhost:8080/swagger-ui/index.html#/reset-password-controller)
+* [hero-card-controller](http://localhost:8080/swagger-ui/index.html#/hero-card-controller)
+* [category-controller](http://localhost:8080/swagger-ui/index.html#/category-controller)
+* [author-controller](http://localhost:8080/swagger-ui/index.html#/author-controller)
+* [article-controller](http://localhost:8080/swagger-ui/index.html#/article-controller)
+* [user-review-author Controller](http://localhost:8080/swagger-ui/index.html#/user-review-author-controller)
+* [otp-controller](http://localhost:8080/swagger-ui/index.html#/otp-controller)
+* [report-controller](http://localhost:8080/swagger-ui/index.html#/report-controller)
+* [user-report-author-controller](http://localhost:8080/swagger-ui/index.html#/user-report-author-controller)
+* [rating-controller](http://localhost:8080/swagger-ui/index.html#/rating-controller)
+* [order-navbar-controller](http://localhost:8080/swagger-ui/index.html#/order-navbar-controller)
+* [history-controller](http://localhost:8080/swagger-ui/index.html#/history-controller)
+* [file-controller](http://localhost:8080/swagger-ui/index.html#/file-controller)
+* [comment-controller](http://localhost:8080/swagger-ui/index.html#/comment-controller)
+* [bookmark-controller](http://localhost:8080/swagger-ui/index.html#/bookmark-controller)
+* [authentication-controller](http://localhost:8080/swagger-ui/index.html#/authentication-controller)
+* [react-controller](http://localhost:8080/swagger-ui/index.html#/react-controller)
+* [notification-controller](http://localhost:8080/swagger-ui/index.html#/notification-controller)
+
