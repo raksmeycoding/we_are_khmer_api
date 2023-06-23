@@ -8,6 +8,7 @@ import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.heroCard.model.entity.HeroCard;
 import com.kshrd.wearekhmer.heroCard.model.request.HeroCardRequest;
 import com.kshrd.wearekhmer.heroCard.model.response.HeroCardResponse;
+import com.kshrd.wearekhmer.heroCard.repository.HeroCardRepository;
 import com.kshrd.wearekhmer.heroCard.service.HeroCardService;
 import com.kshrd.wearekhmer.heroCard.service.HeroCardServiceImp;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
@@ -43,6 +44,8 @@ public class HeroCardController {
     private WeAreKhmerValidation weAreKhmerValidation;
     private ServiceClassHelper classHelper;
 
+    private final HeroCardRepository heroCardRepository;
+
     @PostMapping
     @Operation(summary = "Insert hero card for admin")
     public ResponseEntity<?> insertBookmark(HttpServletRequest httpServletRequest, @Validated @RequestBody HeroCardRequest heroCardRequest) {
@@ -54,6 +57,9 @@ public class HeroCardController {
         weAreKhmerValidation.checkArticleByCategoryId(heroCardRequest.getCategoryId(), heroCardRequest.getArticleId());
         weAreKhmerValidation.validateHeroCardIndexExist(heroCardRequest.getIndex(), heroCardRequest.getType(), heroCardRequest.getCategoryId());
         weAreKhmerValidation.checkArticleAlreadyExistInHeroCard(heroCardRequest.getCategoryId(), heroCardRequest.getArticleId(),heroCardRequest.getType());
+
+        if(heroCardRepository.checkIndexAndHomeHasRecord(heroCardRequest.getIndex()))
+            throw new ValidateException("Index is not available ", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
 
 
 

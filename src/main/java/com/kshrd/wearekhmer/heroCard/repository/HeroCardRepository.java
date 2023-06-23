@@ -97,6 +97,7 @@ public interface HeroCardRepository {
                      left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
             where ab.article_id = #{articleId}
             """)
+    @Result(property = "updateAt", column = "updatedat")
     ArticleResponse2 getArticleByIdForHeroCard(String articleId, String userId);
 
     @Select("""
