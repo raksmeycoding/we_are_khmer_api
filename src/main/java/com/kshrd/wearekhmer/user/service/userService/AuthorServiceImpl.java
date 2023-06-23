@@ -104,9 +104,9 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
         weAreKhmerValidation.genderValidation(updateAccountSetting.getGender());
         java.sql.Date dateOfBirth = defaultWeAreKhmerValidation.validateDateOfBirth(updateAccountSetting.getDateOfBirth());
 
-        List<WorkingExperienceResponse> workingExperience = updateAccountSetting.getWorkingExperiences();
+        List<WorkingExperienceResponse> workingExperience = updateAccountSetting.getWorkingExperience();
         assert workingExperience != null;
-        List<EducationResponse> education = updateAccountSetting.getEducations();
+        List<EducationResponse> education = updateAccountSetting.getEducation();
         assert education != null;
         List<QuoteResponse> bio = updateAccountSetting.getBio();
         assert bio != null;

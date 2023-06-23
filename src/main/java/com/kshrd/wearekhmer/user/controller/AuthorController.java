@@ -252,19 +252,20 @@ public class AuthorController {
 
     @PutMapping("/update-account-setting")
     @Operation(summary = "Update account setting for current author")
-    public ResponseEntity<?> updateAccountSettingByAuthorId(@RequestBody @Validated UpdateAccountSetting updateAccountSetting){
+    public ResponseEntity<?> updateAccountSettingByAuthorId(@RequestBody UpdateAccountSetting updateAccountSetting){
         String authorId = weAreKhmerCurrentUser.getUserId();
         weAreKhmerValidation.genderValidation(updateAccountSetting.getGender());
         java.sql.Date dateOfBirth = defaultWeAreKhmerValidation.validateDateOfBirth(updateAccountSetting.getDateOfBirth());
-        if (updateAccountSetting.getWorkingExperiences().size()>3) {
+        if (updateAccountSetting.getWorkingExperience().size()>3) {
             throw new ValidateException("Working Experience has 3 maximum fields", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
         }
-        if (updateAccountSetting.getEducations().size() > 3) {
+        if (updateAccountSetting.getEducation().size() > 3) {
             throw new ValidateException("Education has 3 maximum fields", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
         }
         if (updateAccountSetting.getBio().size() > 3) {
             throw new ValidateException("Bio has 3 maximum fields", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
         }
+        System.out.println(updateAccountSetting);
 
         UpdateAccountSetting updateAccountSetting1 = authorServiceImpl.updateAccountSetting(updateAccountSetting);
 

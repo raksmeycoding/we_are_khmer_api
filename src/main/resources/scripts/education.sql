@@ -16,7 +16,10 @@ BEGIN
 end;
 $$ language plpgsql;
 
-create trigger trg_limit_user_education before insert or update on education for each row execute function limit_user_education();
+
+drop function limit_user_education cascade ;
+
+create trigger trg_limit_user_education before insert on education for each row execute function limit_user_education();
 
 drop trigger trg_limit_user_education ON education;
 
