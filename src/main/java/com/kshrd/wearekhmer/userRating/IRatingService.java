@@ -16,4 +16,5 @@ public interface IRatingService {
 
 
     Integer getTotalViewAllRecordsByAuthorId(String authorId);
+
 }
