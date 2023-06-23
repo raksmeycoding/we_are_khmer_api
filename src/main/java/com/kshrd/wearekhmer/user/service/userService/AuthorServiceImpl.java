@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer.user.service.userService;
 
+import com.kshrd.wearekhmer.article.model.Response.BanAuthor;
 import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.*;
@@ -66,8 +67,8 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
     }
 
     @Override
-    public List<AuthorDTO> getAllAuthor() {
-        return authorRepository.getAllAuthor();
+    public List<AuthorDTO> getAllAuthor(Integer pageNumber, Integer nextPage) {
+        return authorRepository.getAllAuthor(pageNumber,nextPage);
     }
 
 
@@ -149,5 +150,20 @@ public class AuthorServiceImpl implements AuthorRequestTableService, AuthorServi
         if(!authorRepository.checkUserIdExist(weAreKhmerCurrentUser.getUserId()))
             throw new ValidateException("There's no userId : "+userId, HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
         return authorRepository.updateProfile(photoUrl,userId);
+    }
+
+    @Override
+    public BanAuthor adminBanAuthor(String userId) {
+        return authorRepository.adminBanAuthor(userId);
+    }
+
+    @Override
+    public BanAuthor adminUnBanAuthor(String userId) {
+        return authorRepository.adminUnBanAuthor(userId);
+    }
+
+    @Override
+    public List<BanAuthor> adminGetAllBannedAuthor(Integer pageNumber, Integer nextPage) {
+        return authorRepository.getAllBannedAuthor(pageNumber,nextPage);
     }
 }

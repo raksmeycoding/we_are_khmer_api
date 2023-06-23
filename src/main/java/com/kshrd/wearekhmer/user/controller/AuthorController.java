@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.user.controller;
 
 
+import com.kshrd.wearekhmer.article.model.Response.BanAuthor;
 import com.kshrd.wearekhmer.emailVerification.service.EmailService;
 import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
@@ -15,8 +16,10 @@ import com.kshrd.wearekhmer.user.service.AuthorService;
 import com.kshrd.wearekhmer.user.service.userService.AuthorServiceImpl;
 import com.kshrd.wearekhmer.userRating.reponse.PersonalInformationResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
+import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.mail.MessagingException;
@@ -56,7 +59,22 @@ public class AuthorController {
 
     private final AuthorServiceImpl authorServiceImpl;
 
+    private final ServiceClassHelper serviceClassHelper;
+
+    private static final Integer PAGE_SIZE = 10;
     private final EmailService emailService;
+
+    private Integer getNextPage(Integer page) {
+        int numberOfRecord = serviceClassHelper.getTotalOfRecordInArticleTb();
+        System.out.println(numberOfRecord);
+        int totalPage = (int) Math.ceil((double) numberOfRecord / PAGE_SIZE);
+        System.out.println(totalPage);
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        weAreKhmerValidation.validatePageNumber(page);
+        return (page - 1) * PAGE_SIZE;
+    }
 
 
     @GetMapping("/authorRequest")
@@ -74,10 +92,30 @@ public class AuthorController {
 
     @GetMapping("/authorUser")
     @Operation(summary = "(Get all only authors user.)")
-    public ResponseEntity<?> getAllAuthorUser() {
+    public ResponseEntity<?> getAllAuthorUser(@RequestParam(defaultValue = "1", required = false) Integer page) {
+        Integer totalAuthor = authorRepository.totalAuthor();
         try {
-            List<AuthorDTO> authorDTOList = authorService.getAllAuthor();
-            return ResponseEntity.ok(authorDTOList);
+            Integer nextPage = getNextPage(page);
+            List<AuthorDTO> authorDTOList = authorService.getAllAuthor(PAGE_SIZE,nextPage);
+
+            if(authorDTOList.size()>0){
+
+                return ResponseEntity.ok(GenericResponse.builder()
+                        .statusCode(200)
+                        .totalAuthors(totalAuthor)
+                        .message("You have successfully got total author")
+                        .title("success")
+                        .payload(authorDTOList)
+                        .build());
+            }
+
+            return ResponseEntity.ok(GenericResponse.builder()
+                    .statusCode(404)
+                    .totalAuthors(totalAuthor)
+                    .message("There's no authors in platform")
+                    .title("failure")
+                    .build());
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new RuntimeException();
@@ -253,6 +291,78 @@ public class AuthorController {
                 .payload(updateProfile)
                 .build();
 
+        return ResponseEntity.ok(genericResponse);
+
+    }
+
+    @PutMapping("/admin/banAuthor")
+    @Operation(summary = "Ban author for (only admin has permission to ban)")
+    public ResponseEntity<?> banAuthor(@RequestParam("authorId") String authorId){
+
+        weAreKhmerValidation.checkAuthorExist(authorId);
+
+        if(authorRepository.checkAuthorIsBan(authorId))
+            throw new ValidateException("This author already banned", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+
+
+        BanAuthor isAuthor = authorServiceImpl.adminBanAuthor(authorId);
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .message("You have successfully banned this author")
+                .title("success")
+                .payload(isAuthor)
+                .statusCode(200)
+                .build();
+
+        return ResponseEntity.ok(genericResponse);
+    }
+
+    @PutMapping("/admin/unBanAuthor")
+    @Operation(summary = "Unban author for (only admin has permission to unban)")
+    public ResponseEntity<?> unBanAuthor(@RequestParam("authorId") String authorId){
+
+        weAreKhmerValidation.checkAuthorExist(authorId);
+
+        if(!authorRepository.checkAuthorIsBan(authorId))
+            throw new ValidateException("This author has not banned", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+
+
+        BanAuthor isAuthor = authorServiceImpl.adminUnBanAuthor(authorId);
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .message("You have successfully unbanned this author")
+                .title("success")
+                .payload(isAuthor)
+                .statusCode(200)
+                .build();
+
+        return ResponseEntity.ok(genericResponse);
+    }
+    @GetMapping("/admin/getAllBannedAuthor")
+    @Operation(summary = "Get all banned author for (only admin has permission to get all banned author)")
+    public ResponseEntity<?> getAllBannedAuthor(@RequestParam(defaultValue = "1", required = false) Integer page){
+        GenericResponse genericResponse;
+        Integer nextPage = getNextPage(page);
+        Integer totalBannedAuthor = authorRepository.totalBannedAuthor();
+        List<BanAuthor> getBanAuthor = authorServiceImpl.adminGetAllBannedAuthor(PAGE_SIZE,nextPage);
+
+        if(getBanAuthor.size()>0){
+           genericResponse = GenericResponse.builder()
+                    .message("You have successfully gotten all banned author")
+                    .totalAuthors(totalBannedAuthor)
+                    .title("success")
+                    .payload(getBanAuthor)
+                    .statusCode(200)
+                    .build();
+
+            return ResponseEntity.ok(genericResponse);
+        }
+
+         genericResponse = GenericResponse.builder()
+                .message("There's no banned author")
+                .title("failure")
+                .statusCode(404)
+                .build();
         return ResponseEntity.ok(genericResponse);
 
     }

@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.article.service;
 
 import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
+import com.kshrd.wearekhmer.article.model.Response.BanArticles;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.repository.ArticleMapper;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
@@ -99,7 +100,7 @@ public class ArticleServiceImp implements ArticleService {
 
 
     @Override
-    public List<ArticleResponse> getArticleByMostViewLimit20() {
+    public List<com.kshrd.wearekhmer.article.model.Response.ArticleResponse> getArticleByMostViewLimit20() {
         return articleMapper.getArticleByMostViewLimit20();
     }
 
@@ -215,4 +216,12 @@ public class ArticleServiceImp implements ArticleService {
     public boolean adminUnBanArticle(String articleId) {
         return articleMapper.adminUnBanArticle(articleId);
     }
+
+    @Override
+    public List<BanArticles> getAllBanArticle(Integer pageNumber, Integer nextPage) {
+        return articleMapper.getAllBanArticle(pageNumber, nextPage);
+    }
+
+
 }
+

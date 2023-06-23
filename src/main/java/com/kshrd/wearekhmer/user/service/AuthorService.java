@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer.user.service;
 
+import com.kshrd.wearekhmer.article.model.Response.BanAuthor;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
 import com.kshrd.wearekhmer.user.model.entity.UpdateAccountSetting;
@@ -11,7 +12,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface AuthorService {
-    List<AuthorDTO> getAllAuthor();
+    List<AuthorDTO> getAllAuthor(Integer pageNumber, Integer nextPage);
 
     AuthorDTO getAllAuthorById(String authorId);
 
@@ -30,4 +31,9 @@ public interface AuthorService {
     UpdateAccountSetting updateAccountSetting(UpdateAccountSetting updateAccountSetting);
 
     UpdateProfile updateProfile(String userId, String photoUrl);
+    BanAuthor adminBanAuthor(String userId);
+
+    BanAuthor adminUnBanAuthor(String userId);
+
+    List<BanAuthor> adminGetAllBannedAuthor(Integer pageNumber, Integer nextPage);
 }

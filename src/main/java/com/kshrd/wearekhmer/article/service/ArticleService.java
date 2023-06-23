@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.article.service;
 
 import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
+import com.kshrd.wearekhmer.article.model.Response.BanArticles;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 
@@ -26,7 +27,7 @@ public interface ArticleService {
 
     Article updateArticle(Article article);
 
-    List<ArticleResponse> getArticleByMostViewLimit20();
+    List<com.kshrd.wearekhmer.article.model.Response.ArticleResponse> getArticleByMostViewLimit20();
 
     Article deleteArticleByIdAndCurrentUser(Article article);
 
@@ -80,5 +81,8 @@ public interface ArticleService {
 
 
 
+
     List<ArticleResponse2> getAllArticlesByAuthorId(String userId);
+
+    List<BanArticles> getAllBanArticle(Integer pageNumber, Integer nextPage);
 }
