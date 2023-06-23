@@ -100,7 +100,7 @@ public class ArticleServiceImp implements ArticleService {
 
 
     @Override
-    public List<ArticleResponse> getArticleByMostViewLimit20() {
+    public List<com.kshrd.wearekhmer.article.model.Response.ArticleResponse> getArticleByMostViewLimit20() {
         return articleMapper.getArticleByMostViewLimit20();
     }
 
@@ -221,5 +221,7 @@ public class ArticleServiceImp implements ArticleService {
     public List<BanArticles> getAllBanArticle(Integer pageNumber, Integer nextPage) {
         return articleMapper.getAllBanArticle(pageNumber, nextPage);
     }
+
+
 }
 
