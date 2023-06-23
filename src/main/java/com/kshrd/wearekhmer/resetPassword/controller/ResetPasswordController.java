@@ -35,7 +35,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/reset")
+@RequestMapping("/api/v1/reset")
 @SecurityRequirement(name = "bearerAuth")
 @AllArgsConstructor
 public class ResetPasswordController {
@@ -102,7 +102,7 @@ public class ResetPasswordController {
         }
     }
 
-    @PostMapping("/verify")
+    @PostMapping("/send-verification")
     @Operation(summary = "verify otp to reset password")
     public ResponseEntity<?> verifyOTP(@RequestParam("otp") String otp){
 
@@ -117,7 +117,7 @@ public class ResetPasswordController {
         return ResponseEntity.ok(genericResponse);
     }
 
-    @PutMapping("/reset")
+    @PutMapping("/new-password")
     @Operation(summary = "reset password")
     public ResponseEntity<?> resetPassword(
             @RequestParam("email") String email,
