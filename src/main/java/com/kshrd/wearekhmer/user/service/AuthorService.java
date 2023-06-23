@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface AuthorService {
-    List<AuthorDTO> getAllAuthor();
+    List<AuthorDTO> getAllAuthor(Integer pageNumber, Integer nextPage);
 
     AuthorDTO getAllAuthorById(String authorId);
 

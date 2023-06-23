@@ -1,6 +1,6 @@
 package com.kshrd.wearekhmer.bookmark.controller;
 
-import com.kshrd.wearekhmer.article.service.ArticleService;
+
 import com.kshrd.wearekhmer.bookmark.model.entity.Bookmark;
 import com.kshrd.wearekhmer.bookmark.model.reponse.BookmarkResponse;
 import com.kshrd.wearekhmer.bookmark.model.request.BookmarkRequest;
@@ -24,7 +24,7 @@ import java.util.List;
 public class BookmarkController {
 
     private final IBookService bookmarkService;
-    private final ArticleService articleService;
+
 
     private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
@@ -51,14 +51,14 @@ public class BookmarkController {
                         .message("You have successfully got all bookmark recorded")
                         .build();
                 return ResponseEntity.ok(genericResponse);
-            }else{
+            }
                 genericResponse = GenericResponse.builder()
                         .statusCode(404)
                         .title("failure")
                         .message("There's no bookmark records in your list")
                         .build();
                 return ResponseEntity.ok(genericResponse);
-            }
+
 
         } catch (Exception ex) {
             genericResponse =

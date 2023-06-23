@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.article.repository;
 
 import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
+import com.kshrd.wearekhmer.article.model.Response.BanArticles;
 import com.kshrd.wearekhmer.article.model.entity.Article;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import org.apache.ibatis.annotations.*;
@@ -824,7 +825,42 @@ where ab.article_id = #{articleId}
     List<ArticleResponse2> getAllArticlesByAuthorId(@Param("userId") String userId);
 
     @Select("""
-            SELECT EXISTS(SELECT 1 FROM article_tb WHERE article_id = #{articleId} AND isban = false)
+            SELECT EXISTS(SELECT 1 FROM article_tb WHERE article_id = #{articleId} AND isban = true)
             """)
     boolean checkArticleIsBan(String articleId);
+
+
+    @Select("""
+            UPDATE article_tb 
+            SET isban = false
+            WHERE article_id =#{articleId}
+            returning isban
+            """)
+    boolean adminUnBanArticle(String articleId);
+
+    @Select("""
+            SELECT ab.article_id, ab.title, ab.sub_title, ab.publish_date,
+                   ab.updatedat,ab.image, ut.username, ut.photo_url
+                   FROM article_tb ab
+                   INNER JOIN user_tb ut on ut.user_id =  ab.user_id
+                   WHERE isban = true 
+                   ORDER BY publish_date LIMIT #{pageNumber} OFFSET #{nextPage}
+               
+            """)
+    @Result(property = "authorName", column = "username")
+    @Result(property = "updateAt", column = "updatedat")
+    @Result(property = "articleId", column = "article_id")
+    @Result(property = "title", column = "title")
+    @Result(property = "subTitle", column = "sub_title")
+    @Result(property = "publishDate", column = "publish_date")
+    @Result(property = "authorProfile", column = "photo_url")
+    @Result(property = "articleImage", column = "image")
+    List<BanArticles> getAllBanArticle(Integer pageNumber, Integer nextPage);
+
+
+    @Select("""
+            SELECT COUNT(*) FROM article_tb WHERE isban = true;
+            """)
+    Integer totalBanArticle();
+
 }

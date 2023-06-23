@@ -42,7 +42,6 @@ public class WeAreKhmerSecurity {
             "/api/v1/files/file/**",
             "/api/v1/email/**",
             "/api/v1/auth/verification/token",
-            "/api/v1/author/authorUser",
             "/api/v1/category",
             "/api/v1/article",
             "/api/v1/article/{articleId}",
@@ -64,7 +63,8 @@ public class WeAreKhmerSecurity {
             "/api/reset/**",
             "/api/v1/heroCard",
             "/api/v1/heroCard/{type}",
-            "/api/v1/article/"
+            "/api/v1/article/",
+            "/api/v1/author/personal-info"
 
     };
 
@@ -202,6 +202,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers(HttpMethod.GET, "/api/v1/author/account-setting").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.PUT, "/api/v1/author/update-account-setting").hasRole("AUTHOR")
                 .requestMatchers(HttpMethod.PUT,"/api/v1/author/update-user-image").hasAnyRole("USER","AUTHOR","ADMIN")
+                .requestMatchers("/api/v1/author/authorUser").hasRole("ADMIN")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()
                 .anyRequest()

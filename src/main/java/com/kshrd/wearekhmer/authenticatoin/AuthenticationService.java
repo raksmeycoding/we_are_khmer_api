@@ -27,7 +27,7 @@ public class AuthenticationService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginRequest.getEmail(), userLoginRequest.getPassword()));
         var user = userAppRepository.findUserByEmail(userLoginRequest.getEmail());
         var token = jwtService.generateToken(user);
-//        return UserRepsonse.builder().email(userLoginRequest.getEmail()).token(token).roles(userAppRepository.getUserRolesByUserEmail(userLoginRequest.getEmail())).build();
+
 
 
         GenericResponse genericResponse = GenericResponse.builder()

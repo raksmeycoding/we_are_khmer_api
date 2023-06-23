@@ -52,6 +52,7 @@ public interface AuthorRepository {
 
     @Select("""
             select * from user_tb where is_author = true
+            limit #{pageNumber} offset #{nextPage}
             """)
 
     @Results(id = "authorDTO",
@@ -65,7 +66,12 @@ public interface AuthorRepository {
                     @Result(property = "education", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.EducationMapper.getEducationByUserIdObject")),
                     @Result(property = "quote", column = "user_id", many = @Many(select = "com.kshrd.wearekhmer.user.repository.QuoteMapper.getQuoteByUserIdAsObject"))
             })
-    List<AuthorDTO> getAllAuthor();
+    List<AuthorDTO> getAllAuthor(Integer pageNumber, Integer nextPage);
+
+    @Select("""
+            SELECT COUNT(*) FROM user_tb WHERE is_author = true
+            """)
+    Integer totalAuthor();
 
 
 
@@ -122,9 +128,11 @@ public interface AuthorRepository {
 
 
     @Select("""
-            select u.user_id, u.username, u.email, u.gender, u.data_of_birth from user_tb u inner join user_role_tb urb on urb.user_id = u.user_id inner join  role_tb r on urb.role_id = r.role_id where u.user_id = #{authorId} and r.name = 'ROLE_AUTHOR'
+            select u.user_id, u.username, u.email, u.photo_url, u.gender, u.data_of_birth from user_tb u where u.user_id = #{userId} 
             """)
-    PersonalInformationResponse getAuthorPersonalInfoByAuthorId(String authorId);
+    @Result(property = "dateOfBirth", column = "data_of_birth")
+    @Result(property = "photoUrl", column = "photo_url")
+    PersonalInformationResponse getAuthorPersonalInfoByAuthorId(String userId);
 
 
 
@@ -214,6 +222,7 @@ public interface AuthorRepository {
             SELECT EXISTS(SELECT 1 FROM user_tb WHERE user_id = #{userId})
             """)
     boolean checkUserId(String userId);
+
 }
 
 

@@ -15,6 +15,7 @@ import com.kshrd.wearekhmer.user.service.AuthorService;
 import com.kshrd.wearekhmer.user.service.userService.AuthorServiceImpl;
 import com.kshrd.wearekhmer.userRating.reponse.PersonalInformationResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,7 +57,22 @@ public class AuthorController {
 
     private final AuthorServiceImpl authorServiceImpl;
 
+    private final ServiceClassHelper serviceClassHelper;
+
+    private static final Integer PAGE_SIZE = 10;
     private final EmailService emailService;
+
+    private Integer getNextPage(Integer page) {
+        int numberOfRecord = serviceClassHelper.getTotalOfRecordInArticleTb();
+        System.out.println(numberOfRecord);
+        int totalPage = (int) Math.ceil((double) numberOfRecord / PAGE_SIZE);
+        System.out.println(totalPage);
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        weAreKhmerValidation.validatePageNumber(page);
+        return (page - 1) * PAGE_SIZE;
+    }
 
 
     @GetMapping("/authorRequest")
@@ -74,10 +90,30 @@ public class AuthorController {
 
     @GetMapping("/authorUser")
     @Operation(summary = "(Get all only authors user.)")
-    public ResponseEntity<?> getAllAuthorUser() {
+    public ResponseEntity<?> getAllAuthorUser(@RequestParam(defaultValue = "1", required = false) Integer page) {
+        Integer totalAuthor = authorRepository.totalAuthor();
         try {
-            List<AuthorDTO> authorDTOList = authorService.getAllAuthor();
-            return ResponseEntity.ok(authorDTOList);
+            Integer nextPage = getNextPage(page);
+            List<AuthorDTO> authorDTOList = authorService.getAllAuthor(PAGE_SIZE,nextPage);
+
+            if(authorDTOList.size()>0){
+
+                return ResponseEntity.ok(GenericResponse.builder()
+                        .statusCode(200)
+                        .totalAuthors(totalAuthor)
+                        .message("You have successfully got total author")
+                        .title("success")
+                        .payload(authorDTOList)
+                        .build());
+            }
+
+            return ResponseEntity.ok(GenericResponse.builder()
+                    .statusCode(404)
+                    .totalAuthors(totalAuthor)
+                    .message("There's no authors in platform")
+                    .title("failure")
+                    .build());
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new RuntimeException();
@@ -136,7 +172,7 @@ public class AuthorController {
     }
 
     @PostMapping("rejected/{userId}")
-    @Operation(summary = "(Accept user request as author.)")
+    @Operation(summary = "(Reject user request as author.)")
     public ResponseEntity<?> updateUserRequestToBeAsRejected(@PathVariable String userId) throws MessagingException {
         String hasRoleAuthor = authorRepository.userAlreadyAuthor(userId);
 //        check author had been already rejected or banded
@@ -182,13 +218,17 @@ public class AuthorController {
     }
 
 
-    @GetMapping("/personal-info/{authorId}")
-    public ResponseEntity<?> getAuthorPeronalInfoByAuthorId(@PathVariable String authorId) {
-        weAreKhmerValidation.checkAuthorExist(authorId);
-        PersonalInformationResponse personalInformationResponse = authorRepository.getAuthorPersonalInfoByAuthorId(authorId);
+    @GetMapping("/personal-info/{userId}")
+    @Operation(summary = "View profile user (everyone)")
+    public ResponseEntity<?> getAuthorPeronalInfoByAuthorId(@PathVariable String userId) {
+
+        if(!authorRepository.checkUserId(userId))
+            throw new ValidateException("User not found !", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+
+        PersonalInformationResponse personalInformationResponse = authorRepository.getAuthorPersonalInfoByAuthorId(userId);
         return ResponseEntity.ok().body(GenericResponse.builder()
                 .title("success")
-                .message("Get author profile successfully")
+                .message("Get user profile successfully")
                 .statusCode(200)
                 .payload(personalInformationResponse)
                 .build());
