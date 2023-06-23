@@ -24,6 +24,7 @@ public class ArticleResponse {
 
     private Timestamp publish_date;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String description;
 
     private Timestamp updateat;

@@ -436,21 +436,35 @@ public class ArticleController {
 
     @GetMapping("/most-view")
     @Operation(summary = "(Filters articles by most view ( limit 20 row ))")
-    @Hidden
     public ResponseEntity<?> getArticleByMostViewLimit20() {
         try {
-            List<ArticleResponse> articleResponseList = articleService.getArticleByMostViewLimit20();
+            List<com.kshrd.wearekhmer.article.model.Response.ArticleResponse> articleResponseList = articleService.getArticleByMostViewLimit20();
+
+            if(articleResponseList.size()>0){
+                return ResponseEntity
+                        .ok()
+                        .body(
+                                GenericResponse
+                                        .builder()
+                                        .title("success")
+                                        .message("Fetching data successfully.")
+                                        .payload(articleResponseList)
+                                        .statusCode(200)
+                                        .build()
+                        );
+            }
             return ResponseEntity
                     .ok()
                     .body(
                             GenericResponse
                                     .builder()
-                                    .title("success")
-                                    .message("Fetching data successfully.")
+                                    .title("failure")
+                                    .message("fail to fetching data successfully.")
                                     .payload(articleResponseList)
-                                    .statusCode(200)
+                                    .statusCode(404)
                                     .build()
                     );
+
         } catch (Exception ex) {
             ex.printStackTrace();
             return ResponseEntity
