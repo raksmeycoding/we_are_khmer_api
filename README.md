@@ -72,20 +72,13 @@ sh
 sh
    http://localhost:8080/swagger-ui/index.html
 
-     <!-- USAGE EXAMPLES -->
-## Usage
-
-Domrra is a sharing knowledge website developed by the 11th generation students of Korea Software HRD during basic course in 2023.
-
-<!-- _For more examples, please refer to the [Demo](http://110.74.194.124:5605/swagger-ui/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config&configUrl=/v3/api-docs/swagger-config#/)_ -->
-
 4. Login with Role
 
-- Admin Dashboard
+- Role -> Admin
    1. email : kongthary240@gmail.com
       password : 12345678
 
-- Author Dashboard
+- Role -> Author
    1. email : kongthary240@gmail.com
       password : 12345678
    2. email : seungphearun1@gmail.com
@@ -93,14 +86,21 @@ Domrra is a sharing knowledge website developed by the 11th generation students 
    3. email : savongchamroeun@gmail.com
       password : 12345678
 
-- Normal User
+- Role -> User
    1. email : jameleo7777@gmail.com
       password : 11223344  
    2. email : houtvouyim2023@gmail.com
       password : 00112233
 
-- Guest : default
-      login without account
+- Role -> Guest : login without account
+
+<!-- USAGE EXAMPLES -->
+## Usage
+
+Domrra is a sharing knowledge website developed by the 11th generation students of Korea Software HRD during basic course in 2023.
+
+<!-- _For more examples, please refer to the [Demo](http://110.74.194.124:5605/swagger-ui/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config&configUrl=/v3/api-docs/swagger-config#/)_ -->
+
 
 <!-- ACKNOWLEDGEMENTS -->
 ## What we have done
@@ -123,4 +123,5 @@ Domrra is a sharing knowledge website developed by the 11th generation students 
 * [authentication-controller](http://localhost:8080/swagger-ui/index.html#/authentication-controller)
 * [react-controller](http://localhost:8080/swagger-ui/index.html#/react-controller)
 * [notification-controller](http://localhost:8080/swagger-ui/index.html#/notification-controller)
+
 
