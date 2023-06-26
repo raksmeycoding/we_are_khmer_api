@@ -71,6 +71,14 @@ public interface RatingRepository {
     boolean checkAlreadyRating(String userId, String authorId);
 
 
+    @Select("""
+            SELECT number_of_rating FROM rating_tb WHERE user_id = #{userId}  AND   author_id = #{authorId}
+            """)
+
+    Integer isRating(String userId, String authorId);
+
+
+
 
 
 }
