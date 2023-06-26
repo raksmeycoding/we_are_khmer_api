@@ -56,13 +56,13 @@ public class FileServiceImpl implements IFileService {
             }
             Files.copy(multipartFile.getInputStream(), this.root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 
-//            String serverName = request.getScheme() + "://" + request.getServerName();
+            String serverName = request.getScheme() + "://" + request.getServerName();
 
 //            System.out.println(serverName); // Output: http://localhost:8080
 
-//            String plusURL = serverName + "/api/v1/files/file/filename?name=" + fileName;
+            String plusURL = "https://api.domrra.site" + "/api/v1/files/file/filename?name=" + fileName;
 //            System.out.println(plusURL);
-            return "http://localhost:8080/api/v1/files/file/filename?name=" + fileName;
+            return plusURL;
         }
 
         return null;
