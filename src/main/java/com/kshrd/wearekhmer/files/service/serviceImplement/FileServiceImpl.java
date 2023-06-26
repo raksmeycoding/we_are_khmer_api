@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.files.service.IFileService;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,7 @@ public class FileServiceImpl implements IFileService {
 
 
     @Override
-    public String uploadFile(MultipartFile multipartFile) throws IOException {
+    public String uploadFile(MultipartFile multipartFile, HttpServletRequest request) throws IOException {
         String fileName = multipartFile.getOriginalFilename();
         assert fileName != null;
         if (isFileNameContains(fileName)) {
@@ -54,6 +55,13 @@ public class FileServiceImpl implements IFileService {
                 Files.createDirectories(root);
             }
             Files.copy(multipartFile.getInputStream(), this.root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+
+//            String serverName = request.getScheme() + "://" + request.getServerName();
+
+//            System.out.println(serverName); // Output: http://localhost:8080
+
+//            String plusURL = serverName + "/api/v1/files/file/filename?name=" + fileName;
+//            System.out.println(plusURL);
             return "http://localhost:8080/api/v1/files/file/filename?name=" + fileName;
         }
 
