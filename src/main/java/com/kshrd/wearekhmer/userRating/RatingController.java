@@ -39,7 +39,7 @@ public class RatingController {
 //        if(ratingRequest.getNumber_of_rating() > 6 || ratingRequest.getNumber_of_rating() <= 0){
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "number_of_rating cannot ");
 //        }
-        try {
+
             RatingDto ratingDto = RatingDto.builder()
                     .user_id(weAreKhmerCurrentUser.getUserId())
                     .author_id(ratingRequest.getAuthor_id())
@@ -52,15 +52,7 @@ public class RatingController {
                     .message("Rating successfully.")
                     .payload(returnRating)
                     .build());
-        } catch (Exception ex) {
-            if (ex.getCause() instanceof SQLException) {
-                if (((SQLException) ex.getCause()).getSQLState().equals("23514")) {
-                    throw new ValidateException("Out of range rating number. (we accept a number buteen 1-5).", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
-                }
-            }
-            ex.printStackTrace();
-            throw new ValidateException(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value());
-        }
+
 
     }
 
