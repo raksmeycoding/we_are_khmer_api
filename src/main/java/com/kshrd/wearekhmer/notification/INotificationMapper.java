@@ -154,16 +154,32 @@ ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage};
     boolean validateUserIdExistInUserRequestToBeAuthor(String userId);
 
 
-   @Select("""
-           SELECT * FROM notification_tb WHERE notification_type = cast(#{status} AS notification_type)
-           ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage}
-           """)
+//   @Select("""
+//           SELECT * FROM notification_tb WHERE notification_type = cast(#{status} AS notification_type)
+//           ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage}
+//           """)
+
+    @Select("""
+            SELECT nt.*,
+                   CASE
+                       WHEN nt.notification_type = 'REPORT_ON_ARTICLE' THEN rt.reason
+                       WHEN nt.notification_type = 'USER_REPORT_AUTHOR' THEN urat.reason
+                       ELSE NULL
+                       END AS reason
+            FROM notification_tb nt
+                     LEFT JOIN report_tb rt ON nt.notification_type = 'REPORT_ON_ARTICLE' AND nt.notification_type_id = rt.article_id
+                     LEFT JOIN user_report_author_tb urat ON nt.notification_type = 'USER_REPORT_AUTHOR' AND nt.notification_type_id = urat.author_id
+            WHERE nt.notification_type = cast(#{status} AS notification_type)
+            ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage}
+            """)
    @Result(property = "notificationId", column = "notification_id")
+    @Result(property = "reason", column = "reason")
    @Result(property = "notificationTypeId", column = "notification_type_id")
    @Result(property = "date", column = "createat")
    @Result(property = "profile", column = "sender_image_url")
    @Result(property = "senderName", column = "sender_name")
    @Result(property = "notificationType", column = "notification_type")
+
     List<NotificationResponse> getNotificationTypeReport(Integer pageNumber, Integer nextPage, String status);
 
    @Select("""
