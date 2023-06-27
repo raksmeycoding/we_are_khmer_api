@@ -60,7 +60,8 @@ public interface HeroCardRepository {
 
 
     @Select("""
-            SELECT * FROM hero_card_tb WHERE category_id = #{categoryId} AND type = cast(#{type} as heroType)
+            SELECT * FROM hero_card_tb WHERE category_id = #{categoryId} AND type = cast(#{type} as heroType) 
+            ORDER BY index ASC
             """)
     @Results(
             id = "heroCardResponse", value = {
@@ -107,7 +108,7 @@ public interface HeroCardRepository {
 
 
     @Select("""
-            SELECT * FROM hero_card_tb WHERE type = 'home'
+            SELECT * FROM hero_card_tb WHERE type = 'home' ORDER BY index ASC
             """)
     @Result(property = "heroCardId", column = "hero_card_id")
     @Result(property = "categoryId", column = "category_id")

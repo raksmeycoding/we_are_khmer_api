@@ -4,6 +4,8 @@ import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.userRating.dto.RatingDto;
 import com.kshrd.wearekhmer.userRating.reponse.RatingBarResponse;
 import com.kshrd.wearekhmer.userRating.reponse.RatingResponse;
+import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
+import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import java.util.List;
 public class RatingServiceImpl implements IRatingService{
 
     private final RatingRepository ratingRepository;
+
+    private WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
     @Override
     public  Rating createUserRatingToAuthor(RatingDto ratingDto) {
@@ -41,5 +45,8 @@ public class RatingServiceImpl implements IRatingService{
         return ratingRepository.getTotalViewAllRecordsByAuthorId(authorId);
     }
 
-
+    @Override
+    public Integer AlreadyRating(String userId, String authorId) {
+        return ratingRepository.isRating(weAreKhmerCurrentUser.getUserId(), authorId);
+    }
 }

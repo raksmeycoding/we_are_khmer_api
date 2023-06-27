@@ -104,6 +104,35 @@ public class RatingController {
                 .build());
     }
 
+    @GetMapping("/getNumberOfRating")
+    @Operation(summary = "(Get number of rating that user already rate to author)")
+    public ResponseEntity<?> getNumberOfRating(String authorId){
+        weAreKhmerValidation.checkAuthorExist(authorId);
+
+        Integer getRatingNumber = ratingService.AlreadyRating(weAreKhmerCurrentUser.getUserId(),authorId);
+        GenericResponse genericResponse;
+        if(getRatingNumber != null){
+             genericResponse = GenericResponse.builder()
+                    .message("You have get number of rating that user rated")
+                    .title("success")
+                    .payload(getRatingNumber)
+                    .statusCode(200)
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+        }else{
+            genericResponse = GenericResponse.builder()
+                    .message("Failure to get number of rating")
+                    .title("failure")
+                    .statusCode(404)
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(genericResponse);
+        }
+
+
+
+    }
+
 
 
 
