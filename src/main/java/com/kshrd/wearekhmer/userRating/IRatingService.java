@@ -17,4 +17,6 @@ public interface IRatingService {
 
     Integer getTotalViewAllRecordsByAuthorId(String authorId);
 
+    Integer AlreadyRating(String userId, String authorId);
+
 }
