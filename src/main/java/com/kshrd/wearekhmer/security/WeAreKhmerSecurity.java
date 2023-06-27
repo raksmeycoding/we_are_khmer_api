@@ -203,6 +203,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers(HttpMethod.PUT,"/api/v1/author/update-user-image").hasAnyRole("USER","AUTHOR","ADMIN")
                 .requestMatchers("/api/v1/author/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/v1/author/authorUser").hasRole("ADMIN")
+                .requestMatchers("/api/v1/user//admin/getAllUser/{isAuthor}").hasRole("ADMIN")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()
                 .anyRequest()
