@@ -786,14 +786,24 @@ public class ArticleController {
                 PAGE_SIZE,
                 nextPage
         );
+
+        if(articleResponseList.size()>0){
+            GenericResponse genericResponse = GenericResponse.builder()
+                    .totalRecords(totalRecordByYesterday)
+                    .statusCode(200)
+                    .title("success")
+                    .payload(articleResponseList)
+                    .message("You have successfully get all articles by yesterday.")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+        }
         GenericResponse genericResponse = GenericResponse.builder()
-                .totalRecords(totalRecordByYesterday)
-                .statusCode(200)
-                .title("success")
-                .payload(articleResponseList)
-                .message("You have successfully get all articles by yesterday.")
+                .statusCode(404)
+                .title("failure")
+                .message("There's no articles by yesterday.")
                 .build();
         return ResponseEntity.ok(genericResponse);
+
     }
 
     @Operation(summary = "(Get articles per week for current author)")
@@ -813,14 +823,24 @@ public class ArticleController {
                 PAGE_SIZE,
                 nextPage
         );
+        if(articleResponseList.size()>0){
+            GenericResponse genericResponse = GenericResponse.builder()
+                    .totalRecords(totalRecordPerWeek)
+                    .statusCode(200)
+                    .title("success")
+                    .payload(articleResponseList)
+                    .message("You have successfully get all articles per week.")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+        }
         GenericResponse genericResponse = GenericResponse.builder()
-                .totalRecords(totalRecordPerWeek)
-                .statusCode(200)
-                .title("success")
-                .payload(articleResponseList)
-                .message("You have successfully get all articles per week.")
+
+                .statusCode(404)
+                .title("failure")
+                .message("There's no articles per week.")
                 .build();
         return ResponseEntity.ok(genericResponse);
+
     }
 
 
@@ -838,12 +858,20 @@ public class ArticleController {
                 PAGE_SIZE,
                 nextPage
         );
+        if(articleResponseList.size()>0){
+            GenericResponse genericResponse = GenericResponse.builder()
+                    .totalRecords(totalRecordByPerMonth)
+                    .statusCode(200)
+                    .title("success")
+                    .payload(articleResponseList)
+                    .message("You have successfully get all articles per month.")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+        }
         GenericResponse genericResponse = GenericResponse.builder()
-                .totalRecords(totalRecordByPerMonth)
-                .statusCode(200)
-                .title("success")
-                .payload(articleResponseList)
-                .message("You have successfully get all articles per month.")
+                .statusCode(404)
+                .title("failure")
+                .message("There's no articles per month.")
                 .build();
         return ResponseEntity.ok(genericResponse);
 
@@ -865,14 +893,24 @@ public class ArticleController {
                 PAGE_SIZE,
                 nextPage
         );
+
+        if(articles.size()>0){
+            GenericResponse genericResponse = GenericResponse.builder()
+                    .totalRecords(totalRecordPerYear)
+                    .statusCode(200)
+                    .title("success")
+                    .payload(articles)
+                    .message("You have successfully get all articles per year.")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+        }
         GenericResponse genericResponse = GenericResponse.builder()
-                .totalRecords(totalRecordPerYear)
-                .statusCode(200)
-                .title("success")
-                .payload(articles)
-                .message("You have successfully get all articles per year.")
+                .statusCode(404)
+                .title("failure")
+                .message("There's no articles per year.")
                 .build();
         return ResponseEntity.ok(genericResponse);
+
 
     }
 
