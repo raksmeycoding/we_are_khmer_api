@@ -29,4 +29,6 @@ public class WeAreKhmerConstant {
     public final String[] listOfImageType = {"CATEGORY", "USER", "ARTICLE"};
 
     public String[] NotificationTypeAdmin = {"REPORT_ON_ARTICLE", "USER_REQUEST_AS_AUTHOR", "USER_REPORT_AUTHOR"};
+
+
 }
