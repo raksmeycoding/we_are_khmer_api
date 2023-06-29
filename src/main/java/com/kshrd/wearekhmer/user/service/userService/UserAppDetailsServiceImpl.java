@@ -1,6 +1,8 @@
 package com.kshrd.wearekhmer.user.service.userService;
 
 
+import com.kshrd.wearekhmer.user.model.dto.UserAppDTO;
+import com.kshrd.wearekhmer.user.model.entity.Users;
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
 import com.kshrd.wearekhmer.requestRequest.NormalUserRequest;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
@@ -71,5 +73,10 @@ public class UserAppDetailsServiceImpl implements UserAppService, UserDetailsSer
     @Override
     public List<UserApp> getAllUser() {
         return userAppRepository.getAllUser();
+    }
+
+    @Override
+    public List<Users> getUserOrAuthor(boolean isAuthor, Integer pageNumber, Integer nextPage) {
+        return userAppRepository.dynamicUserAndAuthor(isAuthor,pageNumber,nextPage);
     }
 }

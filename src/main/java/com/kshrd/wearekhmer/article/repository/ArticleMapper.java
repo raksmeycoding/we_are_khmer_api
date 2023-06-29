@@ -305,6 +305,7 @@ public interface ArticleMapper {
 
     @Select("""
             select count(*) from article_tb  as article_count where user_id = #{userId}
+            AND isban = false
             """)
     Integer getTotalRecordOfArticleForCurrentUser(String userId);
 
@@ -727,12 +728,14 @@ public interface ArticleMapper {
     @Select("""
             SELECT count(*) FROM article_tb WHERE user_id = #{userId}
             AND publish_date :: date = (current_date -1)
+            AND isban = false
             """)
     Integer  totalArticleRecordByYesterdayForCurrentAuthor(String userId);
 
     @Select("""
             SELECT count(*) FROM article_tb WHERE user_id = #{userId}
             AND DATE_TRUNC('week', publish_date) = DATE_TRUNC('week', current_date)
+            AND isban = false
             """)
     Integer  totalArticleRecordByPerWeekForCurrentAuthor(String userId);
 
@@ -740,7 +743,10 @@ public interface ArticleMapper {
     @Select("""
             SELECT count(*) FROM article_tb WHERE user_id = #{userId}
             AND EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
-              AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date);
+              AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date)
+              AND isban = false
+              ;
+            
             """)
     Integer  totalArticleRecordByPerMonthForCurrentAuthor(String userId);
 
@@ -749,6 +755,7 @@ public interface ArticleMapper {
             SELECT count(*) FROM article_tb WHERE user_id = #{userId}
             AND date_trunc('year', publish_date) = date_trunc('year', current_date)
             AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) 
+            AND isban = false
                         
            """)
     Integer  totalArticleRecordByPerYearForCurrentAuthor(String userId);
