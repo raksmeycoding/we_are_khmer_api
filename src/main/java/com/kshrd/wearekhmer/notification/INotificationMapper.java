@@ -5,6 +5,7 @@ import com.kshrd.wearekhmer.notification.entity.response.AuthorNotificationList;
 import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
 import com.kshrd.wearekhmer.notification.entity.response.NotificationResponse;
 import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
+import com.kshrd.wearekhmer.userReport.model.reportUser.UserReportAuthorDatabaseReponse;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.*;
 
@@ -186,6 +187,12 @@ ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage};
            SELECT count(notification_id) FROM notification_tb WHERE notification_type = cast(#{status} AS notification_type)
            """)
     Integer totalRecordNotificationTypeReport(String status);
+
+
+   @Select("""
+           DELETE FROM user_report_author_tb WHERE author_id = #{authorId}
+           """)
+    UserReportAuthorDatabaseReponse deleteDataFromUserReportAuthor( String authorId);
 
 
 
