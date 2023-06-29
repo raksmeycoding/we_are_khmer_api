@@ -305,6 +305,7 @@ public interface ArticleMapper {
 
     @Select("""
             select count(*) from article_tb  as article_count where user_id = #{userId}
+            AND isban = false
             """)
     Integer getTotalRecordOfArticleForCurrentUser(String userId);
 
