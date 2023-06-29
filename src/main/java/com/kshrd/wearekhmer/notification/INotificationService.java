@@ -1,9 +1,6 @@
 package com.kshrd.wearekhmer.notification;
 
-import com.kshrd.wearekhmer.notification.entity.response.AuthorNotificationList;
-import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
-import com.kshrd.wearekhmer.notification.entity.response.NotificationResponse;
-import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
+import com.kshrd.wearekhmer.notification.entity.response.*;
 
 import java.util.List;
 
@@ -35,6 +32,10 @@ public interface INotificationService {
     Notification deleteNotificationByTypeAndId( String notificationId, String notificationType);
 
     List<NotificationResponse> getNotificationTypeReport(Integer pageNumber, Integer nextPage, String status);
+
+    ReadNotification readNotification(String notificationId, String userId);
+
+    List<ReadNotification> readAllNotifications(String userId);
 
 
 

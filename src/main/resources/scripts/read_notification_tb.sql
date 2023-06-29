@@ -2,6 +2,7 @@ CREATE TABLE read_notification_tb(
     read_id varchar primary key default uuid_generate_v4(),
     createAt timestamp           default current_timestamp,
     notification_id          varchar not null references notification_tb (notification_id) on delete cascade,
+    receiver_id        varchar not null,
     status         boolean             default false
 );
 
@@ -11,8 +12,8 @@ $$
 BEGIN
     IF TG_OP = 'INSERT' THEN
         -- Insert into read_notification_tb
-        INSERT INTO read_notification_tb (notification_id)
-        VALUES (NEW.notification_id);
+        INSERT INTO read_notification_tb (notification_id,receiver_id)
+        VALUES (NEW.notification_id, NEW.receiver_id);
 
         RETURN NEW;
     END IF;

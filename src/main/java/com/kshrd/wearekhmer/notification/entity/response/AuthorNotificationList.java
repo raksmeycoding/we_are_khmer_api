@@ -20,4 +20,6 @@ public class AuthorNotificationList {
     private String fullName;
     private String photoUrl;
 
+    private Boolean read;
+
 }
