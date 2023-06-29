@@ -25,4 +25,7 @@ public class NotificationResponse {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String reason;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean read;
 }

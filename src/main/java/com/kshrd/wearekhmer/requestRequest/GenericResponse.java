@@ -19,6 +19,8 @@ public class GenericResponse {
     Integer totalRecords;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    Integer unReadNotifications;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     Integer totalAuthors;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

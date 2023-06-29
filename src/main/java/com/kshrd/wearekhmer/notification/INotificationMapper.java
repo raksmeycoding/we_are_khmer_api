@@ -1,10 +1,7 @@
 package com.kshrd.wearekhmer.notification;
 
 
-import com.kshrd.wearekhmer.notification.entity.response.AuthorNotificationList;
-import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
-import com.kshrd.wearekhmer.notification.entity.response.NotificationResponse;
-import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
+import com.kshrd.wearekhmer.notification.entity.response.*;
 import com.kshrd.wearekhmer.userReport.model.reportUser.UserReportAuthorDatabaseReponse;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.*;
@@ -65,8 +62,10 @@ FROM author_request_tb as art INNER JOIN user_tb ut on ut.user_id = art.user_id 
 
 
     @Select("""
-SELECT * FROM notification_tb WHERE notification_type = 'USER_REPORT_AUTHOR' OR notification_type = 'REPORT_ON_ARTICLE' OR  notification_type = 'USER_REQUEST_AS_AUTHOR'
-ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage};
+SELECT nt.notification_id, nt.notification_type, nt.notification_type_id, nt.sender_name, nt.sender_image_url, nt.createat, rnt.status FROM notification_tb nt
+INNER JOIN read_notification_tb rnt on nt.notification_id = rnt.notification_id
+WHERE notification_type = 'USER_REPORT_AUTHOR' OR notification_type ='USER_REQUEST_AS_AUTHOR' OR notification_type = 'REPORT_ON_ARTICLE'
+ORDER BY nt.createat DESC limit #{pageNumber} offset #{nextPage}
 ;
             """)
             @Result(property = "notificationId", column = "notification_id")
@@ -75,13 +74,17 @@ ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage};
             @Result(property = "profile", column = "sender_image_url")
             @Result(property = "senderName", column = "sender_name")
             @Result(property = "notificationType", column = "notification_type")
+            @Result(property = "read", column = "status")
     List<NotificationResponse> getAllNotificationType(Integer pageNumber, Integer nextPage);
 
 
     @Select("""
-            SELECT nt.notification_id, nt.receiver_id, notification_type, nt.notification_type_id, nt.createat, ut.photo_url, ut.username
-            FROM notification_tb AS nt INNER JOIN user_tb ut on ut.user_id = nt.sender_id WHERE receiver_id = #{authorId}
-            ORDER BY nt.createat DESC
+            SELECT nt.notification_id, nt.receiver_id, notification_type, nt.notification_type_id, nt.createat, ut.photo_url, ut.username, rnt.status
+            FROM notification_tb AS nt
+            INNER JOIN user_tb ut on ut.user_id = nt.sender_id
+            INNER JOIN read_notification_tb rnt on rnt.notification_id = nt.notification_id
+            WHERE nt.receiver_id = #{authorId}
+            ORDER BY nt.createat DESC;
             ;
             """)
     @Results(id = "authorNotification", value = {
@@ -92,6 +95,7 @@ ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage};
             @Result(property = "notificationTypeId", column = "notification_type_id"),
             @Result(property = "fullName", column = "username"),
             @Result(property = "photoUrl", column = "photo_url"),
+            @Result(property = "read", column = "status")
     })
 
     List<AuthorNotificationList> getAllNotificationForCurrentAuthor(String authorId);
@@ -193,6 +197,33 @@ ORDER BY createat DESC LIMIT #{pageNumber} OFFSET #{nextPage};
            DELETE FROM user_report_author_tb WHERE author_id = #{authorId}
            """)
     UserReportAuthorDatabaseReponse deleteDataFromUserReportAuthor( String authorId);
+
+   @Select("""
+           UPDATE read_notification_tb
+           SET status = true WHERE notification_id = #{notificationId} AND receiver_id = #{userId} returning *
+           """)
+   @Results(id = "readNotification",
+            value = {
+            @Result(property = "notificationId", column = "notification_id"),
+            @Result(property = "readerId", column = "receiver_id"),
+            @Result(property = "read", column = "status")
+            }
+   )
+   ReadNotification readNotification(@Param("notificationId") String notificationId, @Param("userId") String userId);
+
+   @Select("""
+           UPDATE read_notification_tb
+           SET status = true WHERE receiver_id = #{userId} returning *;
+           """)
+   @ResultMap("readNotification")
+   List<ReadNotification> readAllNotifications(String userId);
+
+
+   @Select("""
+           SELECT count(*) FROM read_notification_tb WHERE receiver_id = #{userId} AND status = false
+           """)
+    Integer numberOfUnReadNotificationForAuthorAndAdmin(String userId);
+
 
 
 

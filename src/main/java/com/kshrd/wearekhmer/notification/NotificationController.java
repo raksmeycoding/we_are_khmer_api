@@ -1,10 +1,7 @@
 package com.kshrd.wearekhmer.notification;
 
 
-import com.kshrd.wearekhmer.notification.entity.response.AuthorNotificationList;
-import com.kshrd.wearekhmer.notification.entity.response.UserRequestAuthorList;
-import com.kshrd.wearekhmer.notification.entity.response.NotificationResponse;
-import com.kshrd.wearekhmer.notification.entity.response.ViewAuthorRequest;
+import com.kshrd.wearekhmer.notification.entity.response.*;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
@@ -131,6 +128,8 @@ public class NotificationController {
 
         Integer totalRecords = notificationService.totalNotificationOfAllType();
 
+        Integer totalUnRead = notificationMapper.numberOfUnReadNotificationForAuthorAndAdmin(weAreKhmerCurrentUser.getUserId());
+
             List<NotificationResponse> notificationResponses = notificationService.getAllNotificationType(
                     PAGE_SIZE,
                     nextPage
@@ -143,6 +142,7 @@ public class NotificationController {
                         .title("success")
                         .message("You have successfully get all notifications")
                         .payload(notificationResponses)
+                        .unReadNotifications(totalUnRead)
                         .totalRecords(totalRecords)
                         .build();
                 return ResponseEntity.ok(genericResponse);
@@ -164,11 +164,13 @@ public class NotificationController {
 
         GenericResponse genericResponse;
         Integer totalRecords = notificationService.totalNotificationRecordsForCurrentAuthor(weAreKhmerCurrentUser.getUserId());
+        Integer totalUnRead = notificationMapper.numberOfUnReadNotificationForAuthorAndAdmin(weAreKhmerCurrentUser.getUserId());
         List<AuthorNotificationList> authorNotificationLists = notificationService.getAllNotificationForCurrentAuthor(weAreKhmerCurrentUser.getUserId());
 
         if(authorNotificationLists.size()>0){
             genericResponse = GenericResponse.builder()
                     .totalRecords(totalRecords)
+                    .unReadNotifications(totalUnRead)
                     .statusCode(200)
                     .title("success")
                     .message("You have gotten all notification records successfully")
@@ -253,6 +255,37 @@ public class NotificationController {
         return ResponseEntity.ok(genericResponse);
 
 
+    }
+
+    @PostMapping("/readNotification")
+    @Operation(summary = "Read notification by notificationId for admin and author")
+    public ResponseEntity<?> readNotificationById(String notificationId){
+        weAreKhmerValidation.validateNotificationId(weAreKhmerCurrentUser.getUserId(), notificationId);
+
+        ReadNotification read = notificationService.readNotification(notificationId, weAreKhmerCurrentUser.getUserId());
+        GenericResponse genericResponse = GenericResponse.builder()
+                .title("success")
+                .statusCode(201)
+                .message("You have successfully read this notification")
+                .payload(read)
+                .build();
+        return ResponseEntity.ok(genericResponse);
+
+    }
+
+    @PostMapping("/readAllNotifications")
+    @Operation(summary = "Read all notification by userId for author and admin")
+    public ResponseEntity<?> readAllNotifications(){
+        GenericResponse genericResponse;
+        List<ReadNotification> readAllNotificationList = notificationService.readAllNotifications(weAreKhmerCurrentUser.getUserId());
+
+            genericResponse = GenericResponse.builder()
+                    .title("success")
+                    .statusCode(201)
+                    .message("You have successfully read all notification")
+                    .payload(readAllNotificationList)
+                    .build();
+            return ResponseEntity.ok(genericResponse);
     }
 
 
