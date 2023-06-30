@@ -160,12 +160,13 @@ public class NotificationController {
 
     @GetMapping("/author")
     @Operation(summary = "Get all notification for current author")
-    public ResponseEntity<?> getAllNotificationForCurrentAuthor(){
+    public ResponseEntity<?> getAllNotificationForCurrentAuthor(@RequestParam(defaultValue = "1", required = false) Integer page){
 
         GenericResponse genericResponse;
+        Integer nextPage = getNextPage(page);
         Integer totalRecords = notificationService.totalNotificationRecordsForCurrentAuthor(weAreKhmerCurrentUser.getUserId());
         Integer totalUnRead = notificationMapper.numberOfUnReadNotificationForAuthorAndAdmin(weAreKhmerCurrentUser.getUserId());
-        List<AuthorNotificationList> authorNotificationLists = notificationService.getAllNotificationForCurrentAuthor(weAreKhmerCurrentUser.getUserId());
+        List<AuthorNotificationList> authorNotificationLists = notificationService.getAllNotificationForCurrentAuthor(weAreKhmerCurrentUser.getUserId(), PAGE_SIZE,nextPage);
 
         if(authorNotificationLists.size()>0){
             genericResponse = GenericResponse.builder()

@@ -84,7 +84,7 @@ ORDER BY nt.createat DESC limit #{pageNumber} offset #{nextPage}
             INNER JOIN user_tb ut on ut.user_id = nt.sender_id
             INNER JOIN read_notification_tb rnt on rnt.notification_id = nt.notification_id
             WHERE nt.receiver_id = #{authorId}
-            ORDER BY nt.createat DESC;
+            ORDER BY nt.createat DESC  limit #{pageSize} offset #{nextPage};
             ;
             """)
     @Results(id = "authorNotification", value = {
@@ -98,7 +98,7 @@ ORDER BY nt.createat DESC limit #{pageNumber} offset #{nextPage}
             @Result(property = "read", column = "status")
     })
 
-    List<AuthorNotificationList> getAllNotificationForCurrentAuthor(String authorId);
+    List<AuthorNotificationList> getAllNotificationForCurrentAuthor(String authorId, Integer pageSize, Integer nextPage);
 
     @Select("""
             DELETE FROM notification_tb WHERE notification_id = #{notificationId}  AND receiver_id = #{userId}

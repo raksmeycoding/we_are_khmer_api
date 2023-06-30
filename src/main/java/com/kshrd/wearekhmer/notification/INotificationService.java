@@ -17,7 +17,7 @@ public interface INotificationService {
 
     List<NotificationResponse> getAllNotificationType(Integer pageNumber, Integer nextPage);
 
-    List<AuthorNotificationList> getAllNotificationForCurrentAuthor(String authorId);
+    List<AuthorNotificationList> getAllNotificationForCurrentAuthor(String authorId, Integer pageSize, Integer nextPage);
 
     AuthorNotificationList deleteNotificationForCurrentAuthorById(String notificationId);
 
