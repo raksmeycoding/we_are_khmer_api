@@ -15,6 +15,7 @@ public interface ICommentRepository {
             from comment_tb cb inner join article_tb a on a.article_id = cb.article_id inner join user_tb ut on cb.user_id = ut.user_id
             where cb.parent_id is null
               and cb.article_id = #{articleId}
+              ORDER BY createat
             """)
     @Result(property = "comment_id", column = "comment_id")
     @Result(property = "author_reply", column = "comment_id", many = @Many(select = "getAuthorReplyCommentByCommentId"))
