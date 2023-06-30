@@ -13,4 +13,8 @@ public interface EmailService {
     public void sendEmailToAuthor(String to, String name) throws MessagingException;
 
     public void rejectEmailToAuthor(String to, String name) throws MessagingException;
+
+    public void banAnnouncementToAuthor(String to, String name) throws MessagingException;
+
+    public void unBanAnnouncementToAuthor(String to, String name) throws MessagingException;
 }

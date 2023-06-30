@@ -56,8 +56,8 @@ public class NotificationServiceImpl implements INotificationService {
     }
 
     @Override
-    public List<AuthorNotificationList> getAllNotificationForCurrentAuthor(String authorId) {
-        return notificationMapper.getAllNotificationForCurrentAuthor(authorId);
+    public List<AuthorNotificationList> getAllNotificationForCurrentAuthor(String authorId, Integer pageSize, Integer nextPage) {
+        return notificationMapper.getAllNotificationForCurrentAuthor(authorId,pageSize,nextPage);
     }
 
     @Override

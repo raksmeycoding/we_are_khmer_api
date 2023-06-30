@@ -298,7 +298,7 @@ public class AuthorController {
 
     @PutMapping("/admin/banAuthor")
     @Operation(summary = "Ban author for (only admin has permission to ban)")
-    public ResponseEntity<?> banAuthor(@RequestParam("authorId") String authorId){
+    public ResponseEntity<?> banAuthor(@RequestParam("authorId") String authorId) throws MessagingException {
 
         weAreKhmerValidation.checkAuthorExist(authorId);
 
@@ -307,6 +307,8 @@ public class AuthorController {
 
 
         BanAuthor isAuthor = authorServiceImpl.adminBanAuthor(authorId);
+        GetEmailAndNameUser getEmailAndNameUser = authorRepository.getEmailAndName(authorId);
+        emailService.banAnnouncementToAuthor(getEmailAndNameUser.getEmail(),getEmailAndNameUser.getUserName());
 
         GenericResponse genericResponse = GenericResponse.builder()
                 .message("You have successfully banned this author")
@@ -320,7 +322,7 @@ public class AuthorController {
 
     @PutMapping("/admin/unBanAuthor")
     @Operation(summary = "Unban author for (only admin has permission to unban)")
-    public ResponseEntity<?> unBanAuthor(@RequestParam("authorId") String authorId){
+    public ResponseEntity<?> unBanAuthor(@RequestParam("authorId") String authorId) throws MessagingException {
 
         weAreKhmerValidation.checkAuthorExist(authorId);
 
@@ -329,6 +331,9 @@ public class AuthorController {
 
 
         BanAuthor isAuthor = authorServiceImpl.adminUnBanAuthor(authorId);
+        GetEmailAndNameUser getEmailAndNameUser = authorRepository.getEmailAndName(authorId);
+
+        emailService.unBanAnnouncementToAuthor(getEmailAndNameUser.getEmail(), getEmailAndNameUser.getUserName());
 
         GenericResponse genericResponse = GenericResponse.builder()
                 .message("You have successfully unbanned this author")

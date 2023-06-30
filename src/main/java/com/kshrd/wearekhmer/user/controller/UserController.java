@@ -3,16 +3,19 @@ package com.kshrd.wearekhmer.user.controller;
 
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.UserAppDTO;
+import com.kshrd.wearekhmer.user.model.entity.UpdateUserName;
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
 import com.kshrd.wearekhmer.user.model.entity.Users;
 import com.kshrd.wearekhmer.user.repository.UserAppRepository;
 import com.kshrd.wearekhmer.user.service.UserAppService;
+import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +35,8 @@ public class UserController {
     private final UserAppRepository userAppRepository;
 
     private final WeAreKhmerValidation weAreKhmerValidation;
+
+    private final WeAreKhmerCurrentUser weAreKhmerCurrentUser;
 
     private static final Integer PAGE_SIZE = 10;
 
@@ -103,6 +108,23 @@ public class UserController {
                 .title("failure")
                 .message("There's no data")
                 .statusCode(404)
+                .build();
+
+        return ResponseEntity.ok(genericResponse);
+
+    }
+
+    @PutMapping("/updateName")
+    @Operation(summary = "Update username for current user")
+    public ResponseEntity<?> updateName(@RequestBody @Valid UpdateUserName user){
+
+        UpdateUserName updateUserName = userAppService.UpdateUserName(user.getUserName(), weAreKhmerCurrentUser.getUserId());
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .title("success")
+                .message("You have successfully updated your name")
+                .statusCode(200)
+                .payload(updateUserName)
                 .build();
 
         return ResponseEntity.ok(genericResponse);
