@@ -121,4 +121,38 @@ public class EmailServiceImpl implements EmailService{
         mimeMessageHelper.setFrom("no-reply@ethandev.com");
         mailSender.send(mimeMessage);
     }
+
+    @Override
+    public void banAnnouncementToAuthor(String to, String name) throws MessagingException {
+        SimpleMailMessage message = new SimpleMailMessage();
+        Context context = new Context();
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        context.setVariables(map);
+        String process = springTemplateEngine.process("ban-announcement-email", context);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(to);
+        mimeMessageHelper.setText(process, true);
+        mimeMessageHelper.setSubject("Ban announcement");
+        mimeMessageHelper.setFrom("no-reply@ethandev.com");
+        mailSender.send(mimeMessage);
+    }
+
+    @Override
+    public void unBanAnnouncementToAuthor(String to, String name) throws MessagingException {
+        SimpleMailMessage message = new SimpleMailMessage();
+        Context context = new Context();
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        context.setVariables(map);
+        String process = springTemplateEngine.process("unban-announcement-email", context);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(to);
+        mimeMessageHelper.setText(process, true);
+        mimeMessageHelper.setSubject("Unban announcement");
+        mimeMessageHelper.setFrom("no-reply@ethandev.com");
+        mailSender.send(mimeMessage);
+    }
 }
