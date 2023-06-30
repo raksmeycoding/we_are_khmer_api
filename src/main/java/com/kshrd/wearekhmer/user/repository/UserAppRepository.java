@@ -3,6 +3,7 @@ package com.kshrd.wearekhmer.user.repository;
 
 import com.kshrd.wearekhmer.repository.WeAreKhmerRepositorySupport;
 import com.kshrd.wearekhmer.user.model.dto.UserAppDTO;
+import com.kshrd.wearekhmer.user.model.entity.UpdateUserName;
 import com.kshrd.wearekhmer.user.model.entity.Users;
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
 import io.swagger.models.auth.In;
@@ -57,6 +58,18 @@ public interface UserAppRepository extends WeAreKhmerRepositorySupport {
             SELECT count(user_id) FROM user_tb WHERE is_author = #{isAuthor} AND is_enable = true;
             """)
     Integer countUserOrAuthor(boolean isAuthor);
+
+
+
+    @Select("""
+            UPDATE user_tb 
+            SET username = #{userName}
+            WHERE user_id = #{userId}
+            returning username
+            """)
+    UpdateUserName updateUserName(@Param("userName") String userName, @Param("userId") String userId);
+
+
 
 
 

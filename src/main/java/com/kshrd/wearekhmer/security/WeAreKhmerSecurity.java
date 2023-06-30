@@ -206,6 +206,7 @@ public class WeAreKhmerSecurity {
                 .requestMatchers("/api/v1/user//admin/getAllUser/{isAuthor}").hasRole("ADMIN")
                 .requestMatchers("/api/v1/notification/readNotification").hasAnyRole("ADMIN","AUTHOR")
                 .requestMatchers("/api/v1/notification/readAllNotifications").hasAnyRole("ADMIN","AUTHOR")
+                .requestMatchers("api/v1/user/updateName").hasAnyRole("ADMIN", "USER", "AUTHOR")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()
                 .anyRequest()

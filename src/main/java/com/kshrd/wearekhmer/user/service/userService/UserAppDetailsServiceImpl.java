@@ -2,6 +2,7 @@ package com.kshrd.wearekhmer.user.service.userService;
 
 
 import com.kshrd.wearekhmer.user.model.dto.UserAppDTO;
+import com.kshrd.wearekhmer.user.model.entity.UpdateUserName;
 import com.kshrd.wearekhmer.user.model.entity.Users;
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
 import com.kshrd.wearekhmer.requestRequest.NormalUserRequest;
@@ -78,5 +79,10 @@ public class UserAppDetailsServiceImpl implements UserAppService, UserDetailsSer
     @Override
     public List<Users> getUserOrAuthor(boolean isAuthor, Integer pageNumber, Integer nextPage) {
         return userAppRepository.dynamicUserAndAuthor(isAuthor,pageNumber,nextPage);
+    }
+
+    @Override
+    public UpdateUserName UpdateUserName(String userName, String userId) {
+        return userAppRepository.updateUserName(userName,userId);
     }
 }
