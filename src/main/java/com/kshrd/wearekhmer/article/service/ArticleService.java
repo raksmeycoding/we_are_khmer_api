@@ -20,6 +20,7 @@ public interface ArticleService {
     List<ArticleResponse> getArticlesForCurrentUserWithPaginate(String userId, Integer pageSize, Integer nextPage);
 
     ArticleResponse2 getArticleById(String articleId, String userId);
+    ArticleResponse2 getArticleStatusById(String articleId, String userId);
 
     ArticleResponse2 getArticleByIdForCurrentUser(String articleId, String currentUserId);
 

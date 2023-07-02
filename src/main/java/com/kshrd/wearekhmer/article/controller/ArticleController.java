@@ -251,6 +251,40 @@ public class ArticleController {
         }
     }
 
+
+
+    @GetMapping("/{articleId}/status")
+    @Operation(summary = "(Get article status by id)")
+    public ResponseEntity<?> getArticleStatusById(@PathVariable String articleId,
+                                            @RequestParam(value = "userId", required = false) String userId) {
+        GenericResponse genericResponse;
+        weAreKhmerValidation.validateArticleId(articleId);
+        if(articleMapper.checkArticleIsBan(articleId))
+            throw new ValidateException("Article is already banned ", HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value());
+        try {
+            ArticleResponse2 article = articleService.getArticleStatusById(articleId, userId);
+            genericResponse =
+                    GenericResponse
+                            .builder()
+                            .statusCode(200)
+                            .title("success")
+                            .message("request successfully")
+                            .payload(article)
+                            .build();
+            return ResponseEntity.ok(genericResponse);
+        } catch (Exception ex) {
+            genericResponse =
+                    GenericResponse
+                            .builder()
+                            .title("request failed")
+                            .statusCode(500)
+                            .message(ex.getMessage())
+                            .build();
+            ex.printStackTrace();
+            return ResponseEntity.internalServerError().body(genericResponse);
+        }
+    }
+
     @GetMapping("/author/{articleId}")
     @Operation(summary = "(Get article by id for current author)")
     public ResponseEntity<?> getArticleByIdForCurrentUser(

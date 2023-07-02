@@ -45,6 +45,7 @@ public class WeAreKhmerSecurity {
             "/api/v1/category",
             "/api/v1/article",
             "/api/v1/article/{articleId}",
+            "/api/v1/article/{articleId}/status",
             "/api/v1/review/**",
             "/api/v1/auth/register",
             "/api/v1/category/{categoryId}",

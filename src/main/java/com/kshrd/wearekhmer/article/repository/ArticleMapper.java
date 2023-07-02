@@ -195,6 +195,20 @@ public interface ArticleMapper {
     ArticleResponse2 getArticleById(String articleId, String userId);
 
 
+    @Select("""
+            select ab.article_id,
+                   (select count(*) from react_tb where react_tb.article_id = ab.article_id)  as react_count, 
+                   (CASE WHEN bt.user_id = #{userId} THEN true ELSE false END) AS bookmarked, (CASE WHEN rt.status = true THEN true ELSE false END) AS reacted from article_tb ab
+                     inner join user_tb ub on ab.user_id = ub.user_id
+                     inner join category c on c.category_id = ab.category_id
+                     left outer join bookmark_tb bt on ab.article_id = bt.article_id AND bt.user_id = #{userId}
+                     left outer join react_tb rt on ab.article_id = rt.article_id AND rt.user_id = #{userId}
+            where ab.article_id = #{articleId} AND ab.isban = false
+            """)
+    @Result(property = "updateAt", column = "updatedat")
+    ArticleResponse2 getArticleStatusById(String articleId, String userId);
+
+
 
 
     @Select("""

@@ -65,6 +65,11 @@ public class ArticleServiceImp implements ArticleService {
     }
 
     @Override
+    public ArticleResponse2 getArticleStatusById(String articleId, String userId) {
+        return articleMapper.getArticleStatusById(articleId, userId);
+    }
+
+    @Override
     public ArticleResponse2 getArticleByIdForCurrentUser(String articleId, String currentUserId) {
         return articleMapper.getArticleByIdForCurrentUser(articleId, currentUserId);
     }
