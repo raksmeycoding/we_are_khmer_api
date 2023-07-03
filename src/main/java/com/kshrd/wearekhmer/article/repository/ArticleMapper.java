@@ -299,8 +299,20 @@ public interface ArticleMapper {
     List<com.kshrd.wearekhmer.article.model.Response.ArticleResponse> getArticleByMostViewLimit20();
 
 
+//    @Select("""
+//            update article_tb set count_view = count_view + 1 where article_id = #{articleId} returning article_id;
+//            """)
+
     @Select("""
-            update article_tb set count_view = count_view + 1 where article_id = #{articleId} returning article_id;
+            WITH updated_article AS (
+              UPDATE article_tb
+              SET count_view = count_view + 1
+              WHERE article_id = #{articleId}
+              RETURNING *
+            )
+            INSERT INTO view_tb (view_id, createat, article_id, author_id)
+            SELECT uuid_generate_v4(), CURRENT_TIMESTAMP, article_id, user_id
+            FROM updated_article;
             """)
     String increaseArticleViewCount(String articleId);
 
@@ -644,49 +656,89 @@ public interface ArticleMapper {
     List<ArticleResponse2> getAllArticleCurrentUserPerYear(String userId, Integer pageNumber, Integer nextPage);
 
 
+//    @Select("""
+//            SELECT COALESCE(SUM(count_view),0) AS total_views
+//            FROM article_tb
+//            WHERE DATE_TRUNC('week', publish_date) = DATE_TRUNC('week', current_date) AND user_id = #{userId}
+//            """)
+
     @Select("""
-            SELECT COALESCE(SUM(count_view),0) AS total_views
-            FROM article_tb
-            WHERE DATE_TRUNC('week', publish_date) = DATE_TRUNC('week', current_date) AND user_id = #{userId}
+            SELECT count(*) AS total_views
+            FROM view_tb
+            WHERE DATE_TRUNC('week', createat) = DATE_TRUNC('week', current_date) AND author_id = #{userId};
             """)
     Integer getTotalViewCurrentAuthorPerWeek(String userId);
 
+//    @Select("""
+//            SELECT COALESCE(SUM(count_view),0) AS total_views
+//            FROM article_tb
+//            WHERE EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
+//              AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND user_id = #{userId}
+//            """)
     @Select("""
-            SELECT COALESCE(SUM(count_view),0) AS total_views
-            FROM article_tb
-            WHERE EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
-              AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND user_id = #{userId}
+            SELECT count(*) AS total_views
+            FROM view_tb
+            WHERE EXTRACT(MONTH FROM createat) = EXTRACT(MONTH FROM current_date)
+              AND EXTRACT(YEAR FROM createat) = EXTRACT(YEAR FROM current_date) AND author_id = #{userId};
             """)
     Integer getTotalViewCurrentAuthorPerMonth(String userId);
 
+//    @Select("""
+//            SELECT COALESCE(SUM(count_view),0) AS total_views
+//            FROM article_tb
+//            WHERE date_trunc('year', publish_date) = date_trunc('year', current_date)
+//                    AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND user_id = #{userId}
+//            """)
+
     @Select("""
-            SELECT COALESCE(SUM(count_view),0) AS total_views
-            FROM article_tb
-            WHERE date_trunc('year', publish_date) = date_trunc('year', current_date)
-                    AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND user_id = #{userId}
+            SELECT count(*) AS total_views
+            FROM view_tb
+            WHERE date_trunc('year', createat) = date_trunc('year', current_date)
+              AND EXTRACT(YEAR FROM createat) = EXTRACT(YEAR FROM current_date) AND author_id = #{userId};
             """)
     Integer getTotalViewCurrentAuthorPerYear(String userId);
 
+//    @Select("""
+//            SELECT COALESCE(SUM(count_view),0) AS total_views
+//            FROM article_tb
+//            WHERE DATE_TRUNC('week', publish_date) = DATE_TRUNC('week', current_date)
+//            """)
     @Select("""
-            SELECT COALESCE(SUM(count_view),0) AS total_views
-            FROM article_tb
-            WHERE DATE_TRUNC('week', publish_date) = DATE_TRUNC('week', current_date)
+            SELECT count(*) AS total_views
+            FROM view_tb
+            WHERE DATE_TRUNC('week', createat) = DATE_TRUNC('week', current_date);
             """)
     Integer getTotalViewAdminPerWeek();
 
+//    @Select("""
+//            SELECT COALESCE(SUM(count_view),0) AS total_views
+//            FROM article_tb
+//            WHERE EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
+//              AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date);
+//            """)
+
     @Select("""
-            SELECT COALESCE(SUM(count_view),0) AS total_views
-            FROM article_tb
-            WHERE EXTRACT(MONTH FROM publish_date) = EXTRACT(MONTH FROM current_date)
-              AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date);
+            SELECT count(*) AS total_views
+            FROM view_tb
+            WHERE EXTRACT(MONTH FROM createat) = EXTRACT(MONTH FROM current_date)
+              AND EXTRACT(YEAR FROM createat) = EXTRACT(YEAR FROM current_date);
             """)
     Integer getTotalViewAdminPerMonth();
+
+
+//    @Select("""
+//            SELECT count(*) AS total_views
+//            FROM view_tb
+//            WHERE date_trunc('year', createat) = date_trunc('year', current_date)
+//              AND EXTRACT(YEAR FROM createat) = EXTRACT(YEAR FROM current_date);
+//            """)
 
     @Select("""
             SELECT COALESCE(SUM(count_view),0) AS total_views FROM article_tb
             WHERE date_trunc('year', publish_date) = date_trunc('year', current_date)
             AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date)
             """)
+
     Integer getTotalViewAdminPerYear();
 
 

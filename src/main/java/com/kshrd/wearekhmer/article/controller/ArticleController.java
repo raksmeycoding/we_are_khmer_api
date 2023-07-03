@@ -524,11 +524,12 @@ public class ArticleController {
             String returnArticleId = articleService.increaseArticleViewCount(
                     articleId
             );
-            if (returnArticleId == null || returnArticleId.isEmpty()) {
-                throw new CustomRuntimeException(
-                        "This article id " + articleId + " is not is not exist"
-                );
-            }
+
+//            if (returnArticleId == null || returnArticleId.isEmpty()) {
+//                throw new CustomRuntimeException(
+//                        "This article id " + articleId + " is not is not exist"
+//                );
+//            }
             return ResponseEntity
                     .ok()
                     .body(
@@ -951,7 +952,6 @@ public class ArticleController {
 
     @Operation(summary = "(Get total views per week for current author )")
     @GetMapping("/author/TotalViewPerWeek")
-    @Hidden
     public ResponseEntity<?> getTotalViewCurrentAuthorPerWeek(
     ) {
         weAreKhmerValidation.checkAuthorExist(weAreKhmerCurrentUser.getUserId());
@@ -969,7 +969,6 @@ public class ArticleController {
 
     @Operation(summary = "(Get total views per month for current author )")
     @GetMapping("/author/TotalViewPerMonth")
-    @Hidden
     public ResponseEntity<?> getTotalViewCurrentAuthorPerMonth(
     ) {
         weAreKhmerValidation.checkAuthorExist(weAreKhmerCurrentUser.getUserId());
@@ -987,7 +986,6 @@ public class ArticleController {
 
     @Operation(summary = "(Get total views per year for current author )")
     @GetMapping("/author/TotalViewPerYear")
-    @Hidden
     public ResponseEntity<?> getTotalViewCurrentAuthorPerYear(
     ) {
         weAreKhmerValidation.checkAuthorExist(weAreKhmerCurrentUser.getUserId());
@@ -1134,4 +1132,6 @@ public class ArticleController {
         return ResponseEntity.ok(genericResponse);
 
     }
+
+
 }

@@ -74,6 +74,7 @@ public interface ArticleService {
     Integer getTotalViewAdminPerYear();
 
 
+
     //    List<ArticleResponse> filterArticles(String title, String categoryId);
     boolean adminBanArticle(String articleId);
 
