@@ -684,18 +684,20 @@ public interface ArticleMapper {
     Integer getTotalViewCurrentAuthorPerMonth(String userId);
 
 //    @Select("""
-//            SELECT COALESCE(SUM(count_view),0) AS total_views
-//            FROM article_tb
-//            WHERE date_trunc('year', publish_date) = date_trunc('year', current_date)
-//                    AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND user_id = #{userId}
+//            SELECT count(*) AS total_views
+//            FROM view_tb
+//            WHERE date_trunc('year', createat) = date_trunc('year', current_date)
+//              AND EXTRACT(YEAR FROM createat) = EXTRACT(YEAR FROM current_date) AND author_id = #{userId};
 //            """)
 
     @Select("""
-            SELECT count(*) AS total_views
-            FROM view_tb
-            WHERE date_trunc('year', createat) = date_trunc('year', current_date)
-              AND EXTRACT(YEAR FROM createat) = EXTRACT(YEAR FROM current_date) AND author_id = #{userId};
+            SELECT COALESCE(SUM(count_view),0) AS total_views
+            FROM article_tb
+            WHERE date_trunc('year', publish_date) = date_trunc('year', current_date)
+                    AND EXTRACT(YEAR FROM publish_date) = EXTRACT(YEAR FROM current_date) AND user_id = #{userId}
             """)
+
+
     Integer getTotalViewCurrentAuthorPerYear(String userId);
 
 //    @Select("""
