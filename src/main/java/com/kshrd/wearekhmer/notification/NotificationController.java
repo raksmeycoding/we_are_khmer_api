@@ -138,38 +138,67 @@ public class NotificationController {
 //            System.out.println(notificationResponses);
 
         List<NotificationResponse> getNotificationReportArticle = notificationMapper.getNotificationReportArticle();
-        System.out.println(getNotificationReportArticle.size());
 
-        Set<NotificationResponse> responses = new LinkedHashSet<>();
+        Set<NotificationResponse> responses = new HashSet<>();
 
-        List<NotificationResponse> store = new ArrayList<>();
+        List<NotificationResponse> storeAllArticle = new ArrayList<>();
+
+
 
 
 
         for(NotificationResponse data : getNotificationReportArticle){
                 responses.add(data);
-                store.add(data);
+                storeAllArticle.add(data);
         }
 
-        if(responses.size()<store.size()){
-            store.clear();
-            store.addAll(responses);
+        if(responses.size()<storeAllArticle.size()){
+            storeAllArticle.clear();
+            storeAllArticle.addAll(responses);
         }
 
-        System.out.println(store.size());
-        System.out.println(responses.size());
 
 
         List<NotificationResponse> getNotificationReportAuthor = notificationMapper.getNotificationReportAuthor();
 
+        Set<NotificationResponse> storeGetNotificationReportAuthor = new HashSet<>();
+
+        List<NotificationResponse> storeAuthor = new ArrayList<>();
+
+        for(NotificationResponse data : getNotificationReportAuthor){
+            storeGetNotificationReportAuthor.add(data);
+            storeAuthor.add(data);
+        }
+
+        if(storeGetNotificationReportAuthor.size()<storeAuthor.size()){
+            storeAuthor.clear();
+            storeAuthor.addAll(storeGetNotificationReportAuthor);
+        }
 
         List<NotificationResponse> getNotificationRequestAsAuthor = notificationMapper.getNotificationRequestAsAuthor();
 
+        Set<NotificationResponse> storeGetNotificationRequest = new HashSet<>();
+
+        List<NotificationResponse> storeRequest = new ArrayList<>();
+
+        for(NotificationResponse data : getNotificationRequestAsAuthor){
+            storeGetNotificationRequest.add(data);
+            storeRequest.add(data);
+        }
+
+        if(storeGetNotificationRequest.size()<storeRequest.size()){
+            storeRequest.clear();
+            storeRequest.addAll(storeGetNotificationRequest);
+        }
+
 
         List<NotificationResponse> notificationResponses = new ArrayList<>();
-        notificationResponses.addAll(getNotificationReportAuthor);
-        notificationResponses.addAll(getNotificationRequestAsAuthor);
-        notificationResponses.addAll(store);
+        notificationResponses.addAll(storeRequest);
+        notificationResponses.addAll(storeAuthor);
+        notificationResponses.addAll(storeAllArticle);
+
+
+        notificationResponses.sort(Comparator.comparing(NotificationResponse::getDate).reversed());
 
 
         int startIndex = (page - 1) * PAGE_SIZE;
@@ -180,11 +209,6 @@ public class NotificationController {
                 .skip(startIndex)
                 .limit(endIndex - startIndex)
                 .collect(Collectors.toList());
-
-
-
-
-
 
             if(paginatedList.size()>0){
                 genericResponse = GenericResponse.builder()
