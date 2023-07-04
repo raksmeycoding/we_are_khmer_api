@@ -742,14 +742,25 @@ public class ArticleController {
                 nextPage,
                 userId
         );
+
+        if(articleResponseList.size()>0){
+            GenericResponse genericResponse = GenericResponse.builder()
+                    .statusCode(200)
+                    .totalRecords(totalArticleEachCategory)
+                    .title("success")
+                    .payload(articleResponseList)
+                    .message("You have successfully get articles in this category")
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+        }
         GenericResponse genericResponse = GenericResponse.builder()
-                .statusCode(200)
+                .statusCode(404)
                 .totalRecords(totalArticleEachCategory)
-                .title("success")
-                .payload(articleResponseList)
-                .message("You have successfully get articles in this category")
+                .title("failure")
+                .message("There's no article in this categoryId")
                 .build();
         return ResponseEntity.ok(genericResponse);
+
     }
 
     @Operation(summary = "(Get most-view articles for current author)")

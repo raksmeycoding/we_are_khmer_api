@@ -941,7 +941,7 @@ where ab.article_id = #{articleId}
 
 
     @Select("""
-            SELECT count(*) FROM article_tb WHERE category_id = #{categoryId}
+            SELECT count(*) FROM article_tb WHERE category_id = #{categoryId} AND isban = false
             """)
     Integer totalArticleEachCategory(String categoryId);
 
