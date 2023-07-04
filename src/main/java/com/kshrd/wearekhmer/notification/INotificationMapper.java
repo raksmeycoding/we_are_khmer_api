@@ -7,6 +7,7 @@ import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper
 public interface INotificationMapper {
@@ -225,7 +226,59 @@ ORDER BY nt.createat DESC limit #{pageNumber} offset #{nextPage}
     Integer numberOfUnReadNotificationForAuthorAndAdmin(String userId);
 
 
+    @Select("""
+SELECT nt.notification_id, nt.notification_type, nt.createat, nt.sender_name, nt.sender_image_url,rnt.status, nt.notification_type_id ,
+                urat.reason FROM notification_tb nt
+                                     INNER JOIN user_report_author_tb urat on nt.notification_type = 'USER_REPORT_AUTHOR' AND notification_type_id = urat.author_id
+                                     INNER JOIN read_notification_tb rnt on nt.notification_id = rnt.notification_id
+WHERE notification_type = 'USER_REPORT_AUTHOR';
+            """)
+    @Result(property = "notificationId", column = "notification_id")
+    @Result(property = "notificationTypeId", column = "notification_type_id")
+    @Result(property = "date", column = "createat")
+    @Result(property = "profile", column = "sender_image_url")
+    @Result(property = "senderName", column = "sender_name")
+    @Result(property = "notificationType", column = "notification_type")
+    @Result(property = "read", column = "status")
+    List<NotificationResponse> getNotificationReportAuthor();
 
+
+//    @Select("""
+//SELECT DISTINCT article_id, crate_at, reason, ut.user_id, ut.username, ut.photo_url FROM report_tb
+//INNER JOIN user_tb ut on report_tb.user_id = ut.user_id
+//INNER JOIN notification_tb nt on nt.notification_type_id = report_tb.article_id
+//WHERE notification_type = 'REPORT_ON_ARTICLE'
+//            """)
+    @Select("""
+SELECT nt.*, rnt.status, rt.reason FROM notification_tb nt
+            INNER JOIN read_notification_tb rnt on nt.notification_id = rnt.notification_id
+            LEFT JOIN report_tb rt on nt.notification_type_id =  rt.article_id
+            WHERE notification_type = 'REPORT_ON_ARTICLE'
+            """)
+    @Result(property = "notificationId", column = "notification_id")
+    @Result(property = "notificationTypeId", column = "notification_type_id")
+    @Result(property = "date", column = "createat")
+    @Result(property = "profile", column = "sender_image_url")
+    @Result(property = "senderName", column = "sender_name")
+    @Result(property = "notificationType", column = "notification_type")
+    @Result(property = "read", column = "status")
+    List<NotificationResponse> getNotificationReportArticle();
+
+    @Select("""
+SELECT nt.notification_id, nt.notification_type, nt.createat, nt.sender_name, nt.sender_image_url,rnt.status,nt.notification_type_id ,
+                art.reason FROM notification_tb nt
+                                    INNER JOIN author_request_tb art on nt.notification_type = 'USER_REQUEST_AS_AUTHOR' AND notification_type_id = art.user_id
+                                    INNER JOIN read_notification_tb rnt on nt.notification_id = rnt.notification_id
+WHERE notification_type = 'USER_REQUEST_AS_AUTHOR';
+            """)
+    @Result(property = "notificationId", column = "notification_id")
+    @Result(property = "notificationTypeId", column = "notification_type_id")
+    @Result(property = "date", column = "createat")
+    @Result(property = "profile", column = "sender_image_url")
+    @Result(property = "senderName", column = "sender_name")
+    @Result(property = "notificationType", column = "notification_type")
+    @Result(property = "read", column = "status")
+    List<NotificationResponse> getNotificationRequestAsAuthor();
 
 
 

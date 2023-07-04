@@ -19,7 +19,8 @@ import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequestMapping("/api/v1/notification")
 @RestController
@@ -124,29 +125,78 @@ public class NotificationController {
 
 
         GenericResponse genericResponse;
-        Integer nextPage = getNextPage(page);
+
 
         Integer totalRecords = notificationService.totalNotificationOfAllType();
 
         Integer totalUnRead = notificationMapper.numberOfUnReadNotificationForAuthorAndAdmin(weAreKhmerCurrentUser.getUserId());
 
-            List<NotificationResponse> notificationResponses = notificationService.getAllNotificationType(
-                    PAGE_SIZE,
-                    nextPage
-            );
-            System.out.println(notificationResponses);
+//            List<NotificationResponse> notificationResponses = notificationService.getAllNotificationType(
+//                    PAGE_SIZE,
+//                    nextPage
+//            );
+//            System.out.println(notificationResponses);
 
-            if(notificationResponses.size()>0){
+        List<NotificationResponse> getNotificationReportArticle = notificationMapper.getNotificationReportArticle();
+        System.out.println(getNotificationReportArticle.size());
+
+        Set<NotificationResponse> responses = new LinkedHashSet<>();
+
+        List<NotificationResponse> store = new ArrayList<>();
+
+
+
+        for(NotificationResponse data : getNotificationReportArticle){
+                responses.add(data);
+                store.add(data);
+        }
+
+        if(responses.size()<store.size()){
+            store.clear();
+            store.addAll(responses);
+        }
+
+        System.out.println(store.size());
+        System.out.println(responses.size());
+
+
+        List<NotificationResponse> getNotificationReportAuthor = notificationMapper.getNotificationReportAuthor();
+
+
+        List<NotificationResponse> getNotificationRequestAsAuthor = notificationMapper.getNotificationRequestAsAuthor();
+
+
+        List<NotificationResponse> notificationResponses = new ArrayList<>();
+        notificationResponses.addAll(getNotificationReportAuthor);
+        notificationResponses.addAll(getNotificationRequestAsAuthor);
+        notificationResponses.addAll(store);
+
+
+        int startIndex = (page - 1) * PAGE_SIZE;
+        int endIndex = Math.min(startIndex + PAGE_SIZE, notificationResponses.size());
+
+        // Retrieve the paginated list
+        List<NotificationResponse> paginatedList = notificationResponses.stream()
+                .skip(startIndex)
+                .limit(endIndex - startIndex)
+                .collect(Collectors.toList());
+
+
+
+
+
+
+            if(paginatedList.size()>0){
                 genericResponse = GenericResponse.builder()
                         .statusCode(200)
                         .title("success")
                         .message("You have successfully get all notifications")
-                        .payload(notificationResponses)
+                        .payload(paginatedList)
                         .unReadNotifications(totalUnRead)
                         .totalRecords(totalRecords)
                         .build();
                 return ResponseEntity.ok(genericResponse);
-            }else{
+            }
                 genericResponse = GenericResponse.builder()
                         .statusCode(404)
                         .title("failure")
@@ -154,7 +204,6 @@ public class NotificationController {
                         .totalRecords(totalRecords)
                         .build();
                 return ResponseEntity.ok(genericResponse);
-            }
 
         }
 
