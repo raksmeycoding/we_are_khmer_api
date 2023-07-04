@@ -307,14 +307,30 @@ public class NotificationController {
         weAreKhmerValidation.validateReportType(status.toUpperCase());
 
         List<NotificationResponse> responseList = notificationService.getNotificationTypeReport(PAGE_SIZE,nextPage,status.toUpperCase());
+
+        Set<NotificationResponse> list = new HashSet<>();
+
+        List<NotificationResponse> store = new ArrayList<>();
+
+        for(NotificationResponse data : responseList){
+            list.add(data);
+            store.add(data);
+        }
+
+        if(list.size()<store.size()){
+            store.clear();
+            store.addAll(list);
+        }
+
+
         Integer totalRecord = notificationMapper.totalRecordNotificationTypeReport(status);
 
 
-        if(responseList.size()>0){
+        if(store.size()>0){
             genericResponse = GenericResponse.builder()
                     .totalRecords(totalRecord)
                     .statusCode(200)
-                    .payload(responseList)
+                    .payload(store)
                     .title("success")
                     .message("You have gotten notification reports successfully")
                     .build();
