@@ -58,8 +58,10 @@ public class HeroCardController {
         weAreKhmerValidation.validateHeroCardIndexExist(heroCardRequest.getIndex(), heroCardRequest.getType(), heroCardRequest.getCategoryId());
         weAreKhmerValidation.checkArticleAlreadyExistInHeroCard(heroCardRequest.getCategoryId(), heroCardRequest.getArticleId(),heroCardRequest.getType());
 
-        if(heroCardRepository.checkIndexAndHomeHasRecord(heroCardRequest.getIndex()))
-            throw new ValidateException("Index is not available ", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+        if(heroCardRequest.getType().equals("home")) {
+            if(heroCardRepository.checkIndexAndHomeHasRecord(heroCardRequest.getIndex()))
+                throw new ValidateException("Index is not available ", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+        }
 
 
 
