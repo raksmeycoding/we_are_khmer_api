@@ -940,5 +940,10 @@ where ab.article_id = #{articleId}
     Integer totalBanArticle();
 
 
+    @Select("""
+            SELECT count(*) FROM article_tb WHERE category_id = #{categoryId}
+            """)
+    Integer totalArticleEachCategory(String categoryId);
+
 
 }

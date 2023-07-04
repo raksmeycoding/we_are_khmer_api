@@ -735,6 +735,7 @@ public class ArticleController {
     ) {
         weAreKhmerValidation.validateCategoryId(categoryId);
         Integer nextPage = getNextPage(page);
+        Integer totalArticleEachCategory = articleMapper.totalArticleEachCategory(categoryId);
         List<ArticleResponse2> articleResponseList = articleService.getAllArticleByCategoryId(
                 categoryId,
                 PAGE_SIZE,
@@ -743,6 +744,7 @@ public class ArticleController {
         );
         GenericResponse genericResponse = GenericResponse.builder()
                 .statusCode(200)
+                .totalRecords(totalArticleEachCategory)
                 .title("success")
                 .payload(articleResponseList)
                 .message("You have successfully get articles in this category")
