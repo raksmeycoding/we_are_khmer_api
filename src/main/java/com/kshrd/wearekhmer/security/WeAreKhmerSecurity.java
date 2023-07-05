@@ -136,7 +136,7 @@ public class WeAreKhmerSecurity {
                 .authorizeHttpRequests()
 //                ⚠️ Smey
 //                feature user report author
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/report/author/{reportId}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/report/author").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/v1/report/author").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/v1/report/author/{reportId}").hasRole("USER")
                 .requestMatchers(HttpMethod.POST, "/api/v1/report/author/admin/approveOrReject/{authorId}").hasRole("ADMIN")
@@ -161,7 +161,7 @@ public class WeAreKhmerSecurity {
                 .hasAnyRole("AUTHOR", "USER")
                 .requestMatchers(HttpMethod.GET, "/api/v1/report")
                 .hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/report/{reportId}")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/report")
                 .hasRole("ADMIN")
                 .requestMatchers("/api/v1/history/**")
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")

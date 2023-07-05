@@ -1,6 +1,8 @@
 package com.kshrd.wearekhmer.notification;
 
 import com.kshrd.wearekhmer.notification.entity.response.*;
+import com.kshrd.wearekhmer.userReport.response.ReportArticleResponse;
+import com.kshrd.wearekhmer.userReport.response.ReportAuthorResponse;
 
 import java.util.List;
 
@@ -36,6 +38,8 @@ public interface INotificationService {
     ReadNotification readNotification(String notificationId, String userId);
 
     List<ReadNotification> readAllNotifications(String userId);
+
+
 
 
 

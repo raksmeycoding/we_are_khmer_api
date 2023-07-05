@@ -3,11 +3,11 @@ package com.kshrd.wearekhmer.notification;
 
 import com.kshrd.wearekhmer.notification.entity.response.*;
 import com.kshrd.wearekhmer.userReport.model.reportUser.UserReportAuthorDatabaseReponse;
-import io.swagger.models.auth.In;
+import com.kshrd.wearekhmer.userReport.response.ReportArticleResponse;
+import com.kshrd.wearekhmer.userReport.response.ReportAuthorResponse;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
-import java.util.Set;
 
 @Mapper
 public interface INotificationMapper {
@@ -279,6 +279,9 @@ WHERE notification_type = 'USER_REQUEST_AS_AUTHOR';
     @Result(property = "notificationType", column = "notification_type")
     @Result(property = "read", column = "status")
     List<NotificationResponse> getNotificationRequestAsAuthor();
+
+
+
 
 
 

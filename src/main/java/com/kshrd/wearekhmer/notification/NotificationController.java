@@ -3,22 +3,18 @@ package com.kshrd.wearekhmer.notification;
 
 import com.kshrd.wearekhmer.notification.entity.response.*;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
+import com.kshrd.wearekhmer.userReport.response.ReportArticleResponse;
+import com.kshrd.wearekhmer.userReport.response.ReportAuthorResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -377,6 +373,5 @@ public class NotificationController {
                     .build();
             return ResponseEntity.ok(genericResponse);
     }
-
 
 }

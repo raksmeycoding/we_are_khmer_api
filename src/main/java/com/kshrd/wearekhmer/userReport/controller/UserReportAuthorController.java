@@ -10,6 +10,8 @@ import com.kshrd.wearekhmer.userReport.request.userReportAuthor.AdminIsApproveMa
 import com.kshrd.wearekhmer.userReport.request.userReportAuthor.AdminIsApproveRequestBody;
 import com.kshrd.wearekhmer.userReport.request.userReportAuthor.UserReportAuthorRequest;
 import com.kshrd.wearekhmer.userReport.request.userReportAuthor.UserReportAuthorRequestBody;
+import com.kshrd.wearekhmer.userReport.response.ReportArticleResponse;
+import com.kshrd.wearekhmer.userReport.response.ReportAuthorResponse;
 import com.kshrd.wearekhmer.userReport.service.reportUser.IUserReportAuthorService;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
@@ -45,6 +47,21 @@ public class UserReportAuthorController {
     private final UserReportAuthorMapper userReportAuthorMapper;
 
 
+    private final static Integer PAGE_SIZE = 10;
+
+    private Integer getNextPage(Integer page) {
+        int numberOfRecord = serviceClassHelper.getTotalOfRecordInArticleTb();
+        System.out.println(numberOfRecord);
+        int totalPage = (int) Math.ceil((double) numberOfRecord / PAGE_SIZE);
+        System.out.println(totalPage);
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        weAreKhmerValidation.validatePageNumber(page);
+        return (page - 1) * PAGE_SIZE;
+    }
+
+
     @PostMapping("/{authorId}")
     @Operation(summary = "(User can report author)")
     public ResponseEntity<?> insertUserReportAuthor(HttpServletRequest httpServletRequest, @PathVariable String authorId, @RequestBody @Validated UserReportAuthorRequestBody userReportAuthorRequestBody) {
@@ -66,34 +83,34 @@ public class UserReportAuthorController {
     }
 
 
-    @GetMapping
-    @Operation(summary = "(Admin Get all user report author)")
-    public ResponseEntity<?> getAllUserReportAuthor() {
-        List<UserReportAuthorDatabaseReponse> userReportAuthorDatabaseReponses = userReportAuthorService.getAllUserReportAuthor();
-        return ResponseEntity.ok().body(GenericResponse.builder()
-                .message("Get user report data successfully.")
-                .title("success")
-                .status("200")
-                .payload(userReportAuthorDatabaseReponses)
-                .build());
-    }
-
-
-    @DeleteMapping("/admin/{reportId}")
-    @Operation(summary = "(Admin can delete user report author)")
-    public ResponseEntity<?> deleteUserReportAuthorById(HttpServletRequest httpServletRequest, @PathVariable String reportId) {
-        UserReportAuthorDatabaseReponse databaseReponse = userReportAuthorService.deleteUserReportAuthorById(reportId);
-        if (databaseReponse == null) {
-            ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "No record has been found!");
-            problemDetail.setType(URI.create(httpServletRequest.getRequestURL().toString()));
-            throw new ErrorResponseException(HttpStatus.NOT_FOUND, problemDetail, null);
-        }
-        return ResponseEntity.ok(GenericResponse.builder()
-                .payload(databaseReponse)
-                .status("200")
-                .title("Delete successfully!")
-                .build());
-    }
+//    @GetMapping
+//    @Operation(summary = "(Admin Get all user report author)")
+//    public ResponseEntity<?> getAllUserReportAuthor() {
+//        List<UserReportAuthorDatabaseReponse> userReportAuthorDatabaseReponses = userReportAuthorService.getAllUserReportAuthor();
+//        return ResponseEntity.ok().body(GenericResponse.builder()
+//                .message("Get user report data successfully.")
+//                .title("success")
+//                .status("200")
+//                .payload(userReportAuthorDatabaseReponses)
+//                .build());
+//    }
+//
+//
+//    @DeleteMapping("/admin/{reportId}")
+//    @Operation(summary = "(Admin can delete user report author)")
+//    public ResponseEntity<?> deleteUserReportAuthorById(HttpServletRequest httpServletRequest, @PathVariable String reportId) {
+//        UserReportAuthorDatabaseReponse databaseReponse = userReportAuthorService.deleteUserReportAuthorById(reportId);
+//        if (databaseReponse == null) {
+//            ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "No record has been found!");
+//            problemDetail.setType(URI.create(httpServletRequest.getRequestURL().toString()));
+//            throw new ErrorResponseException(HttpStatus.NOT_FOUND, problemDetail, null);
+//        }
+//        return ResponseEntity.ok(GenericResponse.builder()
+//                .payload(databaseReponse)
+//                .status("200")
+//                .title("Delete successfully!")
+//                .build());
+//    }
 
 
     @PostMapping("/admin/approveOrReject/{authorId}")
@@ -124,5 +141,49 @@ public class UserReportAuthorController {
             problemDetail.setType(URI.create(httpServletRequest.getRequestURL().toString()));
             throw new ErrorResponseException(HttpStatus.BAD_REQUEST, problemDetail, null);
         }
+    }
+
+    @GetMapping
+    @Operation(summary = "Get authors report for admin")
+    public ResponseEntity<?> getAllReportAuthors(@RequestParam(defaultValue = "1", required = false)Integer page){
+
+        Integer nextPage = getNextPage(page);
+        Integer totalReportAuthors = userReportAuthorMapper.totalReportAuthors();
+        List<ReportAuthorResponse>  reportAuthorResponses = userReportAuthorService.getAllReportAuthors(PAGE_SIZE, nextPage);
+        GenericResponse genericResponse;
+
+        if(reportAuthorResponses.size()>0){
+            genericResponse = GenericResponse.builder()
+                    .totalRecords(totalReportAuthors)
+                    .title("success")
+                    .message("You have successfully gotten report authors")
+                    .statusCode(200)
+                    .payload(reportAuthorResponses)
+                    .build();
+            return ResponseEntity.ok(genericResponse);
+        }
+        genericResponse = GenericResponse.builder()
+                .title("failure")
+                .message("There's no report authors")
+                .statusCode(404)
+                .build();
+        return ResponseEntity.ok(genericResponse);
+    }
+
+
+
+    @DeleteMapping
+    @Operation(summary = "Delete report author by userReportAuthorId for admin")
+    public ResponseEntity<?> deleteReportAuthorByUserReportAuthorId(@RequestParam("userReportAuthorId")String userReportAuthorId){
+
+
+        ReportAuthorResponse reportAuthorResponse = userReportAuthorService.deleteReportAuthorByUserReportAuthorId(userReportAuthorId);
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .statusCode(200)
+                .title("success")
+                .message("You have deleted this report author successfully")
+                .build();
+        return ResponseEntity.ok(genericResponse);
     }
 }
