@@ -3,8 +3,8 @@ package com.kshrd.wearekhmer.userReport.repository;
 import com.kshrd.wearekhmer.userReport.model.reportUser.UserReportAuthorDatabaseReponse;
 import com.kshrd.wearekhmer.userReport.request.userReportAuthor.AdminIsApproveMapperRequest;
 import com.kshrd.wearekhmer.userReport.request.userReportAuthor.UserReportAuthorRequest;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import com.kshrd.wearekhmer.userReport.response.ReportAuthorResponse;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -43,4 +43,47 @@ public interface UserReportAuthorMapper {
             select exists(select 1 from user_tb u where u.user_id = #{userId} and is_enable = false);
             """)
     boolean isAuthorOrUserHadBennAlreadyBan(String userId);
+
+
+    @Select("""
+            SELECT urat.*, ut.username FROM user_report_author_tb urat INNER JOIN user_tb ut on ut.user_id = urat.user_id
+            ORDER BY create_at DESC
+            LIMIT #{pageSize} OFFSET #{nextPage}
+            """)
+    @Results(
+            id = "getReportAuthors",
+            value = {
+                    @Result(property = "authorId", column = "author_id"),
+                    @Result(property = "date", column = "create_at"),
+                    @Result(property = "reportDetail", column = "reason"),
+                    @Result(property = "senderName", column = "username"),
+                    @Result(property = "userReportAuthorId", column = "user_report_author_id")
+            }
+    )
+    List<ReportAuthorResponse>getAllReportAuthors(Integer pageSize, Integer nextPage);
+
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM user_report_author_tb WHERE user_report_author_id = #{userReportAuthorId})
+            """)
+    boolean checkReportAuthorId(String userReportAuthorId);
+
+
+    @Select("""
+            WITH delete_report_author AS(
+                DELETE FROM user_report_author_tb
+                WHERE user_report_author_id = #{userReportAuthorId}
+                RETURNING author_id, user_id
+            )
+            DELETE FROM notification_tb
+            WHERE(notification_type_id, sender_id) IN (
+                SELECT author_id, user_id FROM delete_report_author
+                )
+            """)
+    ReportAuthorResponse deleteReportAuthorByReportAuthorId(String userReportAuthorId);
+
+    @Select("""
+            SELECT COUNT(*) FROM user_report_author_tb;
+            """)
+    Integer totalReportAuthors();
 }

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -28,4 +29,31 @@ public class NotificationResponse {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean read;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NotificationResponse that = (NotificationResponse) o;
+        return Objects.equals(notificationId, that.notificationId) &&
+                Objects.equals(notificationTypeId, that.notificationTypeId) &&
+                Objects.equals(date, that.date) &&
+                Objects.equals(profile, that.profile) &&
+                Objects.equals(senderName, that.senderName) &&
+                Objects.equals(notificationType, that.notificationType) &&
+                Objects.equals(read, that.read);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(notificationId, notificationTypeId, date, profile, senderName, notificationType, read);
+    }
+
+
+
+
+
+
+
 }

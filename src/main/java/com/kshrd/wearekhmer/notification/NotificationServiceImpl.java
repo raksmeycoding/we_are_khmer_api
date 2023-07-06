@@ -2,6 +2,8 @@ package com.kshrd.wearekhmer.notification;
 
 import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.notification.entity.response.*;
+import com.kshrd.wearekhmer.userReport.response.ReportArticleResponse;
+import com.kshrd.wearekhmer.userReport.response.ReportAuthorResponse;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import lombok.AllArgsConstructor;
@@ -117,4 +119,6 @@ public class NotificationServiceImpl implements INotificationService {
     public List<ReadNotification> readAllNotifications(String userId) {
         return notificationMapper.readAllNotifications(userId);
     }
+
+
 }
