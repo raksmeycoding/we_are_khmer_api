@@ -78,6 +78,15 @@ public interface RatingRepository {
     Integer isRating(String userId, String authorId);
 
 
+    @Select("""
+            UPDATE rating_tb
+            SET number_of_rating = #{ratingDto.number_of_rating}
+            WHERE user_id = #{ratingDto.user_id} AND author_id = #{ratingDto.author_id}
+            returning *
+            """)
+    Rating updateNumberOfRating(@Param("ratingDto") RatingDto ratingDto);
+
+
 
 
 
