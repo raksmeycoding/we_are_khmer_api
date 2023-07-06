@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.bookmark.model.reponse;
 
 
+import com.kshrd.wearekhmer.article.model.Response.ArticleResponse2;
 import com.kshrd.wearekhmer.article.response.ArticleResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import java.sql.Timestamp;
 public class BookmarkResponse {
     private String bookmarkId;
     private String userId;
-    private ArticleResponse article;
+    private ArticleResponse2 article;
 
     private Timestamp createdAt;
 }
