@@ -119,7 +119,7 @@ public class NotificationController {
             @RequestParam(defaultValue = "1" , required = false) Integer page
     ){
 
-
+        Integer nextPage = getNextPage(page);
         GenericResponse genericResponse;
 
 
@@ -127,91 +127,91 @@ public class NotificationController {
 
         Integer totalUnRead = notificationMapper.numberOfUnReadNotificationForAuthorAndAdmin(weAreKhmerCurrentUser.getUserId());
 
-//            List<NotificationResponse> notificationResponses = notificationService.getAllNotificationType(
-//                    PAGE_SIZE,
-//                    nextPage
-//            );
-//            System.out.println(notificationResponses);
+            List<NotificationResponse> notificationResponses = notificationService.getAllNotificationType(
+                    PAGE_SIZE,
+                    nextPage
+            );
+            System.out.println(notificationResponses);
 
-        List<NotificationResponse> getNotificationReportArticle = notificationMapper.getNotificationReportArticle();
+//        List<NotificationResponse> getNotificationReportArticle = notificationMapper.getNotificationReportArticle();
+//
+//        Set<NotificationResponse> responses = new HashSet<>();
+//
+//        List<NotificationResponse> storeAllArticle = new ArrayList<>();
+//
+//
+//
+//
+//
+//        for(NotificationResponse data : getNotificationReportArticle){
+//                responses.add(data);
+//                storeAllArticle.add(data);
+//        }
+//
+//        if(responses.size()<storeAllArticle.size()){
+//            storeAllArticle.clear();
+//            storeAllArticle.addAll(responses);
+//        }
+//
+//
+//
+//        List<NotificationResponse> getNotificationReportAuthor = notificationMapper.getNotificationReportAuthor();
+//
+//        Set<NotificationResponse> storeGetNotificationReportAuthor = new HashSet<>();
+//
+//        List<NotificationResponse> storeAuthor = new ArrayList<>();
+//
+//        for(NotificationResponse data : getNotificationReportAuthor){
+//            storeGetNotificationReportAuthor.add(data);
+//            storeAuthor.add(data);
+//        }
+//
+//        if(storeGetNotificationReportAuthor.size()<storeAuthor.size()){
+//            storeAuthor.clear();
+//            storeAuthor.addAll(storeGetNotificationReportAuthor);
+//        }
+//
+//        List<NotificationResponse> getNotificationRequestAsAuthor = notificationMapper.getNotificationRequestAsAuthor();
+//
+//        Set<NotificationResponse> storeGetNotificationRequest = new HashSet<>();
+//
+//        List<NotificationResponse> storeRequest = new ArrayList<>();
+//
+//        for(NotificationResponse data : getNotificationRequestAsAuthor){
+//            storeGetNotificationRequest.add(data);
+//            storeRequest.add(data);
+//        }
+//
+//        if(storeGetNotificationRequest.size()<storeRequest.size()){
+//            storeRequest.clear();
+//            storeRequest.addAll(storeGetNotificationRequest);
+//        }
+//
+//
+//        List<NotificationResponse> notificationResponses = new ArrayList<>();
+//        notificationResponses.addAll(storeRequest);
+//        notificationResponses.addAll(storeAuthor);
+//        notificationResponses.addAll(storeAllArticle);
+//
+//
+//        notificationResponses.sort(Comparator.comparing(NotificationResponse::getDate).reversed());
+//
+//
+//        int startIndex = (page - 1) * PAGE_SIZE;
+//        int endIndex = Math.min(startIndex + PAGE_SIZE, notificationResponses.size());
+//
+//        // Retrieve the paginated list
+//        List<NotificationResponse> paginatedList = notificationResponses.stream()
+//                .skip(startIndex)
+//                .limit(endIndex - startIndex)
+//                .collect(Collectors.toList());
 
-        Set<NotificationResponse> responses = new HashSet<>();
-
-        List<NotificationResponse> storeAllArticle = new ArrayList<>();
-
-
-
-
-
-        for(NotificationResponse data : getNotificationReportArticle){
-                responses.add(data);
-                storeAllArticle.add(data);
-        }
-
-        if(responses.size()<storeAllArticle.size()){
-            storeAllArticle.clear();
-            storeAllArticle.addAll(responses);
-        }
-
-
-
-        List<NotificationResponse> getNotificationReportAuthor = notificationMapper.getNotificationReportAuthor();
-
-        Set<NotificationResponse> storeGetNotificationReportAuthor = new HashSet<>();
-
-        List<NotificationResponse> storeAuthor = new ArrayList<>();
-
-        for(NotificationResponse data : getNotificationReportAuthor){
-            storeGetNotificationReportAuthor.add(data);
-            storeAuthor.add(data);
-        }
-
-        if(storeGetNotificationReportAuthor.size()<storeAuthor.size()){
-            storeAuthor.clear();
-            storeAuthor.addAll(storeGetNotificationReportAuthor);
-        }
-
-        List<NotificationResponse> getNotificationRequestAsAuthor = notificationMapper.getNotificationRequestAsAuthor();
-
-        Set<NotificationResponse> storeGetNotificationRequest = new HashSet<>();
-
-        List<NotificationResponse> storeRequest = new ArrayList<>();
-
-        for(NotificationResponse data : getNotificationRequestAsAuthor){
-            storeGetNotificationRequest.add(data);
-            storeRequest.add(data);
-        }
-
-        if(storeGetNotificationRequest.size()<storeRequest.size()){
-            storeRequest.clear();
-            storeRequest.addAll(storeGetNotificationRequest);
-        }
-
-
-        List<NotificationResponse> notificationResponses = new ArrayList<>();
-        notificationResponses.addAll(storeRequest);
-        notificationResponses.addAll(storeAuthor);
-        notificationResponses.addAll(storeAllArticle);
-
-
-        notificationResponses.sort(Comparator.comparing(NotificationResponse::getDate).reversed());
-
-
-        int startIndex = (page - 1) * PAGE_SIZE;
-        int endIndex = Math.min(startIndex + PAGE_SIZE, notificationResponses.size());
-
-        // Retrieve the paginated list
-        List<NotificationResponse> paginatedList = notificationResponses.stream()
-                .skip(startIndex)
-                .limit(endIndex - startIndex)
-                .collect(Collectors.toList());
-
-            if(paginatedList.size()>0){
+            if(notificationResponses.size()>0){
                 genericResponse = GenericResponse.builder()
                         .statusCode(200)
                         .title("success")
                         .message("You have successfully get all notifications")
-                        .payload(paginatedList)
+                        .payload(notificationResponses)
                         .unReadNotifications(totalUnRead)
                         .totalRecords(totalRecords)
                         .build();
@@ -221,7 +221,6 @@ public class NotificationController {
                         .statusCode(404)
                         .title("failure")
                         .message("There's no notification records in list")
-                        .totalRecords(totalRecords)
                         .build();
                 return ResponseEntity.ok(genericResponse);
 
