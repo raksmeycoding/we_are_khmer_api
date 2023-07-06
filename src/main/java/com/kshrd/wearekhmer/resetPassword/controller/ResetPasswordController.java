@@ -4,6 +4,7 @@ package com.kshrd.wearekhmer.resetPassword.controller;
 import com.kshrd.wearekhmer.authenticatoin.AuthenticationService;
 import com.kshrd.wearekhmer.emailVerification.service.EmailService;
 import com.kshrd.wearekhmer.exception.DuplicateKeyException;
+import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.opt.model.Otp;
 import com.kshrd.wearekhmer.opt.service.OtpService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
@@ -70,6 +71,11 @@ public class ResetPasswordController {
         weAreKhmerValidation.validateEmail(email.getEmail());
 
 //        resetPasswordImp.checkEmailExistInResetTb(email.getEmail());
+
+        if(!resetPasswordMapper.checkEmailUsedToLogIn(email)){
+            throw new ValidateException("Your account is not normal user yet, please verify before reset password", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+        }
+
 
 
         resetPasswordImp.checkEmail(email.getEmail());
