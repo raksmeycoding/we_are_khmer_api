@@ -19,4 +19,8 @@ public interface IRatingService {
 
     Integer AlreadyRating(String userId, String authorId);
 
+    Rating updateRatingToAuthor(RatingDto ratingDto);
+
+    boolean isAlreadyRating(String userId, String authorId);
+
 }

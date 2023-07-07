@@ -23,8 +23,8 @@ public class RatingServiceImpl implements IRatingService{
 
     @Override
     public  Rating createUserRatingToAuthor(RatingDto ratingDto) {
-        if(ratingRepository.checkAlreadyRating(ratingDto.getUser_id(), ratingDto.getAuthor_id()))
-            throw new ValidateException("You already rated this author", HttpStatus.FORBIDDEN,HttpStatus.FORBIDDEN.value());
+//        if(ratingRepository.checkAlreadyRating(ratingDto.getUser_id(), ratingDto.getAuthor_id()))
+//            throw new ValidateException("You already rated this author", HttpStatus.FORBIDDEN,HttpStatus.FORBIDDEN.value());
         return ratingRepository.createUserRatingToAuthor(ratingDto);
     }
 
@@ -48,5 +48,15 @@ public class RatingServiceImpl implements IRatingService{
     @Override
     public Integer AlreadyRating(String userId, String authorId) {
         return ratingRepository.isRating(weAreKhmerCurrentUser.getUserId(), authorId);
+    }
+
+    @Override
+    public Rating updateRatingToAuthor(RatingDto ratingDto) {
+        return ratingRepository.updateNumberOfRating(ratingDto);
+    }
+
+    @Override
+    public boolean isAlreadyRating(String userId, String authorId) {
+        return ratingRepository.checkAlreadyRating(userId, authorId);
     }
 }

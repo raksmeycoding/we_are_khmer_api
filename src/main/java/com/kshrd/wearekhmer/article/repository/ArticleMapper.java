@@ -850,7 +850,7 @@ select ab.article_id,
        ab.title,
        ab.sub_title,
        ab.publish_date,
-      ab.description,
+     
        ab.updatedat,
        coalesce((nullif(ab.image, '')),
                 'https://images.unsplash.com/photo-1599283415392-c1ad8110a147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80') as image,
@@ -869,7 +869,7 @@ select ab.article_id,
 where ab.article_id = #{articleId}
             """)
     @Result(property = "updateAt", column = "updatedat")
-    ArticleResponse getArticleByIdForBookmarkAndHistory(String articleId, String userId);
+    ArticleResponse2 getArticleByIdForBookmarkAndHistory(String articleId, String userId);
 
 
 

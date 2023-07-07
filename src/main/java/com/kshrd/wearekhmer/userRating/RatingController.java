@@ -45,14 +45,22 @@ public class RatingController {
                     .author_id(ratingRequest.getAuthor_id())
                     .number_of_rating(ratingRequest.getNumber_of_rating())
                     .build();
-            Rating returnRating = ratingService.createUserRatingToAuthor(ratingDto);
-            return ResponseEntity.ok(GenericResponse.builder()
-                    .title("success")
-                    .statusCode(201)
-                    .message("Rating successfully.")
-                    .payload(returnRating)
-                    .build());
-
+            if(!ratingService.isAlreadyRating(ratingDto.getUser_id(), ratingDto.getAuthor_id())){
+                Rating returnRating = ratingService.createUserRatingToAuthor(ratingDto);
+                return ResponseEntity.ok(GenericResponse.builder()
+                        .title("success")
+                        .statusCode(201)
+                        .message("Rating successfully.")
+                        .payload(returnRating)
+                        .build());
+            }
+                Rating updateRating = ratingService.updateRatingToAuthor(ratingDto);
+                return ResponseEntity.ok(GenericResponse.builder()
+                        .title("success")
+                        .message("You already update rating author successfully")
+                        .statusCode(200)
+                        .payload(updateRating)
+                        .build());
 
     }
 

@@ -73,6 +73,12 @@ public interface ResetPasswordMapper {
     Reset removeToken(String email);
 
 
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM user_tb WHERE email = #{email} AND is_enable = true)
+            """)
+    boolean checkEmailUsedToLogIn(InputEmail email);
+
+
 
 
 }
