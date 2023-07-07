@@ -145,4 +145,29 @@ select * from article_tb where user_id = 'd0e1bd19-d4bc-45d5-9beb-32538d16b769';
 select user_id from user_role_tb where user_id = '7e913fab-eb8c-4d52-aff8-266eb1185d7a';
 
 
-select exists(select  1 from author_request_tb arb where user_id = '0cd89dbf-0075-48a0-8be0-fd5dd786c37b' and is_author_accepted = 'REJECTED')
+select exists(select  1 from author_request_tb arb where user_id = '0cd89dbf-0075-48a0-8be0-fd5dd786c37b' and is_author_accepted = 'REJECTED');
+
+
+
+
+
+-- change url
+UPDATE public.user_tb
+SET photo_url = CONCAT('https://api.domrra.site', SUBSTRING(photo_url, LENGTH('http://localhost:8080') + 1))
+WHERE photo_url LIKE 'http://localhost:8080%';
+
+
+UPDATE public.article_tb
+SET image = CONCAT('https://api.domrra.site', SUBSTRING(image, LENGTH('http://localhost:8080') + 1))
+WHERE article_tb.image LIKE 'http://localhost:8080%';
+
+
+-- reverse
+UPDATE public.user_tb
+SET photo_url = CONCAT('http://localhost:8080', SUBSTRING(photo_url, LENGTH('https://api.domrra.site') + 1))
+WHERE photo_url LIKE 'https://api.domrra.site%';
+
+
+UPDATE public.article_tb
+SET image = CONCAT('https://http://localhost:8080', SUBSTRING(image, LENGTH('https://api.domrra.site') + 1))
+WHERE article_tb.image LIKE 'https://api.domrra.sitehttps://api.domrra.site%';
