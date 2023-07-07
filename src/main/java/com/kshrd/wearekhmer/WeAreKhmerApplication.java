@@ -13,6 +13,7 @@ import com.kshrd.wearekhmer.user.service.UserAppService;
 import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.userArtivities.repository.ICommentRepository;
 import com.kshrd.wearekhmer.utils.OtpUtil;
+import com.kshrd.wearekhmer.utils.ServerUtil;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceHelperImpl;
@@ -24,6 +25,7 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.apache.http.HttpEntity;
@@ -34,6 +36,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.io.Resources;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -94,6 +97,8 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 
     private final WeAreKhmerValidation weAreKhmerValidation;
 
+    private final ServerUtil serverUtil;
+
 
     public static void main(String[] args) {
         SpringApplication.run(WeAreKhmerApplication.class, args);
@@ -142,6 +147,9 @@ public class WeAreKhmerApplication implements CommandLineRunner {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+
+
+        System.out.println(serverUtil.getImageServerName());
 
     }
 }

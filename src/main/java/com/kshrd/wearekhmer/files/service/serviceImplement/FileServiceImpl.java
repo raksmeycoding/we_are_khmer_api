@@ -3,9 +3,12 @@ package com.kshrd.wearekhmer.files.service.serviceImplement;
 import com.kshrd.wearekhmer.exception.ValidateException;
 import com.kshrd.wearekhmer.files.config.FileConfig;
 import com.kshrd.wearekhmer.files.service.IFileService;
+import com.kshrd.wearekhmer.utils.ServerUtil;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -25,16 +28,15 @@ import java.util.UUID;
 
 
 @Service
+@RequiredArgsConstructor
 public class FileServiceImpl implements IFileService {
 
     private final FileConfig fileConfig;
     private final ServiceClassHelper serviceClassHelper;
+    private final ServerUtil serverUtil;
     Path root;
 
-    public FileServiceImpl(FileConfig fileConfig, ServiceClassHelper serviceClassHelper) {
-        this.fileConfig = fileConfig;
-        this.serviceClassHelper = serviceClassHelper;
-    }
+
 
 
     @PostConstruct
@@ -62,7 +64,7 @@ public class FileServiceImpl implements IFileService {
 
 //            String plusURL = serverName + "/api/v1/files/file/filename?name=" + fileName;
 //            System.out.println(plusURL);
-            return "http://localhost:8080/api/v1/files/file/filename?name=" + fileName;
+            return serverUtil.getImageServerName() + fileName;
         }
 
         return null;

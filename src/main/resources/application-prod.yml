@@ -1,0 +1,73 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://8.219.139.67:5436/we_are_khmer
+    username: we_are_khmer
+    password: we_are_khmer
+
+    #config files
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: "50KB"
+      max-request-size: 250MB
+      max-file-size: 250MB
+
+
+
+
+
+
+
+
+
+  mail:
+    username: raksmeykoung@gmail.com
+    password: qxsayvuxoekwvixo
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            trust: smtp.gmail.com
+          starttls:
+            enable: true
+
+user:
+  personal:
+    repo:
+      link: https://github.com/MaheshIare?tab=repositories
+      type: Github repo
+
+thymeleaf:
+  templates:
+    location: classpath:/templates/
+    extension: .html
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+server:
+  port: 8080
+
+
+#map image url
+app:
+  image:
+    serverName: "https://api.domrra.site/api/v1/files/file/filename?name="
+
+
+
+
+
+
+
+
+
+
+
+
