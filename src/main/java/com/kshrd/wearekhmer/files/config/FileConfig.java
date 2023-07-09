@@ -1,5 +1,6 @@
 package com.kshrd.wearekhmer.files.config;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import java.nio.file.Paths;
 
 @Service
 @Getter
+@SecurityRequirement(name = "bearerAuth")
 public class FileConfig implements WebMvcConfigurer{
 
     private final String[] imagePath = {"main", "resources","static",  "images"};

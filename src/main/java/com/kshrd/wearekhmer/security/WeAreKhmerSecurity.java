@@ -213,9 +213,9 @@ public class WeAreKhmerSecurity {
                 .permitAll()
                 .anyRequest()
                 .authenticated()
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(this.authenticationEntryPoint)
+//                .and()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(this.authenticationEntryPoint)
                 .and()
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(
