@@ -64,8 +64,8 @@ public class WeAreKhmerSecurity {
             "/api/v1/heroCard",
             "/api/v1/heroCard/{type}",
             "/api/v1/article/",
-            "/api/v1/author/personal-info",
-            "/api/v1/files/**"
+            "/api/v1/author/personal-info"
+//            "/api/v1/files/**"
 
     };
 
@@ -149,8 +149,8 @@ public class WeAreKhmerSecurity {
 //                ⚠️Smey
                 .requestMatchers(HttpMethod.POST, "/api/v1/article/adminBanArticle/{articleId}").hasRole("ADMIN")
 //
-//                .requestMatchers(HttpMethod.POST, "/api/v1/files/**")
-//                .hasAnyRole("ADMIN", "AUTHOR", "USER")
+                .requestMatchers(HttpMethod.POST, "/api/v1/files/**")
+                .hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers("/api/v1/article/react/**")
                 .hasAnyRole("ADMIN", "AUTHOR", "USER")
                 .requestMatchers("/api/v1/comment/article")
