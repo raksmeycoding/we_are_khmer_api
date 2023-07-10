@@ -58,7 +58,7 @@ server:
 #map image url
 app:
   image:
-    serverName: "https://api.domrra.site/api/v1/files/file/filename?name="
+    serverName: "http://api.domrra.site/api/v1/files/file/filename?name="
 
 
 
