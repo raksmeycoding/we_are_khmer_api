@@ -65,6 +65,7 @@ public class WeAreKhmerSecurity {
             "/api/v1/heroCard/{type}",
             "/api/v1/article/",
             "/api/v1/author/personal-info"
+//            "/api/v1/files/**"
 
     };
 
