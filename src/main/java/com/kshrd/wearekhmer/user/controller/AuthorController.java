@@ -4,6 +4,7 @@ package com.kshrd.wearekhmer.user.controller;
 import com.kshrd.wearekhmer.article.model.Response.BanAuthor;
 import com.kshrd.wearekhmer.emailVerification.service.EmailService;
 import com.kshrd.wearekhmer.exception.ValidateException;
+import com.kshrd.wearekhmer.files.service.IFileService;
 import com.kshrd.wearekhmer.requestRequest.GenericResponse;
 import com.kshrd.wearekhmer.user.model.dto.AuthorDTO;
 import com.kshrd.wearekhmer.user.model.entity.*;
@@ -62,6 +63,7 @@ public class AuthorController {
     private final ServiceClassHelper serviceClassHelper;
 
     private static final Integer PAGE_SIZE = 10;
+    private final IFileService fileService;
     private final EmailService emailService;
 
     private Integer getNextPage(Integer page) {
@@ -282,6 +284,16 @@ public class AuthorController {
     @PutMapping("/update-user-image")
     @Operation(summary = "Update user image for all user in platform")
     public ResponseEntity<?> updateProfile(String imageUrl){
+
+        String photoUrl = authorRepository.photoUrl(weAreKhmerCurrentUser.getUserId().substring(authorRepository.photoUrl(weAreKhmerCurrentUser.getUserId()).lastIndexOf('=') + 1 ));
+
+        if(photoUrl != null){
+            fileService.deleteFileByFileName(photoUrl);
+        }
+//        String filename = photoUrl.substring(photoUrl.lastIndexOf('=')+1);
+//        System.out.println(filename);
+
+
 
         UpdateProfile updateProfile = authorRepository.updateProfile(imageUrl, weAreKhmerCurrentUser.getUserId());
 
