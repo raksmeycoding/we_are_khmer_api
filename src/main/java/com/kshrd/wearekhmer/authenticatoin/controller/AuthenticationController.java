@@ -20,6 +20,7 @@ import com.kshrd.wearekhmer.user.repository.QuoteMapper;
 import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
 import com.kshrd.wearekhmer.user.service.userService.UserAppDetailsServiceImpl;
 import com.kshrd.wearekhmer.utils.OtpUtil;
+import com.kshrd.wearekhmer.utils.ServerUtil;
 import com.kshrd.wearekhmer.utils.WeAreKhmerCurrentUser;
 import com.kshrd.wearekhmer.utils.serviceClassHelper.ServiceClassHelper;
 import com.kshrd.wearekhmer.utils.userUtil.UserUtil;
@@ -81,6 +82,8 @@ public class AuthenticationController {
 
     private final WeAreKhmerValidation weAreKhmerValidation;
 
+    private final ServerUtil serverUtil;
+
 
     @PostMapping("/register")
     @Operation(summary = "(User can register our application here.)")
@@ -102,7 +105,7 @@ public class AuthenticationController {
                     .username(username)
                     .email(normalUserRequest.getEmail())
                     .password(passwordEncoder.encode(normalUserRequest.getPassword()))
-                    .photo_url("http://localhost:8080/api/v1/files/file/filename?name=defaultUserProfile.png")
+                    .photo_url( serverUtil.getImageServerName() + "defaultUserProfile.png")
                     .gender(normalUserRequest.getGender().toLowerCase())
                     .build();
 

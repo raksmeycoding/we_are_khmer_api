@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -28,9 +29,19 @@ public class SecurityConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        Server server = new Server();
-        server.setUrl("https://api.domrra.site");
-        return new OpenAPI().servers(List.of(server));
+        List<Server> servers = new ArrayList<>();
+
+        Server server1 = new Server();
+        server1.setUrl("https://api.domrra.site");
+        servers.add(server1);
+
+        Server server2 = new Server();
+        server2.setUrl("http://localhost:8080");
+        servers.add(server2);
+
+        // Add more servers as needed
+
+        return new OpenAPI().servers(servers);
     }
 
 }
