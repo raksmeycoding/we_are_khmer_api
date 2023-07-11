@@ -268,6 +268,11 @@ public interface AuthorRepository {
             """)
     Integer totalBannedAuthor();
 
+    @Select("""
+            SELECT photo_url FROM user_tb WHERE user_id =#{userId}';
+            """)
+    String photoUrl(String userId);
+
 }
 
 
