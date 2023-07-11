@@ -37,6 +37,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -285,14 +286,12 @@ public class AuthorController {
     @Operation(summary = "Update user image for all user in platform")
     public ResponseEntity<?> updateProfile(String imageUrl){
 
-        String photoUrl = authorRepository.photoUrl(weAreKhmerCurrentUser.getUserId().substring(authorRepository.photoUrl(weAreKhmerCurrentUser.getUserId()).lastIndexOf('=') + 1 ));
 
-        if(photoUrl != null){
-            fileService.deleteFileByFileName(photoUrl);
-        }
-//        String filename = photoUrl.substring(photoUrl.lastIndexOf('=')+1);
-//        System.out.println(filename);
-
+        String photoUrl = authorRepository.photoUrl(weAreKhmerCurrentUser.getUserId());
+        String[] parts = photoUrl.split("=");
+        String partAfterEquals = parts[1];
+        System.out.println(partAfterEquals);
+        fileService.deleteFileByFileName(partAfterEquals);
 
 
         UpdateProfile updateProfile = authorRepository.updateProfile(imageUrl, weAreKhmerCurrentUser.getUserId());
