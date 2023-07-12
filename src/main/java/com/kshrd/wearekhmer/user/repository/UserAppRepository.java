@@ -2,11 +2,9 @@ package com.kshrd.wearekhmer.user.repository;
 
 
 import com.kshrd.wearekhmer.repository.WeAreKhmerRepositorySupport;
-import com.kshrd.wearekhmer.user.model.dto.UserAppDTO;
 import com.kshrd.wearekhmer.user.model.entity.UpdateUserName;
-import com.kshrd.wearekhmer.user.model.entity.Users;
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
-import io.swagger.models.auth.In;
+import com.kshrd.wearekhmer.user.model.entity.Users;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -14,7 +12,6 @@ import java.util.List;
 
 @Mapper
 public interface UserAppRepository extends WeAreKhmerRepositorySupport {
-
 
 
     @Select("""
@@ -52,13 +49,12 @@ public interface UserAppRepository extends WeAreKhmerRepositorySupport {
     @Result(property = "photoUrl", column = "photo_url")
     @Result(property = "dateOfBirth", column = "data_of_birth")
     @Result(property = "gender", column = "gender")
-   List<Users>  dynamicUserAndAuthor(boolean isAuthor, Integer pageNumber, Integer nextPage);
+    List<Users> dynamicUserAndAuthor(boolean isAuthor, Integer pageNumber, Integer nextPage);
 
     @Select("""
             SELECT count(user_id) FROM user_tb WHERE is_author = #{isAuthor} AND is_enable = true;
             """)
     Integer countUserOrAuthor(boolean isAuthor);
-
 
 
     @Select("""
@@ -70,7 +66,15 @@ public interface UserAppRepository extends WeAreKhmerRepositorySupport {
     UpdateUserName updateUserName(@Param("userName") String userName, @Param("userId") String userId);
 
 
+//    check user already signed up and response user already signed up
 
+    @Select("""
+               select * from checkUserAuthentication(#{email});
+            """)
+    void checkUserAuthentication(String email);
+
+
+//    check user account is not verified
 
 
 }

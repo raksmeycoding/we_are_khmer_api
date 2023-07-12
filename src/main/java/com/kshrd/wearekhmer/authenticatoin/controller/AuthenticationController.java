@@ -14,10 +14,7 @@ import com.kshrd.wearekhmer.requestRequest.UserLoginRequest;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequest;
 import com.kshrd.wearekhmer.user.model.entity.AuthorRequestTable;
 import com.kshrd.wearekhmer.user.model.entity.UserApp;
-import com.kshrd.wearekhmer.user.repository.AuthorRepository;
-import com.kshrd.wearekhmer.user.repository.EducationMapper;
-import com.kshrd.wearekhmer.user.repository.QuoteMapper;
-import com.kshrd.wearekhmer.user.repository.WorkingExperienceMapper;
+import com.kshrd.wearekhmer.user.repository.*;
 import com.kshrd.wearekhmer.user.service.userService.UserAppDetailsServiceImpl;
 import com.kshrd.wearekhmer.utils.OtpUtil;
 import com.kshrd.wearekhmer.utils.ServerUtil;
@@ -28,12 +25,11 @@ import com.kshrd.wearekhmer.utils.validation.DefaultWeAreKhmerValidation;
 import com.kshrd.wearekhmer.utils.validation.WeAreKhmerValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,6 +38,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.SQLException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -82,6 +80,8 @@ public class AuthenticationController {
 
     private final WeAreKhmerValidation weAreKhmerValidation;
 
+    private final UserAppRepository userAppRepository;
+
     private final ServerUtil serverUtil;
 
 
@@ -99,13 +99,15 @@ public class AuthenticationController {
 //            password validation
             defaultWeAreKhmerValidation.passwordValidation(normalUserRequest.getPassword());
 
+            userAppRepository.checkUserAuthentication(normalUserRequest.getEmail());
+
             String username = normalUserRequest.getEmail().split("@", 2)[0];
 
             NormalUserRequest n = NormalUserRequest.builder()
                     .username(username)
                     .email(normalUserRequest.getEmail())
                     .password(passwordEncoder.encode(normalUserRequest.getPassword()))
-                    .photo_url( serverUtil.getImageServerName() + "defaultUserProfile.png")
+                    .photo_url(serverUtil.getImageServerName() + "defaultUserProfile.png")
                     .gender(normalUserRequest.getGender().toLowerCase())
                     .build();
 
@@ -136,12 +138,21 @@ public class AuthenticationController {
                     .statusCode(200)
                     .build();
             return ResponseEntity.ok(genericResponse);
-        } catch (DataIntegrityViolationException | MessagingException ex) {
-            if (ex instanceof DataIntegrityViolationException) {
-                throw new ValidateException("This email is already registered!", HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value());
+        } catch (Exception ex) {
+            if (ex instanceof UncategorizedSQLException) {
+                if (((SQLException) ex.getCause()).getSQLState().equals("P0003")) {
+                    throw new ValidateException("User is not verified yet", HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.value());
+                } else if (((SQLException) ex.getCause()).getSQLState().equals("P0001")) {
+                    throw new ValidateException("User is already signed up", HttpStatus.CONFLICT, HttpStatus.CONFLICT.value());
+                } else if (((SQLException) ex.getCause()).getSQLState().equals("P0002")) {
+                    throw new ValidateException("User is already banned", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+                }
             }
-            throw new RuntimeException(((MessagingException) ex).getCause());
+
+            throw new RuntimeException(ex.getCause());
         }
+
+
     }
 
 
