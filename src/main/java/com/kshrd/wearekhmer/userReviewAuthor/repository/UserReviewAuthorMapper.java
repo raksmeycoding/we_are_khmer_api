@@ -26,7 +26,7 @@ public interface UserReviewAuthorMapper {
                 SELECT urat.author_id, urat.user_review_author_id,urat.user_id,author_name,
                        create_at,update_at, urat.comment, ut.username, ut.photo_url
                 FROM user_review_author_tb urat INNER JOIN user_tb ut on urat.user_id = ut.user_id
-                WHERE author_id = #{authorId} LIMIT 4 OFFSET 0
+                WHERE author_id = #{authorId} ORDER BY create_at DESC LIMIT 4 OFFSET 0
             """)
     @Result(property = "photoUrl", column = "photo_url")
     @Result(property = "senderName", column = "username")
