@@ -64,7 +64,8 @@ public class WeAreKhmerSecurity {
             "/api/v1/heroCard",
             "/api/v1/heroCard/{type}",
             "/api/v1/article/",
-            "/api/v1/author/personal-info"
+            "/api/v1/author/personal-info",
+
 //            "/api/v1/files/**"
 
     };
@@ -209,13 +210,14 @@ public class WeAreKhmerSecurity {
                 .requestMatchers("/api/v1/notification/readNotification").hasAnyRole("ADMIN","AUTHOR")
                 .requestMatchers("/api/v1/notification/readAllNotifications").hasAnyRole("ADMIN","AUTHOR")
                 .requestMatchers("api/v1/user/updateName").hasAnyRole("ADMIN", "USER", "AUTHOR")
+                .requestMatchers( "api/v1/notification/deleteAllNotification").hasAnyRole("AUTHOR","ADMIN", "USER")
                 .requestMatchers(ENDPOINTS_WHITELIST)
                 .permitAll()
                 .anyRequest()
                 .authenticated()
-//                .and()
-//                .exceptionHandling()
-//                .authenticationEntryPoint(this.authenticationEntryPoint)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(this.authenticationEntryPoint)
                 .and()
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(

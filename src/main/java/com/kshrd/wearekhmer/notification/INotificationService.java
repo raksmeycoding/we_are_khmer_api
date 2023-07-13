@@ -39,6 +39,8 @@ public interface INotificationService {
 
     List<ReadNotification> readAllNotifications(String userId);
 
+    void deleteAllNotificationForCurrentUser(String userId);
+
 
 
 

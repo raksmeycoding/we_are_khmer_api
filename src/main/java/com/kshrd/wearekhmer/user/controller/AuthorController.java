@@ -291,10 +291,19 @@ public class AuthorController {
         String[] parts = photoUrl.split("=");
         String partAfterEquals = parts[1];
         System.out.println(partAfterEquals);
-        fileService.deleteFileByFileName(partAfterEquals);
+        UpdateProfile updateProfile;
+        if(partAfterEquals.equalsIgnoreCase( "defaultUserProfile.png")){
+            updateProfile= authorRepository.updateProfile(imageUrl, weAreKhmerCurrentUser.getUserId());
+        }else{
+            fileService.deleteFileByFileName(partAfterEquals);
+             updateProfile = authorRepository.updateProfile(imageUrl, weAreKhmerCurrentUser.getUserId());
+        }
 
 
-        UpdateProfile updateProfile = authorRepository.updateProfile(imageUrl, weAreKhmerCurrentUser.getUserId());
+
+
+
+
 
         GenericResponse genericResponse = GenericResponse.builder()
                 .statusCode(200)

@@ -120,5 +120,16 @@ public class NotificationServiceImpl implements INotificationService {
         return notificationMapper.readAllNotifications(userId);
     }
 
-
+    @Override
+    public void deleteAllNotificationForCurrentUser(String userId) {
+        if(notificationMapper.checkIsExistInUserTb(userId)){
+            if(notificationMapper.checkIsAdmin(userId) || notificationMapper.checkIsAuthor(userId)){
+                notificationMapper.deleteAllNotificationByAuthorIdAndAdminId(userId);
+            }else{
+                throw new ValidateException("You aren't author or admin, so there's no notifications to delete",HttpStatus.FORBIDDEN,HttpStatus.FORBIDDEN.value());
+            }
+        }else{
+            throw new ValidateException("userId : "+userId+ " does not exist",HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value());
+        }
+    }
 }
