@@ -262,7 +262,11 @@ public interface ArticleMapper {
     @ResultMap("articleResultMap")
     Article updateArticle(Article article);
 
-    @Select("DELETE FROM article_tb WHERE article_id = #{articleId} and user_id = #{userId} returning *")
+//    @Select("DELETE FROM article_tb WHERE article_id = #{articleId} and user_id = #{userId} returning *")
+    @Select("WITH deleteArticle AS(\n" +
+            "    DELETE FROM article_tb WHERE article_id = #{articleId} AND user_id = #{userId} RETURNING *\n" +
+            "           )\n" +
+            "    DELETE FROM notification_tb WHERE receiver_id IN (SELECT deleteArticle.user_id FROM deleteArticle) AND notification_type_id IN (SELECT deleteArticle.article_id FROM deleteArticle);")
     @ResultMap("articleResultMap")
     Article deleteArticleByIdAndCurrentUser(Article article);
 
