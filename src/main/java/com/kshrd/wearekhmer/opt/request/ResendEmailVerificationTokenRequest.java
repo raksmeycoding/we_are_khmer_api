@@ -1,6 +1,7 @@
 package com.kshrd.wearekhmer.opt.request;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,6 @@ public class ResendEmailVerificationTokenRequest {
     private String email;
 
 
-    @NotBlank(message = "Password must be not blank.")
-    @NotNull(message = "Password must be not null.")
+    @JsonIgnore
     private String password;
 }

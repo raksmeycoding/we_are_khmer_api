@@ -113,7 +113,7 @@ BEGIN
            not exists(select 1 from otp_tb o where o.email = emailForResendVerificationCode) then
         raise exception 'This user had already banded from our system. your are not able to get a resend verification';
     else
-        raise exception 'In our system detected that no user with email % needing get verification to verify email...', emailForResendVerificationCode using errcode = 'P0001';
+        raise exception '% already verified', emailForResendVerificationCode using errcode = 'P0001';
     end if;
     RETURN;
 END;

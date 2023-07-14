@@ -37,12 +37,12 @@ public class OtpController {
     public ResponseEntity<?> resendEmailVerification(@RequestBody @Validated ResendEmailVerificationTokenRequest request) {
         try {
             // ⚠️ this logic, our database total handle it;
-            System.out.println(otpServiceRepository.getUserRawPasswordByUserEmail(request.getEmail()));
-            boolean isInputCorrectPassword = passwordEncoder.matches(request.getPassword(), otpServiceRepository.getUserRawPasswordByUserEmail(request.getEmail()));
-            System.out.println(isInputCorrectPassword);
-            if (!isInputCorrectPassword) {
-                throw new ValidateException("Input valid password.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
-            }
+//            System.out.println(otpServiceRepository.getUserRawPasswordByUserEmail(request.getEmail()));
+//            boolean isInputCorrectPassword = passwordEncoder.matches(request.getPassword(), otpServiceRepository.getUserRawPasswordByUserEmail(request.getEmail()));
+//            System.out.println(isInputCorrectPassword);
+//            if (!isInputCorrectPassword) {
+//                throw new ValidateException("Input valid password.", HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
+//            }
             Otp2 getNewGeneratedToken = otpService.resendVerificationTokenToVerifyEmail(request.getEmail());
             emailService.sendResendVerificationCode(getNewGeneratedToken.getEmail(), getNewGeneratedToken.getToken());
             return ResponseEntity.ok().body(GenericResponse.builder()
@@ -50,8 +50,6 @@ public class OtpController {
                     .statusCode(200)
                     .message("Token resending have been finished. Please check your email and verify your email address.")
                     .build());
-        } catch (ValidateException ex) {
-            throw new ValidateException(ex.getMessage(), HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value());
         } catch (Exception ex) {
             if (ex.getCause() instanceof SQLException) {
                 String exceptionMessage = ex.getCause().getMessage();
