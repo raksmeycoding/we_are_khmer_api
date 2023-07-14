@@ -8,6 +8,7 @@ import com.kshrd.wearekhmer.user.model.entity.Users;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Mapper
@@ -71,7 +72,7 @@ public interface UserAppRepository extends WeAreKhmerRepositorySupport {
     @Select("""
                select * from checkUserAuthentication(#{email});
             """)
-    void checkUserAuthentication(String email);
+    String checkUserAuthentication(String email);
 
 
 //    check user account is not verified

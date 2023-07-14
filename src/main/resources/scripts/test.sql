@@ -239,6 +239,7 @@ BEGIN
     elseif exists(select 1 from user_tb ut where email = userEmail and is_enable = false) and
            not exists(select 1 from otp_tb where email = userEmail) then
         raise exception 'User is banded.' using errcode = 'P0002';
+
     elseif exists(select 1 from user_tb ut where email = userEmail and is_enable = false) and
            exists(select 1 from otp_tb where email = userEmail) then
         raise exception 'User is not verified yet.' using errcode = 'P0003';
@@ -249,8 +250,7 @@ $$ language plpgsql;
 
 
 
-select *
-from checkUserAuthentication('eamdayan@gmail.com');
+select * from checkUserAuthentication('eamdayan@gmail.com');
 select *
 from checkUserAuthentication('kongthary240@gmail.com');
 select *

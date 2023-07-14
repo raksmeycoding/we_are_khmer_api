@@ -91,14 +91,13 @@ public class AuthenticationController {
 
 
         GenericResponse genericResponse = null;
-        try {
-//            validate email
-            defaultWeAreKhmerValidation.validateEmail(normalUserRequest.getEmail());
+        //            validate email
+        defaultWeAreKhmerValidation.validateEmail(normalUserRequest.getEmail());
 //            gender validation
-            defaultWeAreKhmerValidation.genderValidation(normalUserRequest.getGender());
+        defaultWeAreKhmerValidation.genderValidation(normalUserRequest.getGender());
 //            password validation
-            defaultWeAreKhmerValidation.passwordValidation(normalUserRequest.getPassword());
-
+        defaultWeAreKhmerValidation.passwordValidation(normalUserRequest.getPassword());
+        try {
             userAppRepository.checkUserAuthentication(normalUserRequest.getEmail());
 
             String username = normalUserRequest.getEmail().split("@", 2)[0];
