@@ -373,4 +373,18 @@ public class NotificationController {
             return ResponseEntity.ok(genericResponse);
     }
 
+    @DeleteMapping("/deleteAllNotification")
+    @Operation(summary = "Delete all notifications for author and admin only")
+    public ResponseEntity<?> deleteAllNotifications(){
+
+        notificationService.deleteAllNotificationForCurrentUser(weAreKhmerCurrentUser.getUserId());
+
+        GenericResponse genericResponse = GenericResponse.builder()
+                .message("You have successfully delete all notifications")
+                .title("success")
+                .statusCode(200)
+                .build();
+        return ResponseEntity.ok(genericResponse);
+    }
+
 }

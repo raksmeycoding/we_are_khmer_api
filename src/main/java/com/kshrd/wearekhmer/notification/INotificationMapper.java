@@ -281,6 +281,33 @@ WHERE notification_type = 'USER_REQUEST_AS_AUTHOR';
     List<NotificationResponse> getNotificationRequestAsAuthor();
 
 
+    @Select("""
+            DELETE FROM notification_tb WHERE receiver_id = #{userId}
+            """)
+    void deleteAllNotificationByAuthorIdAndAdminId(String userId);
+
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM user_tb
+                INNER JOIN user_role_tb urt on user_tb.user_id = urt.user_id
+                INNER JOIN role_tb rt on urt.role_id = rt.role_id
+                WHERE user_tb.user_id = #{adminId} AND rt.name = 'ROLE_ADMIN'
+                );
+            """)
+    boolean checkIsAdmin(String adminId);
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM user_tb WHERE user_id = #{authorId} AND is_author = true)
+            """)
+    boolean checkIsAuthor(String authorId);
+
+
+    @Select("""
+            SELECT EXISTS(SELECT 1 FROM user_tb WHERE user_id = #{userId})
+            """)
+    boolean checkIsExistInUserTb(String userId);
+
+
 
 
 
