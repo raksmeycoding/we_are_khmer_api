@@ -111,7 +111,7 @@ public class ServiceHelperImpl implements ServiceClassHelper {
                     .quoteName(quote)
                     .userId(weAreKhmerCurrentUser.getUserId())
                     .build();
-            Quote education11 = quoteMapper.insert(quoteName);
+            Quote quote1 = quoteMapper.insert(quoteName);
         }
 
         if (workingExperiences.isEmpty()) {
@@ -120,13 +120,13 @@ public class ServiceHelperImpl implements ServiceClassHelper {
             workingExperiences.add("None");
         } else if (workingExperiences.size() < 3) {
 
-            int remainingSlots = 3 - quotes.size();
+            int remainingSlots = 3 - workingExperiences.size();
             for (int i = 0; i < remainingSlots; i++) {
                 workingExperiences.add("None");
             }
         }
 
-        for (String workingExperience : quotes) {
+        for (String workingExperience : workingExperiences) {
             WorkingExperience workingExperience1 = WorkingExperience.builder()
                     .workingExperienceName(workingExperience)
                     .userId(weAreKhmerCurrentUser.getUserId())
